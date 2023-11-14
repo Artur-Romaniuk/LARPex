@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.7.34202.233
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Larpex.Events.Api", "Larpex.Events.Api\Larpex.Events.Api.csproj", "{F511ADE3-611D-4D49-AA98-211C5A745623}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{F511ADE3-611D-4D49-AA98-211C5A745623}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F511ADE3-611D-4D49-AA98-211C5A745623}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F511ADE3-611D-4D49-AA98-211C5A745623}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F511ADE3-611D-4D49-AA98-211C5A745623}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {27A8EAF8-2E1D-4024-AAE2-515331E4D9CF}
+	EndGlobalSection
+EndGlobal
