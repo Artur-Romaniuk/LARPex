@@ -1,4 +1,4 @@
-namespace Larpex.Events.Api
+namespace Larpex.Mono
 {
     public class WeatherForecast
     {

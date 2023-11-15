@@ -7,16 +7,16 @@ EXPOSE 443
 
 FROM mcr.microsoft.com/dotnet/sdk:7.0 AS build
 WORKDIR /src
-COPY ["Larpex.Events.Api/Larpex.Events.Api.csproj", "Larpex.Events.Api/"]
-RUN dotnet restore "Larpex.Events.Api/Larpex.Events.Api.csproj"
+COPY ["Larpex.Mono/Larpex.Mono.csproj", "Larpex.Mono/"]
+RUN dotnet restore "Larpex.Mono/Larpex.Mono.csproj"
 COPY . .
-WORKDIR "/src/Larpex.Events.Api"
-RUN dotnet build "Larpex.Events.Api.csproj" -c Release -o /app/build
+WORKDIR "/src/Larpex.Mono"
+RUN dotnet build "Larpex.Mono.csproj" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "Larpex.Events.Api.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "Larpex.Mono.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
-ENTRYPOINT ["dotnet", "Larpex.Events.Api.dll"]
+ENTRYPOINT ["dotnet", "Larpex.Mono.dll"]
