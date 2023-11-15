@@ -3,10 +3,12 @@ import { Outlet } from "react-router-dom";
 
 const DefaultLayout = () => {
   return (
-    <>
+    <div className="main d-flex flex-column">
       <Navigation />
-      <Outlet />
-    </>
+      <main className="d-flex flex-column flex-grow-1">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 

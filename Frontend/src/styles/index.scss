@@ -6,4 +6,24 @@ html {
     --grey: #747474;
     --grey-light-1: #E8E8E8;
     --grey-light-2: #d1d1d1;
+    --grey-light-3: #F0F0F0;
+    --grey-light-4: #D9D9D9;
+    --green: #65C03E;
+    --red: #CA0202;
+
+    .main {
+        min-height: 100vh;
+    }
+}
+
+
+.image {
+    width: 100%;
+    max-width: 300px;
+    height: auto;
+    margin: 0 auto;
+
+    img {
+        width: 100%;
+    }
 }
