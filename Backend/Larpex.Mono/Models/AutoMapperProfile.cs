@@ -9,5 +9,11 @@ public class AutoMapperProfile : Profile
     {
         CreateMap<Event, EventDto>();
         CreateMap<EventDto, Event>();
+
+        CreateMap<Game, GameDto>();
+        CreateMap<GameDto, Game>();
+
+        CreateMap<Participant, ParticipantDto>();
+        CreateMap<ParticipantDto, Participant>();
     }
 }

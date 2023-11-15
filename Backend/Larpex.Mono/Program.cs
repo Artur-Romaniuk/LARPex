@@ -1,3 +1,4 @@
+using AutoMapper;
 using Larpex.Mono.Extensions;
 using Larpex.Mono.Models;
 using Larpex.Shared.Middlewares;
@@ -19,6 +20,8 @@ builder.Services.AddDbContext<LarpexDbContext>(options =>
 
 // Dependency injection services here
 builder.Services.AddTransients();
+builder.Services.AddSigleton();
+
 
 var app = builder.Build();
 

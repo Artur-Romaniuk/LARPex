@@ -38,7 +38,7 @@ namespace Larpex.Mono.Controllers
             return NoContent();
         }
 
-        [HttpGet]
+        [HttpGet("getEvent/{id}")]
         [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<EventDto>> GetEvent(int id)
@@ -51,7 +51,7 @@ namespace Larpex.Mono.Controllers
             return Ok(existingEvent);
         }
 
-        [HttpGet]
+        [HttpGet("getEvents")]
         [ProducesResponseType(typeof(IEnumerable<EventDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
         {

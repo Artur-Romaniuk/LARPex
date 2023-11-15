@@ -1,4 +1,6 @@
-﻿using Larpex.Mono.Repositories;
+﻿using AutoMapper;
+using Larpex.Mono.Models;
+using Larpex.Mono.Repositories;
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
 using Larpex.Mono.Services;
@@ -10,8 +12,20 @@ public static class TransientServiceExtensions
 {
     public static void AddTransients(this IServiceCollection services)
     {
-        services.AddTransient<IEventsRepo, EventsRepo>();
+        services.AddTransient<IEventsRepo, EventsRepo>(); services.AddTransient<IPaymentService, PaymentService>();
+        services.AddTransient<IParticipantsRepo, ParticipantsRepo>();
+        services.AddTransient<IParticipantService, ParticipantService>();
+        services.AddTransient<IGamesRepo, GamesRepo>();
+        services.AddTransient<IGameService, GameService>();
+    }
+    public static void AddSigleton(this IServiceCollection services)
+    {
+        var mapperConfig = new MapperConfiguration(mc =>
+        {
+            mc.AddProfile(new AutoMapperProfile());
+        });
 
-        services.AddTransient<IPaymentService, PaymentService>();
+        IMapper mapper = mapperConfig.CreateMapper();
+        services.AddSingleton(mapper);
     }
 }
