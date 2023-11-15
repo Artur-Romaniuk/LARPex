@@ -25,6 +25,9 @@ const Navigation = () => {
             <Link to="/about" className={"nav-link"}>
               About
             </Link>
+            <Link to="/panel-wydarzen" className={"nav-link"}>
+              Panel wydarzeń
+            </Link>
             <Link to="/temp/updateEvent/1" className={"nav-link"}>
               event 1
             </Link>
