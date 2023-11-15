@@ -1,5 +1,6 @@
 using Larpex.Mono.Extensions;
 using Larpex.Mono.Models;
+using Larpex.Shared.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 
@@ -28,7 +29,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+app.UseHsts();
 app.UseHttpsRedirection();
+
+app.UseMiddleware<ExceptionHandlerMiddleware>();
+
 
 app.UseAuthorization();
 
