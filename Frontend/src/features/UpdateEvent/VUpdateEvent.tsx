@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import CEventHandler from "./CEventHandler.ts";
 import { Container } from "react-bootstrap";
 import PageTitle from "../../components/ui/pageTItle/PageTitle.tsx";
@@ -9,6 +9,7 @@ import ButtonComp from "../../components/ui/buttonComp/ButtonComp.tsx";
 
 const VUpdateEvent = () => {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
   const { updatedEvent, handleSetUpdateEvent, handleDescriptionChange } =
     CEventHandler({ id: Number.parseInt(id ?? "-1") });
 
@@ -22,7 +23,7 @@ const VUpdateEvent = () => {
             typeInput={"blank"}
             placeholder={"Wprowadź nazwę wydarzenia"}
             name={"name"}
-            value={updatedEvent.name}
+            value={updatedEvent.title}
             setValue={handleSetUpdateEvent}
           />
           <InputComp
@@ -88,7 +89,13 @@ const VUpdateEvent = () => {
         </div>
       </Container>
       <Container className="w-100 m-auto my-3 d-flex  justify-content-between">
-        <ButtonComp text={"Anuluj"} onClick={() => {}} classElem="cancel" />
+        <ButtonComp
+          text={"Anuluj"}
+          onClick={() => {
+            navigate(-1);
+          }}
+          classElem="cancel"
+        />
         <ButtonComp text={"Utwórz"} onClick={() => {}} classElem="confirm" />
       </Container>
     </>

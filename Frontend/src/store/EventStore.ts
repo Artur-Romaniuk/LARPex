@@ -11,22 +11,24 @@ const EventStore = (props: EventStoreProps) => {
   const [events, setEvents] = useState<IEvent[]>();
   const [newEvent, setNewEvent] = useState<IEvent>({
     id: -1,
-    name: "",
+    title: "",
     game: "",
     payment: "",
     location: "",
     date: "",
-    icon: "",
+    peopleCount: 0,
+    img: "",
     description: "",
   });
   const [updatedEvent, setUpdatedEvent] = useState<IEvent>({
     id: -1,
-    name: "",
+    title: "",
     game: "",
     payment: "",
     location: "",
     date: "",
-    icon: "",
+    peopleCount: 0,
+    img: "",
     description: "",
   });
 
