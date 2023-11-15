@@ -28,21 +28,6 @@ const Navigation = () => {
             <Link to="/panel-wydarzen" className={"nav-link"}>
               Panel wydarzeń
             </Link>
-            <Link to="/temp/updateEvent/1" className={"nav-link"}>
-              event 1
-            </Link>
-            <Link to="/temp/updateEvent/2" className={"nav-link"}>
-              event 2
-            </Link>
-            <Link to="/temp/updateEvent/3" className={"nav-link"}>
-              event 3
-            </Link>
-            <Link to="/temp/updateEvent/4" className={"nav-link"}>
-              event 4
-            </Link>
-            <Link to="/temp/updateEvent/5" className={"nav-link"}>
-              event 5
-            </Link>
             <Link
               to="/logout"
               onClick={() => console.log("Wyloguj się")}

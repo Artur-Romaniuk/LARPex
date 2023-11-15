@@ -4,7 +4,7 @@ import PageTitle from "./components/ui/pageTItle/PageTitle.tsx";
 import EventStore, { eventContext } from "./store/EventStore.ts";
 import { eventLogic } from "./config/context.ts";
 import VUpdateEvent from "./features/UpdateEvent/VUpdateEvent.tsx";
-import EventList from "./components/ui/eventList/EventList.tsx";
+import VEventList from "./features/EventList/VEventList.tsx";
 
 const router = createBrowserRouter([
   {
@@ -29,14 +29,10 @@ const router = createBrowserRouter([
       },
       {
         path: "/panel-wydarzen",
-        element: (
-          <div>
-            <EventList/>
-          </div>
-        ),
+        element: <VEventList />,
       },
       {
-        path: "/temp/updateEvent/:id",
+        path: "/panel-wydarzen/:id",
         element: <VUpdateEvent />,
       },
     ],

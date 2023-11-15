@@ -1,11 +1,12 @@
 interface IEvent {
   id: number;
-  name: string;
+  title: string;
   game: string;
   payment: string;
   location: string;
   date: string;
-  icon: string;
+  peopleCount: number;
+  img: string;
   description: string;
 }
 
