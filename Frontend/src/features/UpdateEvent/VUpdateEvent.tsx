@@ -1,5 +1,5 @@
 import { useNavigate, useParams } from "react-router-dom";
-import CEventHandler from "./CEventHandler.ts";
+import CEventHandler from "../CEventHandler.ts";
 import { Container } from "react-bootstrap";
 import PageTitle from "../../components/ui/pageTItle/PageTitle.tsx";
 import InputComp from "../../components/forms/Input/InputComp.tsx";
@@ -10,9 +10,18 @@ import ButtonComp from "../../components/ui/buttonComp/ButtonComp.tsx";
 const VUpdateEvent = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { updatedEvent, handleSetUpdateEvent, handleDescriptionChange } =
-    CEventHandler({ id: Number.parseInt(id ?? "-1") });
+  const {
+    event,
+    eventLoading,
+    handleInputChange,
+    handleTextAreaChange,
+    updateEvent,
+    updateEventLoading,
+  } = CEventHandler({
+    id: Number.parseInt(id ?? "-1"),
+  });
 
+  if (eventLoading.isLoading) return <div>loading</div>;
   return (
     <>
       <PageTitle title={"Edytuj wydarzenie"} />
@@ -22,35 +31,35 @@ const VUpdateEvent = () => {
             label={"Nazwa wydarzenia"}
             typeInput={"blank"}
             placeholder={"Wprowadź nazwę wydarzenia"}
-            name={"name"}
-            value={updatedEvent.title}
-            setValue={handleSetUpdateEvent}
+            name={"eventName"}
+            value={event.eventName}
+            setValue={handleInputChange}
           />
           <InputComp
             label={"Wybierz grę"}
             typeInput={"icon"}
             placeholder={"Wybierz grę"}
             icon={<ChevronDown />}
-            name={"game"}
-            value={updatedEvent.game}
-            setValue={handleSetUpdateEvent}
+            name={"eventStatus"}
+            value={event.eventStatus}
+            setValue={handleInputChange}
           />
           <InputComp
             label={"Płatność od jednej osoby"}
             typeInput={"pln"}
             placeholder={"Wprowadź kwotę"}
-            name={"payment"}
-            value={updatedEvent.payment}
-            setValue={handleSetUpdateEvent}
+            name={"eventDescription"}
+            value={event.eventDescription}
+            setValue={handleInputChange}
           />
           <InputComp
             label={"Wybierz lokalizację"}
             typeInput={"icon"}
             placeholder={"Wprowadź lokalizację"}
             icon={<ChevronDown />}
-            name={"location"}
-            value={updatedEvent.location}
-            setValue={handleSetUpdateEvent}
+            name={"eventName"}
+            value={event.eventName}
+            setValue={handleInputChange}
           />
         </div>
         <div>
@@ -61,8 +70,8 @@ const VUpdateEvent = () => {
             icon={<Calendar4Week />}
             name={"date"}
             type={"datetime-local"}
-            value={updatedEvent.date}
-            setValue={handleSetUpdateEvent}
+            value={event.eventName}
+            setValue={handleInputChange}
           />
           <InputComp
             id={"eventIcon"}
@@ -73,7 +82,7 @@ const VUpdateEvent = () => {
             name={"icon"}
             type={"file"}
             value={""}
-            setValue={handleSetUpdateEvent}
+            setValue={handleInputChange}
           />
           {/*TODO - image display*/}
           <div className="image">
@@ -83,8 +92,8 @@ const VUpdateEvent = () => {
         <div>
           <TextAreaComp
             label={"Opis"}
-            value={updatedEvent.description}
-            setValue={handleDescriptionChange}
+            value={event.eventName}
+            setValue={handleTextAreaChange}
           />
         </div>
       </Container>
@@ -96,7 +105,15 @@ const VUpdateEvent = () => {
           }}
           classElem="cancel"
         />
-        <ButtonComp text={"Utwórz"} onClick={() => {}} classElem="confirm" />
+        <ButtonComp
+          text={"Utwórz"}
+          onClick={() => updateEvent()}
+          classElem="confirm"
+        />
+        {
+          //TODO - loading
+          updateEventLoading.isLoading && <div>loading</div>
+        }
       </Container>
     </>
   );
