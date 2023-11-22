@@ -28,6 +28,9 @@ const Navigation = () => {
             <Link to="/panel-wydarzen" className={"nav-link"}>
               Panel wydarzeń
             </Link>
+            <Link to="/utworz-wydarzenie" className={"nav-link"}>
+              Utwórz wydarzenie
+            </Link>
             <Link
               to="/logout"
               onClick={() => console.log("Wyloguj się")}

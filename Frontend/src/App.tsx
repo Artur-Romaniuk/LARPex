@@ -4,6 +4,7 @@ import PageTitle from "./components/ui/pageTItle/PageTitle.tsx";
 import EventStore, { eventContext } from "./store/EventStore.ts";
 import { eventLogic } from "./config/context.ts";
 import VUpdateEvent from "./features/UpdateEvent/VUpdateEvent.tsx";
+import VCreateEvent from "./features/CreateEvent/VCreateEvent.tsx";
 import VEventList from "./features/EventList/VEventList.tsx";
 
 const router = createBrowserRouter([
@@ -26,6 +27,10 @@ const router = createBrowserRouter([
             <PageTitle title={"About"} />
           </div>
         ),
+      },
+      {
+        path: "/utworz-wydarzenie",
+        element: <VCreateEvent />,
       },
       {
         path: "/panel-wydarzen",
