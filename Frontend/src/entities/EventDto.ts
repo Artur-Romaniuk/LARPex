@@ -6,7 +6,7 @@ interface EventDto {
   game: string;
   payment: string;
   location: string;
-  date: string;
+  date: Date;
   peopleCount: number;
   img: string;
 }
