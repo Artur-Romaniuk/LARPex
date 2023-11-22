@@ -5,7 +5,7 @@ import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 interface EventTileProps {
   id: number;
   title: string;
-  date: string;
+  date: Date;
   peopleCount: number;
   img: string;
   navigateToEvent: (id: number) => void;

@@ -18,9 +18,9 @@ const VEventList = () => {
             key={index}
             id={event.id}
             title={event.eventName}
-            date={event.eventStatus}
-            peopleCount={10}
-            img={event.eventDescription}
+            date={event.date}
+            peopleCount={event.peopleCount}
+            img={event.img}
             navigateToEvent={navigateToEvent}
           />
         ))}
