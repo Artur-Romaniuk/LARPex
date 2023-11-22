@@ -8,8 +8,19 @@ namespace Larpex.Shared.ModelDto;
 
 public class EventDto
 {
-    public int Id { get; set; }
-    public string EventName { get; set; }
-    public string EventStatus { get; set; }
-    public string EventDescription { get; set; }
+    public int EventId { get; set; }
+
+    public string EventName { get; set; } = null!;
+
+    public string EventStatus { get; set; } = null!;
+
+    public string? EventDescription { get; set; }
+
+    public int? OrderId { get; set; }
+
+    public int? LocationId { get; set; }
+
+    public int? GameId { get; set; }
+
+    public int? TimeslotId { get; set; }
 }
