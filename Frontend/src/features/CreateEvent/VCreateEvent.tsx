@@ -1,17 +1,18 @@
 import { useNavigate, useParams } from "react-router-dom";
-import CEventHandler from "./CEventHandler.ts";
 import { Container } from "react-bootstrap";
 import PageTitle from "../../components/ui/pageTItle/PageTitle.tsx";
 import InputComp from "../../components/forms/Input/InputComp.tsx";
 import { Calendar4Week, ChevronDown } from "react-bootstrap-icons";
 import TextAreaComp from "../../components/forms/textAreaComp/TextAreaComp.tsx";
 import ButtonComp from "../../components/ui/buttonComp/ButtonComp.tsx";
+import CEventHandler from "../CEventHandler.ts";
 
 const VCreateEvent = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { updatedEvent, handleSetUpdateEvent, handleDescriptionChange } =
-    CEventHandler({ id: Number.parseInt(id ?? "-1") });
+  const { event, handleInputChange, handleTextAreaChange } = CEventHandler({
+    id: Number.parseInt(id ?? "-1"),
+  });
 
   return (
     <>
@@ -22,35 +23,35 @@ const VCreateEvent = () => {
             label={"Nazwa wydarzenia"}
             typeInput={"blank"}
             placeholder={"Wprowadź nazwę wydarzenia"}
-            name={"name"}
-            value={updatedEvent.title}
-            setValue={handleSetUpdateEvent}
+            name={"eventName"}
+            value={event.eventName}
+            setValue={handleInputChange}
           />
           <InputComp
             label={"Wybierz grę"}
             typeInput={"icon"}
             placeholder={"Wybierz grę"}
             icon={<ChevronDown />}
-            name={"game"}
-            value={updatedEvent.game}
-            setValue={handleSetUpdateEvent}
+            name={"eventStatus"}
+            value={event.eventStatus}
+            setValue={handleInputChange}
           />
           <InputComp
             label={"Płatność od jednej osoby"}
             typeInput={"pln"}
             placeholder={"Wprowadź kwotę"}
-            name={"payment"}
-            value={updatedEvent.payment}
-            setValue={handleSetUpdateEvent}
+            name={"eventDescription"}
+            value={event.eventDescription}
+            setValue={handleInputChange}
           />
           <InputComp
             label={"Wybierz lokalizację"}
             typeInput={"icon"}
             placeholder={"Wprowadź lokalizację"}
             icon={<ChevronDown />}
-            name={"location"}
-            value={updatedEvent.location}
-            setValue={handleSetUpdateEvent}
+            name={"eventName"}
+            value={event.eventName}
+            setValue={handleInputChange}
           />
         </div>
         <div>
@@ -61,8 +62,8 @@ const VCreateEvent = () => {
             icon={<Calendar4Week />}
             name={"date"}
             type={"datetime-local"}
-            value={updatedEvent.date}
-            setValue={handleSetUpdateEvent}
+            value={event.eventName}
+            setValue={handleInputChange}
           />
           <InputComp
             id={"eventIcon"}
@@ -73,7 +74,7 @@ const VCreateEvent = () => {
             name={"icon"}
             type={"file"}
             value={""}
-            setValue={handleSetUpdateEvent}
+            setValue={handleInputChange}
           />
           {/*TODO - image display*/}
           <div className="image">
@@ -83,8 +84,8 @@ const VCreateEvent = () => {
         <div>
           <TextAreaComp
             label={"Opis"}
-            value={updatedEvent.description}
-            setValue={handleDescriptionChange}
+            value={event.eventName}
+            setValue={handleTextAreaChange}
           />
         </div>
       </Container>

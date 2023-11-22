@@ -1,9 +1,8 @@
-import { useContext } from "react";
-import { eventContext } from "../../store/EventStore.ts";
 import { useNavigate } from "react-router-dom";
+import { injectEventViewModel } from "../config/context.ts";
 
 const CEventList = () => {
-  const { events } = useContext(eventContext);
+  const eventViewModel = injectEventViewModel()({ id: -1 });
   const navigate = useNavigate();
 
   const navigateToEvent = (id: number) => {
@@ -11,7 +10,7 @@ const CEventList = () => {
   };
 
   return {
-    events,
+    events: eventViewModel.events,
     navigateToEvent,
   };
 };
