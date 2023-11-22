@@ -2,3 +2,4 @@
 **obj**
 **.csproj.user
 **bin**
+/Backend/Larpex.Mono/appsettings.json
