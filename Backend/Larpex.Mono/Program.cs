@@ -1,9 +1,7 @@
-using AutoMapper;
 using Larpex.Mono.Extensions;
 using Larpex.Mono.Models;
 using Larpex.Shared.Middlewares;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
