@@ -9,5 +9,5 @@ namespace Larpex.Shared.ModelDto;
 public class PaymentDto
 {
     public int Id {  get; set; }
-    public string Status { get; set; }
+    public bool Status { get; set; }
 }
