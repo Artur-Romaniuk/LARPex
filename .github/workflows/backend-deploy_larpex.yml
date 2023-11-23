@@ -23,13 +23,13 @@ jobs:
         run: dotnet build Backend/Backend.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish Backend/Backend.sln -c Release -o /home/runner/work/LARPex/Backend
+        run: dotnet publish Backend/Backend.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
         with:
           name: .net-app
-          path: /home/runner/work/LARPex/Backend
+          path: ${{env.DOTNET_ROOT}}/myapp
 
   deploy:
     runs-on: ubuntu-latest
@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'larpex'
           slot-name: 'Production'
-          package: /home/runner/work/LARPex/Backend
+          package: ./myapp
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2B8CDD23B434C93B577C813C60DE34E }}
