@@ -26,6 +26,7 @@ const games: GameDto[] = [
 
 class GameRepositoryMock implements IGameRepository {
   addGame(game: GameDto): Promise<GameDto> {
+    game.id = games.length + 1;
     games.push(game);
     return Promise.resolve(game);
   }

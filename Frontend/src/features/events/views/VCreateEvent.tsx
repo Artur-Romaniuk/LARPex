@@ -1,21 +1,30 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import PageTitle from "../../components/ui/pageTItle/PageTitle.tsx";
-import InputComp from "../../components/forms/Input/InputComp.tsx";
-import { Calendar4Week, ChevronDown } from "react-bootstrap-icons";
-import TextAreaComp from "../../components/forms/textAreaComp/TextAreaComp.tsx";
-import ButtonComp from "../../components/ui/buttonComp/ButtonComp.tsx";
-import CEventHandler from "../CEventHandler.ts";
+import { ChevronDown } from "react-bootstrap-icons";
+import TextAreaComp from "../../../components/forms/textAreaComp/TextAreaComp.tsx";
+import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
+
+import DateInput from "../../../components/forms/DateInput";
+import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import InputComp from "../../../components/forms/Input/InputComp.tsx";
+import CEventHandler from "../controllers/CEventHandler.ts";
 
 const VCreateEvent = () => {
   const { id } = useParams<{ id: string }>();
-  const navigate = useNavigate();
-  const { event, handleInputChange, handleTextAreaChange, options, games } = CEventHandler({
+  const {
+    event,
+    handleInputChange,
+    handleTextAreaChange,
+    handleDateInputChange,
+    goBack,
+    saveNewEvent,
+    options,
+    games,
+  } = CEventHandler({
     id: Number.parseInt(id ?? "-1"),
   });
 
-  const gameNames = games.map(game =>  game.name);
-
+  const gameNames = games.map((game) => game.name);
 
   return (
     <>
@@ -36,8 +45,8 @@ const VCreateEvent = () => {
             typeInput={"datalist"}
             placeholder={"Wybierz grę"}
             icon={<ChevronDown />}
-            name={"eventStatus"}
-            value={event.eventStatus}
+            name={"game"}
+            value={event.game}
             setValue={handleInputChange}
             datalistOptions={gameNames}
           />
@@ -45,8 +54,8 @@ const VCreateEvent = () => {
             label={"Płatność od jednej osoby"}
             typeInput={"pln"}
             placeholder={"Wprowadź kwotę"}
-            name={"eventDescription"}
-            value={event.eventDescription}
+            name={"payment"}
+            value={event.payment}
             setValue={handleInputChange}
           />
           <InputComp
@@ -55,56 +64,52 @@ const VCreateEvent = () => {
             typeInput={"datalist"}
             placeholder={"Wprowadź lokalizację"}
             icon={<ChevronDown />}
-            name={"eventName"}
-            value={event.eventName}
+            name={"location"}
+            value={event.location}
             setValue={handleInputChange}
             datalistOptions={options}
           />
         </div>
         <div>
-          <InputComp
-            label={"Wybierz datę"}
-            typeInput={"date"}
-            placeholder={"Wprowadź datę"}
-            icon={<Calendar4Week />}
+          <DateInput
             name={"date"}
-            type={"datetime-local"}
-            value={event.eventName}
-            setValue={handleInputChange}
+            className={"w-100"}
+            label={"Wybierz datę"}
+            placeholder={"Wybierz datę"}
+            valueDate={event.date ?? new Date()}
+            setValueDate={handleDateInputChange}
           />
           <InputComp
             id={"eventIcon"}
-            label={"Wybierz ikonkę"}
-            placeholder={"Wprowadź ikonkę"}
-            className={"custom-file-upload"}
-            typeInput={"date"}
-            name={"icon"}
-            type={"file"}
-            value={""}
+            label={"Wybierz url ikony"}
+            placeholder={"Wprowadź url ikony"}
+            // className={"custom-file-upload"}
+            typeInput={"blank"}
+            name={"img"}
+            type={"text"}
+            value={event.img}
             setValue={handleInputChange}
           />
           {/*TODO - image display*/}
           <div className="image">
-            <img src="/src/assets/gothicL.jpg" alt="icon name" />
+            {event.img && <img src={event.img} alt="icon name" />}
           </div>
         </div>
         <div>
           <TextAreaComp
             label={"Opis"}
-            value={event.eventName}
+            value={event.eventDescription}
             setValue={handleTextAreaChange}
           />
         </div>
       </Container>
       <Container className="w-100 m-auto my-3 d-flex  justify-content-between">
+        <ButtonComp text={"Anuluj"} onClick={goBack} classElem="cancel" />
         <ButtonComp
-          text={"Anuluj"}
-          onClick={() => {
-            navigate(-1);
-          }}
-          classElem="cancel"
+          text={"Utwórz"}
+          onClick={saveNewEvent}
+          classElem="confirm"
         />
-        <ButtonComp text={"Utwórz"} onClick={() => {}} classElem="confirm" />
       </Container>
     </>
   );

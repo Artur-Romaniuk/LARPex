@@ -5,14 +5,14 @@ import useUpdateEvent from "./useUpdateEvent.ts";
 import useDeleteEvent from "./useDeleteEvent.ts";
 import EventDto from "../../../entities/EventDto.ts";
 import { useEffect, useState } from "react";
-import { injectEventRepository } from "../../../config/context.ts";
+import repositoryContext from "../../context/repositoryContext.ts";
 
 interface useEventModelProps {
   id: number;
 }
 
 const useEventModel = (props: useEventModelProps) => {
-  const eventRepository = injectEventRepository();
+  const eventRepository = repositoryContext.injectEventRepository();
   const { id } = props;
 
   const getEvents = useGetEvents({ eventRepository });

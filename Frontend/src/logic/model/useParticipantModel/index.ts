@@ -1,4 +1,3 @@
-import { injectParticipantRepository } from "../../../config/context.ts";
 import useGetParticipants from "./useGetParticipants.ts";
 import useGetParticipant from "./useGetParticipant.ts";
 import useCreateParticipant from "./useCreateParticipant.ts";
@@ -6,6 +5,7 @@ import useUpdateParticipant from "./useUpdateParticipant.ts";
 import useDeleteParticipant from "./useDeleteParticipant.ts";
 import { useEffect, useState } from "react";
 import ParticipantDto from "../../../entities/ParticipantDto.ts";
+import repositoryContext from "../../context/repositoryContext.ts";
 
 interface useParticipantModelProps {
   id: number;
@@ -13,7 +13,7 @@ interface useParticipantModelProps {
 
 const useParticipantModel = (props: useParticipantModelProps) => {
   const { id } = props;
-  const participantRepository = injectParticipantRepository();
+  const participantRepository = repositoryContext.injectParticipantRepository();
 
   const getParticipants = useGetParticipants({ participantRepository });
   const getParticipant = useGetParticipant({ participantRepository, id });

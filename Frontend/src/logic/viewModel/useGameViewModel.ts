@@ -1,12 +1,11 @@
-import { injectGameModel } from "../../config/context.ts";
-import IGameLogic from "../interfaces/logic/IGameLogic.ts";
+import useGameModel from "../model/useGameModel";
 
 interface useGameViewModelProps {
   id: number;
 }
 
-const useGameViewModel = (props: useGameViewModelProps): IGameLogic => {
-  const gameModel = injectGameModel()(props);
+const useGameViewModel = (props: useGameViewModelProps) => {
+  const gameModel = useGameModel(props);
 
   const handleGameChange = (name: string, value: string) => {
     gameModel.setGame((prevState) => ({
