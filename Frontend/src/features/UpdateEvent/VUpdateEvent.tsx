@@ -17,9 +17,13 @@ const VUpdateEvent = () => {
     handleTextAreaChange,
     updateEvent,
     updateEventLoading,
+    options, 
+    games
   } = CEventHandler({
     id: Number.parseInt(id ?? "-1"),
   });
+
+  const gameNames = games.map(game =>  game.name);
 
   if (eventLoading.isLoading) return <div>loading</div>;
   return (
@@ -36,13 +40,15 @@ const VUpdateEvent = () => {
             setValue={handleInputChange}
           />
           <InputComp
+            datalistId={"gameList"}
             label={"Wybierz grę"}
-            typeInput={"icon"}
+            typeInput={"datalist"}
             placeholder={"Wybierz grę"}
             icon={<ChevronDown />}
             name={"eventStatus"}
             value={event.eventStatus}
             setValue={handleInputChange}
+            datalistOptions={gameNames}
           />
           <InputComp
             label={"Płatność od jednej osoby"}
@@ -53,13 +59,15 @@ const VUpdateEvent = () => {
             setValue={handleInputChange}
           />
           <InputComp
+            datalistId={"locationList"}
             label={"Wybierz lokalizację"}
-            typeInput={"icon"}
+            typeInput={"datalist"}
             placeholder={"Wprowadź lokalizację"}
             icon={<ChevronDown />}
             name={"eventName"}
             value={event.eventName}
             setValue={handleInputChange}
+            datalistOptions={options}
           />
         </div>
         <div>
