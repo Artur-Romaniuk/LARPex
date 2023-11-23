@@ -20,10 +20,10 @@ jobs:
           include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build Backend/larpex.sln --configuration Release  # Specify the solution file
+        run: dotnet build Backend/Backend.sln --configuration Release
 
       - name: dotnet publish
-        run: dotnet publish Backend/larpex.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp  # Specify the solution file
+        run: dotnet publish Backend/Backend.sln -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'larpex'
           slot-name: 'Production'
-          package: ${{ github.workspace }}/myapp  # Adjust the path to the published output
-          publish-profile: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}  # Replace with your Azure Web App publish profile secret
+          package: ${{ github.workspace }}/myapp
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2B8CDD23B434C93B577C813C60DE34E }}
