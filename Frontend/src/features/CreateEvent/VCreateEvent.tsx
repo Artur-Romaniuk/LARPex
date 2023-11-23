@@ -10,9 +10,12 @@ import CEventHandler from "../CEventHandler.ts";
 const VCreateEvent = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { event, handleInputChange, handleTextAreaChange } = CEventHandler({
+  const { event, handleInputChange, handleTextAreaChange, options, games } = CEventHandler({
     id: Number.parseInt(id ?? "-1"),
   });
+
+  const gameNames = games.map(game =>  game.name);
+
 
   return (
     <>
@@ -21,20 +24,22 @@ const VCreateEvent = () => {
         <div>
           <InputComp
             label={"Nazwa wydarzenia"}
-            typeInput={"blank"}
+            typeInput={"datalist"}
             placeholder={"Wprowadź nazwę wydarzenia"}
             name={"eventName"}
             value={event.eventName}
             setValue={handleInputChange}
           />
           <InputComp
+            datalistId={"gameList"}
             label={"Wybierz grę"}
-            typeInput={"icon"}
+            typeInput={"datalist"}
             placeholder={"Wybierz grę"}
             icon={<ChevronDown />}
             name={"eventStatus"}
             value={event.eventStatus}
             setValue={handleInputChange}
+            datalistOptions={gameNames}
           />
           <InputComp
             label={"Płatność od jednej osoby"}
@@ -45,13 +50,15 @@ const VCreateEvent = () => {
             setValue={handleInputChange}
           />
           <InputComp
+            datalistId={"locationList"}
             label={"Wybierz lokalizację"}
-            typeInput={"icon"}
+            typeInput={"datalist"}
             placeholder={"Wprowadź lokalizację"}
             icon={<ChevronDown />}
             name={"eventName"}
             value={event.eventName}
             setValue={handleInputChange}
+            datalistOptions={options}
           />
         </div>
         <div>

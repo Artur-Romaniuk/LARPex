@@ -12,6 +12,7 @@ const CEventHandler = (props: CEventHandlerProps) => {
   const { id } = props;
   const eventViewModel = injectEventViewModel()({ id: id ?? -1 });
   const gameViewModel = injectGameViewModel()({ id: id ?? -1 });
+  const options = ["Warszawa", "Kraków", "Wrocław", "Gdańsk"];
   gameViewModel.games;
 
   const handleTextAreaChange = (e: ChangeEvent<HTMLTextAreaElement>) => {
@@ -44,6 +45,9 @@ const CEventHandler = (props: CEventHandlerProps) => {
 
     updateEvent,
     updateEventLoading: eventViewModel.updateEventLoading,
+
+    games: gameViewModel.games,
+    options,
   };
 };
 
