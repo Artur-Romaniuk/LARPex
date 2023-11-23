@@ -68,6 +68,7 @@ class EventRepositoryMock implements IEventRepository {
   }
 
   addEvent(event: EventDto): Promise<EventDto> {
+    event.id = events.length + 1;
     events.push(event);
     console.log(events);
     return Promise.resolve(event);

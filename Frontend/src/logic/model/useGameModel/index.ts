@@ -1,4 +1,3 @@
-import { injectGameRepository } from "../../../config/context.ts";
 import useGetGames from "./useGetGames.ts";
 import useGetGame from "./useGetGame.ts";
 import useCreateGame from "./useCreateGame.ts";
@@ -6,6 +5,7 @@ import useDeleteGame from "./useDeleteGame.ts";
 import useUpdateGame from "./useUpdateGame.ts";
 import { useEffect, useState } from "react";
 import GameDto from "../../../entities/GameDto.ts";
+import repositoryContext from "../../context/repositoryContext.ts";
 
 interface useGameModelProps {
   id: number;
@@ -13,7 +13,7 @@ interface useGameModelProps {
 
 const useGameModel = (props: useGameModelProps) => {
   const { id } = props;
-  const gameRepository = injectGameRepository();
+  const gameRepository = repositoryContext.injectGameRepository();
 
   const getGames = useGetGames({ gameRepository });
   const getGame = useGetGame({ gameRepository, id });
