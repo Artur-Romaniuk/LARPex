@@ -50,5 +50,5 @@ jobs:
         with:
           app-name: 'larpex'
           slot-name: 'Production'
-          package: ./myapp
+          package: .
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F2B8CDD23B434C93B577C813C60DE34E }}
