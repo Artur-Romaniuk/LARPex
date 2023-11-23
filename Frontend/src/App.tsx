@@ -1,10 +1,10 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./features/DefaultLayout.tsx";
 import PageTitle from "./components/ui/pageTItle/PageTitle.tsx";
-import EventStore, { eventContext } from "./store/EventStore.ts";
-import { eventLogic } from "./config/context.ts";
-import VUpdateEvent from "./features/UpdateEvent/VUpdateEvent.tsx";
-import VEventList from "./features/EventList/VEventList.tsx";
+import VUpdateEvent from "./features/events/views/VUpdateEvent.tsx";
+import VCreateEvent from "./features/events/views/VCreateEvent.tsx";
+import VEventList from "./features/events/views/VEventList.tsx";
+import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([
   {
@@ -28,6 +28,10 @@ const router = createBrowserRouter([
         ),
       },
       {
+        path: "/utworz-wydarzenie",
+        element: <VCreateEvent />,
+      },
+      {
         path: "/panel-wydarzen",
         element: <VEventList />,
       },
@@ -39,23 +43,13 @@ const router = createBrowserRouter([
   },
 ]);
 
-const EventStoreProvider = ({ children }: { children: JSX.Element }) => {
-  const elems = EventStore({
-    eventLogic,
-  });
-
-  return (
-    <eventContext.Provider value={{ ...elems }}>
-      {children}
-    </eventContext.Provider>
-  );
-};
+const queryClient = new QueryClient();
 
 const App = () => {
   return (
-    <EventStoreProvider>
+    <QueryClientProvider client={queryClient}>
       <RouterProvider router={router} />
-    </EventStoreProvider>
+    </QueryClientProvider>
   );
 };
 

@@ -1,21 +1,43 @@
-﻿using Larpex.Mono.Services.Interfaces;
+﻿using Larpex.Mono.Models;
+using Larpex.Mono.Repositories.Interfaces;
+using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
 
 namespace Larpex.Mono.Services;
 
 public class PaymentService : IPaymentService
 {
-    public Task<bool> CancelPayment(int id)
+    private readonly IPaymentRepo _IPaymentRepo;
+    public PaymentService(IPaymentRepo paymentRepo)
     {
-        throw new NotImplementedException();
+        _IPaymentRepo = paymentRepo;
     }
 
-    public Task<PaymentDto> GetPaymentStatus(int id)
+    public async Task<bool> CancelPayment(int id)
     {
-        throw new NotImplementedException();
+        var payment = await _IPaymentRepo.GetPaymentStatus(id);
+
+        if (payment == null)
+        {
+            return false;
+        }
+
+        return true;
     }
 
-    public Task<int> ProcessPayment()
+    public async Task<PaymentDto> GetPaymentStatus(int id)
+    {
+        var payment = await _IPaymentRepo.GetPaymentStatus(id);
+
+        if(payment == null)
+        {
+            return null;
+        }
+
+        return payment;
+    }
+
+    public Task<int> ProcessPayment(int id)
     {
         throw new NotImplementedException();
     }

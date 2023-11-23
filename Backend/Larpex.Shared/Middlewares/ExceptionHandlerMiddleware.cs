@@ -39,7 +39,8 @@ public class ExceptionHandlerMiddleware
             var error = new
             {
                 Id = errorId,
-                ErrorMessage = "Big oof"
+                ErrorMessage = "Big oof",
+                DebugError = ex.Message
             };
 
             await httpContext.Response.WriteAsJsonAsync(error);

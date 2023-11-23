@@ -22,7 +22,7 @@ namespace Larpex.Mono.Controllers
         public async Task<ActionResult<EventDto>> CreateEvent(EventDto newEvent)
         {
             var createdEvent = await _eventsRepo.CreateEvent(newEvent);
-            return CreatedAtAction("GetEvent", new { id = createdEvent.Id }, newEvent);
+            return CreatedAtAction("GetEvent", new { id = createdEvent.EventId }, newEvent);
         }
 
         [HttpDelete]
@@ -64,7 +64,7 @@ namespace Larpex.Mono.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<EventDto>> UpdateEvent(int id, EventDto existingEvent)
         {
-            if(id != existingEvent.Id)
+            if(id != existingEvent.EventId)
             {
                 return BadRequest("Id does not match.");
             }
