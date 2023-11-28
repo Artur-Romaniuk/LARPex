@@ -22,13 +22,23 @@ public class TimeslotRepo : ITimeslotRepo
     public async Task<DailyTimetableDto> GetDailyTimeslots(DateTime date)
     {
         var dbTimeslots = await _context.TblTimeslots.Where(t => t.TimeslotDatetime.Date.Equals(date.Date)).ToListAsync();
+
         if (dbTimeslots.Count == 0 || dbTimeslots == null)
         {
             return new DailyTimetableDto
             {
-                ReservedTimeslots = new List<TimeslotDto>(0)
+                AvailableTimeslots = new List<TimeslotDto>
+                {
+                    new TimeslotDto
+                    {
+                        TimeslotDatetime = DateTime.Today.AddHours(9),
+                        TimeslotDuration = TimeSpan.FromHours(12)
+                    }
+                }
+
             };
         }
+
         var dtoTimeslots = new List<TimeslotDto>(); 
         foreach(var ts in dbTimeslots)
         {
@@ -36,9 +46,36 @@ public class TimeslotRepo : ITimeslotRepo
         }
 
         dtoTimeslots = dtoTimeslots.OrderBy(timeslot => timeslot.TimeslotDatetime).ToList();
+        dtoTimeslots = CalculateAvailableSlots(dtoTimeslots);
         return new DailyTimetableDto
         {
-            ReservedTimeslots = dtoTimeslots
+            AvailableTimeslots = dtoTimeslots
         };
+    }
+
+    private List<TimeslotDto> CalculateAvailableSlots(List<TimeslotDto> timeslots)
+    {
+        return timeslots.Select((ts, index) =>
+        {
+            var newTimeslotDatetime = ts.TimeslotDatetime + ts.TimeslotDuration;
+            if (index + 1 < timeslots.Count())
+            {
+                var nextTimeslot = timeslots.ElementAt(index + 1);
+
+                return new TimeslotDto
+                {
+                    TimeslotDatetime = newTimeslotDatetime,
+                    TimeslotDuration = nextTimeslot.TimeslotDatetime - newTimeslotDatetime
+                };
+            }
+            else
+            {
+                return new TimeslotDto
+                {
+                    TimeslotDatetime = ts.TimeslotDatetime,
+                    TimeslotDuration = DateTime.Today.AddHours(21) - newTimeslotDatetime
+                };
+            }
+        }).ToList();
     }
 }

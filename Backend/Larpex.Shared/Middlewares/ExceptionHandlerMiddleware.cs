@@ -39,7 +39,7 @@ public class ExceptionHandlerMiddleware
             var error = new
             {
                 Id = errorId,
-                ErrorMessage = "Big oof",
+                ErrorMessage = "Big ooooooooooooooooooooooooooooooooooooooof",
                 DebugError = ex.Message
             };
 
