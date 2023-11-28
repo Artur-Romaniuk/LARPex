@@ -15,5 +15,8 @@ public class AutoMapperProfile : Profile
 
         CreateMap<TblParticipant, ParticipantDto>();
         CreateMap<ParticipantDto, TblParticipant>();
+
+        CreateMap<UserDTO, TblUser>();
+        CreateMap<TblUser, UserDTO>();
     }
 }
