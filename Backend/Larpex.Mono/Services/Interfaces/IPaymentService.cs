@@ -6,5 +6,5 @@ public interface IPaymentService
 {
     public Task<bool> CancelPayment(int id);
     public Task<PaymentDto> GetPaymentStatus(int id);
-    public Task<int> ProcessPayment();
+    public Task<int> ProcessPayment(int id);
 }

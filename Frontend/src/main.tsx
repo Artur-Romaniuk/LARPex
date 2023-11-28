@@ -3,7 +3,8 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 
 import "bootstrap/dist/css/bootstrap.min.css";
-import "./styles/index.scss";
+import "react-datetime/css/react-datetime.css";
+import "./index.scss";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>

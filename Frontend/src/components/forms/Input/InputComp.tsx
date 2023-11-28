@@ -8,12 +8,14 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
   value: string;
   setValue: (e: ChangeEvent<HTMLInputElement>) => void;
-  typeInput: "blank" | "icon" | "pln" | "date";
+  typeInput: "blank" | "icon" | "pln" | "date" | "datalist";
   icon?: JSX.Element;
+  datalistOptions?: string[];
+  datalistId?: string;
 }
 
 const InputComp = (props: InputProps) => {
-  const { typeInput, icon, value, setValue, ...rest } = props;
+  const { typeInput, icon, value, setValue, datalistOptions, datalistId, ...rest } = props;
 
   return (
     <div className={"inputElem"}>
@@ -25,6 +27,7 @@ const InputComp = (props: InputProps) => {
           onChange={setValue}
           type={rest.type}
           placeholder={rest.placeholder}
+          list={typeInput === "datalist" ? datalistId : undefined}
         />
         {
           {
@@ -32,6 +35,13 @@ const InputComp = (props: InputProps) => {
             date: null,
             icon: <InputGroup.Text className={"icon"}>{icon}</InputGroup.Text>,
             pln: <InputGroup.Text className={"icon"}>PLN</InputGroup.Text>,
+            datalist: datalistOptions && datalistId && (
+              <datalist id={datalistId}>
+                {datalistOptions.map(option => (
+                  <option key={option} value={option} />
+                ))}
+              </datalist>
+            ),
           }[typeInput]
         }
       </InputGroup>

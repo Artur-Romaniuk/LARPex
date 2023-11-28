@@ -12,11 +12,13 @@ public static class TransientServiceExtensions
 {
     public static void AddTransients(this IServiceCollection services)
     {
-        services.AddTransient<IEventsRepo, EventsRepo>(); services.AddTransient<IPaymentService, PaymentService>();
+        services.AddTransient<IEventsRepo, EventsRepo>(); 
         services.AddTransient<IParticipantsRepo, ParticipantsRepo>();
         services.AddTransient<IParticipantService, ParticipantService>();
         services.AddTransient<IGamesRepo, GamesRepo>();
         services.AddTransient<IGameService, GameService>();
+        services.AddTransient<IPaymentRepo, PaymentRepo>();
+        services.AddTransient<IPaymentService, PaymentService>();
     }
     public static void AddSigleton(this IServiceCollection services)
     {

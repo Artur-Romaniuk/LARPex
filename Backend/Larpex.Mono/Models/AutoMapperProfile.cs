@@ -7,13 +7,16 @@ public class AutoMapperProfile : Profile
 {
     public AutoMapperProfile()
     {
-        CreateMap<Event, EventDto>();
-        CreateMap<EventDto, Event>();
+        CreateMap<TblEvent, EventDto>();
+        CreateMap<EventDto, TblEvent>();
 
-        CreateMap<Game, GameDto>();
-        CreateMap<GameDto, Game>();
+        CreateMap<TblGame, GameDto>();
+        CreateMap<GameDto, TblGame>();
 
-        CreateMap<Participant, ParticipantDto>();
-        CreateMap<ParticipantDto, Participant>();
+        CreateMap<TblParticipant, ParticipantDto>();
+        CreateMap<ParticipantDto, TblParticipant>();
+
+        CreateMap<UserDTO, TblUser>();
+        CreateMap<TblUser, UserDTO>();
     }
 }

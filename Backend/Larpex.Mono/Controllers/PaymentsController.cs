@@ -1,5 +1,6 @@
 ﻿using Larpex.Mono.Repositories;
 using Larpex.Mono.Repositories.Interfaces;
+using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,13 +11,13 @@ namespace Larpex.Mono.Controllers
     [ApiController]
     public class PaymentsController : ControllerBase
     {
-        private readonly IPaymentRepo _paymentRepo;
+        private readonly IPaymentService _paymentService;
 
         public PaymentsController(
-            IPaymentRepo paymentRepo
+            IPaymentService paymentService
             )
         {
-            _paymentRepo = paymentRepo;
+            _paymentService = paymentService;
         }
 
         [HttpDelete]
@@ -24,7 +25,7 @@ namespace Larpex.Mono.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<bool>> CancelPayment(int id)
         {
-            var success = await _paymentRepo.DeletePayment(id);
+            var success = await _paymentService.CancelPayment(id);
             if (!success)
             {
                 return BadRequest($"Could not delete payment with id {id}");
@@ -37,12 +38,12 @@ namespace Larpex.Mono.Controllers
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<PaymentDto>> GetPaymentStatus(int id)
         {
-            var payment = await _paymentRepo.GetPaymentStatus(id);
+            var payment = await _paymentService.GetPaymentStatus(id);
             if (payment != null)
             {
                 return BadRequest($"No such payment with id {id}");
             }
-            return Ok(payment.Status);
+            return Ok(payment);
         }
 
 
@@ -50,13 +51,13 @@ namespace Larpex.Mono.Controllers
         [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
         public async Task<ActionResult<int>> ProcessPayment(PaymentDto newPayment)
         {
-            var payment = await _paymentRepo.SavePayment(newPayment.Id);
+            var payment = await _paymentService.ProcessPayment(newPayment.Id);
             if (payment != null)
             {
                 return BadRequest($"Couldn't process the payment");
             }
 
-            return Ok(payment.Status);
+            return Ok(payment);
         }
     }
 }
