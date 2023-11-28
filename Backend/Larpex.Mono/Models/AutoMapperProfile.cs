@@ -13,8 +13,20 @@ public class AutoMapperProfile : Profile
         CreateMap<TblGame, GameDto>();
         CreateMap<GameDto, TblGame>();
 
+        CreateMap<TblGame, EditGameDto>();
+        CreateMap<EditGameDto, TblGame>();
+
+        CreateMap<CreateGameDto, GameDto>();
+        CreateMap<GameDto, CreateGameDto>();
+
+        CreateMap<TblCharacter, CharacterDto>();
+        CreateMap<CharacterDto, TblCharacter>();
+
         CreateMap<TblParticipant, ParticipantDto>();
         CreateMap<ParticipantDto, TblParticipant>();
+
+        CreateMap<ParticipantDto, CreateParticipantDto>();
+        CreateMap<CreateParticipantDto, ParticipantDto>();
 
         CreateMap<UserDTO, TblUser>();
         CreateMap<TblUser, UserDTO>();
