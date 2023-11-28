@@ -18,5 +18,8 @@ public class AutoMapperProfile : Profile
 
         CreateMap<UserDTO, TblUser>();
         CreateMap<TblUser, UserDTO>();
+
+        CreateMap<TimeslotDto, TblTimeslot>();
+        CreateMap<TblTimeslot, TimeslotDto>();
     }
 }

@@ -19,6 +19,8 @@ public static class TransientServiceExtensions
         services.AddTransient<IGameService, GameService>();
         services.AddTransient<IPaymentRepo, PaymentRepo>();
         services.AddTransient<IPaymentService, PaymentService>();
+        services.AddTransient<IUserRepo, UserRepo>();
+        services.AddTransient<ITimeslotRepo, TimeslotRepo>();
     }
     public static void AddSigleton(this IServiceCollection services)
     {
