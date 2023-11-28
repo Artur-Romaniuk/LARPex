@@ -3,6 +3,7 @@ using Larpex.Mono.Models;
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Larpex.Mono.Repositories
 {
@@ -10,37 +11,69 @@ namespace Larpex.Mono.Repositories
     {
         private readonly LarpexDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IPaymentService _paymentService;
 
         public PaymentRepo(
             LarpexDbContext context,
-            IMapper mapper,
-            IPaymentService paymentService
+            IMapper mapper
             )
         {
             _context = context;
             _mapper = mapper;
-            _paymentService = paymentService;
         }
 
-        public Task<int> ChangePaymentStatus(int id)
+        public async Task<int> ChangePaymentStatus(int id)
         {
-            throw new NotImplementedException();
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+
+            if (payment == null)
+            {
+                return -1;
+            }
+
+            bool changedStatus = !payment.PaymentAccepted;
+            payment.PaymentAccepted = changedStatus;
+            await _context.SaveChangesAsync();
+
+            return 0;
         }
 
-        public Task<bool> DeletePayment(int id)
+        public async Task<bool> DeletePayment(int id)
         {
-            throw new NotImplementedException();
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+
+            if (payment == null)
+            {
+                return false;
+            }
+
+            _context.TblPayments.Remove(payment);
+            await _context.SaveChangesAsync();
+
+            return true;
         }
 
-        public Task<PaymentDto> GetPaymentStatus(int id)
+        public async Task<PaymentDto> GetPaymentStatus(int id)
         {
-            throw new NotImplementedException();
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+
+            if (payment == null)
+            {
+                return null;
+            }
+
+            return new PaymentDto { Id = payment.PaymentId, Status = payment.PaymentAccepted };
         }
 
-        public Task<PaymentDto> SavePayment(int id)
+        public async Task<PaymentDto> SavePayment(int id)
         {
-            throw new NotImplementedException();
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+
+            if(payment != null)
+            {
+                return null;
+            }
+
+            return null;
         }
     }
 }

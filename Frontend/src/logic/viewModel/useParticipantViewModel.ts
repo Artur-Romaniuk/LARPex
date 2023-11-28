@@ -1,11 +1,11 @@
-import { injectParticipantModel } from "../../config/context.ts";
+import useParticipantModel from "../model/useParticipantModel";
 
 interface useParticipantViewModelProps {
   id: number;
 }
 
 const useParticipantViewModel = (props: useParticipantViewModelProps) => {
-  const participantModel = injectParticipantModel()(props);
+  const participantModel = useParticipantModel(props);
 
   const handleParticipantChange = (name: string, value: string) => {
     participantModel.setParticipant((prevState) => ({

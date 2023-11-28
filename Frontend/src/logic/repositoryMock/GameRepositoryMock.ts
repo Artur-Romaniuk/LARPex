@@ -1,10 +1,32 @@
 import IGameRepository from "../interfaces/repositories/IGameRepository.ts";
 import GameDto from "../../entities/GameDto.ts";
 
-const games: GameDto[] = [];
+const games: GameDto[] = [
+  {
+    id: 1,
+    name: "Warhammer 40k",
+    eventId: 1,
+  },
+  {
+    id: 2,
+    name: "CS",
+    eventId: 2,
+  },
+  {
+    id: 3,
+    name: "Dungeons & Dragons",
+    eventId: 3,
+  },
+  {
+    id: 4,
+    name: "Rocket League",
+    eventId: 4,
+  },
+];
 
 class GameRepositoryMock implements IGameRepository {
   addGame(game: GameDto): Promise<GameDto> {
+    game.id = games.length + 1;
     games.push(game);
     return Promise.resolve(game);
   }

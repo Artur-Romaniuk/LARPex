@@ -1,8 +1,8 @@
 import { useNavigate } from "react-router-dom";
-import { injectEventViewModel } from "../config/context.ts";
+import logicMgmt from "../../../logic/context/logicContext.ts";
 
 const CEventList = () => {
-  const eventViewModel = injectEventViewModel()({ id: -1 });
+  const eventViewModel = logicMgmt.injectEvent()({ id: -1 });
   const navigate = useNavigate();
 
   const navigateToEvent = (id: number) => {

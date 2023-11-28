@@ -1,8 +1,8 @@
-import { injectPaymentRepository } from "../../../config/context.ts";
 import useGetPayment from "./useGetPayment.ts";
 import useCreatePayment from "./useCreatePayment.ts";
 import useDeletePayment from "./useDeletePayment.ts";
 import { useEffect, useState } from "react";
+import repositoryContext from "../../context/repositoryContext.ts";
 
 interface usePaymentModelProps {
   id: number;
@@ -10,7 +10,7 @@ interface usePaymentModelProps {
 
 const usePaymentModel = (props: usePaymentModelProps) => {
   const { id } = props;
-  const paymentRepository = injectPaymentRepository();
+  const paymentRepository = repositoryContext.injectPaymentRepository();
 
   const getPayment = useGetPayment({ paymentRepository, id });
   const createPayment = useCreatePayment({ paymentRepository });

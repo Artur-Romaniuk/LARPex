@@ -1,24 +1,32 @@
-import IEventL from "../interfaces/logic/IEventL.ts";
 import useEventModel from "../model/useEventModel";
+import { useNavigate } from "react-router-dom";
 
 interface useEventViewModelProps {
   id: number;
 }
 
-const useEventViewModel = (props: useEventViewModelProps): IEventL => {
+const useEventViewModel = (props: useEventViewModelProps) => {
   const eventModel = useEventModel(props);
+  const navigate = useNavigate();
 
   const createEvent = () => {
     console.log("createEvent");
-    eventModel.createEvent.createEvent(eventModel.event);
-    eventModel.getEvents.execute();
+    eventModel.createEvent.createEvent(eventModel.event, {
+      onSuccess: () => {
+        eventModel.getEvents.execute();
+        navigate("/panel-wydarzen");
+      },
+    });
   };
 
   const updateEvent = () => {
     console.log("updateEvent");
-    eventModel.updateEvent.updateEvent(eventModel.event);
-    eventModel.getEvents.execute();
-    eventModel.getEvent.execute();
+    eventModel.updateEvent.updateEvent(eventModel.event, {
+      onSuccess: () => {
+        eventModel.getEvents.execute();
+        eventModel.getEvent.execute();
+      },
+    });
   };
 
   const deleteEvent = (id: number) => {
@@ -34,12 +42,20 @@ const useEventViewModel = (props: useEventViewModelProps): IEventL => {
     });
   };
 
+  const handleDateInputChange = (date: Date) => {
+    eventModel.setEvent({
+      ...eventModel.event,
+      date: date,
+    });
+  };
+
   return {
     events: eventModel.events,
     eventsLoading: eventModel.getEvents.loadings,
 
     event: eventModel.event,
     handleEventChange: handleEventChange,
+    handleDateInputChange,
     eventLoading: eventModel.getEvent.loadings,
 
     createEvent: createEvent,

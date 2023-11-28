@@ -1,10 +1,9 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./features/DefaultLayout.tsx";
 import PageTitle from "./components/ui/pageTItle/PageTitle.tsx";
-import VUpdateEvent from "./features/UpdateEvent/VUpdateEvent.tsx";
-import VCreateEvent from "./features/CreateEvent/VCreateEvent.tsx";
-import VEventList from "./features/EventList/VEventList.tsx";
-import { Provider } from "react-redux";
+import VUpdateEvent from "./features/events/views/VUpdateEvent.tsx";
+import VCreateEvent from "./features/events/views/VCreateEvent.tsx";
+import VEventList from "./features/events/views/VEventList.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 
 const router = createBrowserRouter([

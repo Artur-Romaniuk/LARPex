@@ -1,11 +1,11 @@
-import { injectPaymentModel } from "../../config/context.ts";
+import usePaymentModel from "../model/usePaymentModel";
 
 interface usePaymentViewModelProps {
   id: number;
 }
 
 const usePaymentViewModel = (props: usePaymentViewModelProps) => {
-  const paymentModel = injectPaymentModel()(props);
+  const paymentModel = usePaymentModel(props);
 
   const handleChangePayment = (name: string, value: string) => {
     paymentModel.setPayment({
