@@ -1,3 +1,4 @@
+using AutoMapper;
 using Larpex.Mono.Models;
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
@@ -11,17 +12,19 @@ namespace Larpex.Mono.Controllers
     public class GameController : ControllerBase
     {
         private readonly IGameService _GameService;
+        private readonly IMapper _mapper;
 
-        public GameController(IGameService Gameervice)
+        public GameController(IGameService Gameervice, IMapper mapper)
         {
             _GameService = Gameervice;
+            _mapper = mapper;
         }
 
         [HttpPost]
         [ProducesResponseType(typeof(GameDto), StatusCodes.Status201Created)]
-        public async Task<ActionResult<GameDto>> AddGame(GameDto newGame)
+        public async Task<ActionResult<GameDto>> AddGame(CreateGameDto newGame)
         {
-            var createdGame = await _GameService.AddGame(newGame);
+            var createdGame = await _GameService.AddGame(_mapper.Map<GameDto>(newGame));
             return CreatedAtAction("GetGame", new { id = createdGame }, newGame);
         }
 
@@ -44,7 +47,7 @@ namespace Larpex.Mono.Controllers
         public async Task<ActionResult<GameDto>> GetGame(int id)
         {
             var existingGame = await _GameService.GetGame(id);
-            if(existingGame != null)
+            if (existingGame == null)
             {
                 return BadRequest($"No such Game with id {id}");
             }
@@ -53,22 +56,24 @@ namespace Larpex.Mono.Controllers
 
         [HttpGet("getGames")]
         [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGame()
+        public async Task<ActionResult<IEnumerable<GameDto>>> GetGames()
         {
             var existingGame = await _GameService.GetGames();
             return Ok(existingGame);
         }
 
         [HttpPut]
-        [ProducesResponseType(typeof(GameDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(bool), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<GameDto>> UpdateGame(GameDto existingGame)
+        public async Task<ActionResult<GameDto>> UpdateGame([FromBody]EditGameDto newValuesGame)
         {
-            if(existingGame.Id != existingGame.Id)
+            var existingGame = await _GameService.GetGame(newValuesGame.GameId);
+            if (existingGame == null)
             {
-                return BadRequest("Id does not match.");
+                return BadRequest($"No such Game with id {newValuesGame.GameId}");
             }
-            var updatedGame = await _GameService.UpdateGame(existingGame);
+
+            var updatedGame = await _GameService.UpdateGame(newValuesGame);
             return Ok(updatedGame);
         }
     }
