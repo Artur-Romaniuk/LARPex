@@ -5,6 +5,7 @@ namespace Larpex.Mono.Repositories.Interfaces;
 public interface IEventsRepo
 {
     public Task<EventDto> CreateEvent(EventDto eventDto);
+    public Task<EventDto> CreateEventWithTimeslot(EventWithTimeslotDto eventWithTimeslotDto);
     public Task<EventDto> UpdateEvent(int id, EventDto existingEvent);
     public Task<bool> DeleteEvent(int id);
     public Task<EventDto> GetEvent(int id);

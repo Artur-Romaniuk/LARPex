@@ -25,6 +25,15 @@ namespace Larpex.Mono.Controllers
             return CreatedAtAction("GetEvent", new { id = createdEvent.EventId }, newEvent);
         }
 
+        [HttpPost("createEventWithTimeslot")]
+        [ProducesResponseType(typeof(EventDto), StatusCodes.Status201Created)]
+        public async Task<ActionResult<EventDto>> CreateEventWithTimeslot([FromBody]EventWithTimeslotDto eventWith)
+        {
+            var createdEvent = await _eventsRepo.CreateEventWithTimeslot(eventWith);
+            return CreatedAtAction("GetEvent", new { id = createdEvent.EventId }, eventWith);
+        }
+
+
         [HttpDelete]
         [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
