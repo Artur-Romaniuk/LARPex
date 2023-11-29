@@ -4,6 +4,8 @@ using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json;
+using Stripe.Checkout;
 
 namespace Larpex.Mono.Controllers
 {
@@ -46,18 +48,56 @@ namespace Larpex.Mono.Controllers
             return Ok(payment);
         }
 
-
+        
         [HttpPost]
-        [ProducesResponseType(typeof(int), StatusCodes.Status201Created)]
-        public async Task<ActionResult<int>> ProcessPayment(PaymentDto newPayment)
+        [ProducesResponseType(typeof(StripeRequestDto), StatusCodes.Status201Created)]
+        public async Task<ActionResult<StripeRequestDto>> ProcessPayment()
         {
-            var payment = await _paymentService.ProcessPayment(newPayment.Id);
-            if (payment != null)
+            // tymczasowo bo nie ma Order zaimplementowanego
+            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
+            StripeRequestDto stripeRequestDto = new()
             {
-                return BadRequest($"Couldn't process the payment");
+                ApprovedUrl = domain + "utworz-wydarzenie", // to do: zmienic
+                CancelUrl = domain + "panel-wydarzen"
+            };
+
+            try
+            {
+                var options = new SessionCreateOptions
+                {
+                    SuccessUrl = stripeRequestDto.ApprovedUrl,
+                    CancelUrl = stripeRequestDto.CancelUrl,
+                    LineItems = new List<SessionLineItemOptions>(),
+                    Mode = "payment",
+                };
+
+                var sessionTemporaryItem = new SessionLineItemOptions
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = 20,
+                        Currency = "PLN",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = "Payment for event"
+                        }
+                    },
+                    Quantity = 1
+                };
+
+                var service = new SessionService();
+                Session session = service.Create(options);
+
+                Response.Headers.Add("Location", session.Url);
+            }
+            catch (Exception ex)
+            {
+
             }
 
-            return Ok(payment);
+            return stripeRequestDto;
         }
+
+
     }
 }
