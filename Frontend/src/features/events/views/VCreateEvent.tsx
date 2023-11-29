@@ -1,13 +1,13 @@
 import { useParams } from "react-router-dom";
-import { Container } from "react-bootstrap";
+import { Alert, Container } from "react-bootstrap";
 import { ChevronDown } from "react-bootstrap-icons";
 import TextAreaComp from "../../../components/forms/textAreaComp/TextAreaComp.tsx";
 import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
-
 import DateInput from "../../../components/forms/DateInput";
 import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
 import InputComp from "../../../components/forms/Input/InputComp.tsx";
 import CEventHandler from "../controllers/CEventHandler.ts";
+import { useState, useEffect } from "react";
 
 const VCreateEvent = () => {
   const { id } = useParams<{ id: string }>();
@@ -24,8 +24,31 @@ const VCreateEvent = () => {
     id: Number.parseInt(id ?? "-1"),
   });
 
-  const gameNames = games.map((game) => game.name);
+  const areAllFieldsFilled = (): boolean => {
 
+   console.log(event.date, event.img, event.eventDescription, event.location, event.payment, event.game, event.eventName);
+
+    return (
+      event.eventName !== undefined &&
+      event.game !== undefined &&
+      event.payment !== undefined &&
+     
+      event.location !== undefined &&
+      
+      event.img !== undefined &&
+      event.eventDescription !== undefined
+    );
+  };
+
+const [isFieldsIncomplete, setIsFieldsIncomplete] = useState(false);
+
+  useEffect(() => {
+    // Sprawdź, czy pola są niekompletne, zanim zaktualizujesz stan
+    console.log("areAllFieldsFilled", areAllFieldsFilled());
+    setIsFieldsIncomplete(!areAllFieldsFilled());
+  }, [event]);
+
+ const gameNames = games.map((game) => game.name);
   return (
     <>
       <PageTitle title={"Utwórz wydarzenie"} />
@@ -106,10 +129,25 @@ const VCreateEvent = () => {
       <Container className="w-100 m-auto my-3 d-flex  justify-content-between">
         <ButtonComp text={"Anuluj"} onClick={goBack} classElem="cancel" />
         <ButtonComp
+          disabled={false}
           text={"Utwórz"}
-          onClick={saveNewEvent}
+          onClick={() => {
+            // Dodaj warunek przed wywołaniem saveNewEvent
+            if (!isFieldsIncomplete) {
+              saveNewEvent();
+            } else {
+              // Tutaj możesz obsłużyć sytuację, gdy pola nie są wypełnione
+              console.error("Wypełnij wszystkie pola przed utworzeniem.");
+            }
+          }}
           classElem="confirm"
+          // Dodaj atrybut disabled, aby zablokować przycisk, jeśli warunek nie jest spełniony
         />
+        <Alert variant="danger"
+          show={isFieldsIncomplete}
+        >
+          {  "Uzupełnij wszystkie pola"}
+        </Alert>
       </Container>
     </>
   );

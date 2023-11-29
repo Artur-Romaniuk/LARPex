@@ -24,6 +24,7 @@ const VUpdateEvent = () => {
   } = CEventHandler({
     id: Number.parseInt(id ?? "-1"),
   });
+  
 
   const gameNames = games.map((game) => game.name);
 
@@ -108,7 +109,7 @@ const VUpdateEvent = () => {
       <Container className="w-100 m-auto my-3 d-flex  justify-content-between">
         <ButtonComp text={"Anuluj"} onClick={goBack} classElem="cancel" />
         <ButtonComp
-          text={"Utwórz"}
+          text={"Zapisz"}
           onClick={() => updateEvent()}
           classElem="confirm"
         />

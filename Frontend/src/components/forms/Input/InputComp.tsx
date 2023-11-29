@@ -1,8 +1,6 @@
-import { InputGroup } from "react-bootstrap";
-import { Form } from "react-bootstrap";
-
+import { InputGroup, Form, Alert } from "react-bootstrap";
 import "./input.scss";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useState, useEffect } from "react";
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   label: string;
@@ -15,7 +13,43 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const InputComp = (props: InputProps) => {
-  const { typeInput, icon, value, setValue, datalistOptions, datalistId, ...rest } = props;
+  const {
+    typeInput,
+    icon,
+    value,
+    setValue,
+    datalistOptions,
+    datalistId,
+    ...rest
+  } = props;
+  const [error, setError] = useState<string | null>(null);
+  const [suggestions, setSuggestions] = useState<string[]>([]);
+
+  useEffect(() => {
+    if (typeInput != "pln" && value?.trim() === "" ) {
+      setError("Wypełnij pole");
+    } else {
+      setError(null);
+    }
+  }, [typeInput, value]);
+
+  useEffect(() => {
+    if (typeInput === "pln" && !/^\d+$/.test(value?.trim()) && value === "") {
+      setError("Wprowadź liczbę");
+    } 
+  }, [typeInput, value]);
+
+  useEffect(() => {
+    if (typeInput === "datalist") {
+      // Filter the suggestions based on the current input value
+      const filteredSuggestions = datalistOptions
+        ? datalistOptions.filter((option) =>
+            option?.toLowerCase()?.includes(value?.toLowerCase())
+          )
+        : [];
+      setSuggestions(filteredSuggestions);
+    }
+  }, [typeInput, value, datalistOptions]);
 
   return (
     <div className={"inputElem"}>
@@ -29,22 +63,24 @@ const InputComp = (props: InputProps) => {
           placeholder={rest.placeholder}
           list={typeInput === "datalist" ? datalistId : undefined}
         />
-        {
-          {
-            blank: null,
-            date: null,
-            icon: <InputGroup.Text className={"icon"}>{icon}</InputGroup.Text>,
-            pln: <InputGroup.Text className={"icon"}>PLN</InputGroup.Text>,
-            datalist: datalistOptions && datalistId && (
-              <datalist id={datalistId}>
-                {datalistOptions.map(option => (
-                  <option key={option} value={option} />
-                ))}
-              </datalist>
-            ),
-          }[typeInput]
-        }
+        {typeInput === "icon" && (
+          <InputGroup.Text className={"icon"}>{icon}</InputGroup.Text>
+        )}
+        {typeInput === "pln" && (
+          <InputGroup.Text className={"icon"}>PLN</InputGroup.Text>
+        )}
+        {typeInput === "datalist" && suggestions.length > 0 && (
+          <>
+            <InputGroup.Text className={"icon"}>{icon}</InputGroup.Text>
+            <datalist id={datalistId}>
+              {suggestions.map((option) => (
+                <option key={option} value={option} />
+              ))}
+            </datalist>
+          </>
+        )}
       </InputGroup>
+      {error && <Alert variant="danger">{error}</Alert>}
     </div>
   );
 };
