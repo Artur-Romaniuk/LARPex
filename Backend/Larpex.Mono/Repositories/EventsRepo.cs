@@ -30,6 +30,60 @@ public class EventsRepo : IEventsRepo
         return eventDto;
     }
 
+    public async Task<EventDto> CreateEventWithTimeslot(EventWithTimeslotDto eventWithTimeslotDto)
+    {
+        EventDto newEvent = new EventDto();
+        newEvent.EventDescription = eventWithTimeslotDto.EventDescription;
+        newEvent.EventName = eventWithTimeslotDto.EventName;
+        newEvent.GameId = eventWithTimeslotDto.GameId;
+        newEvent.EventStatus = "";
+
+        //Location
+        TblLocation location = new TblLocation
+        {
+            LocationAddress = eventWithTimeslotDto.LocationAddress
+        };
+        _context.TblLocations.Add(location);
+        await _context.SaveChangesAsync();
+        newEvent.LocationId = location.LocationId;
+
+        //Timeslot
+        TblTimeslot timeslot = new TblTimeslot
+        {
+            TimeslotDatetime = eventWithTimeslotDto.StartDate,
+            TimeslotDuration = new TimeSpan(0, eventWithTimeslotDto.DurationHour, eventWithTimeslotDto.DurationMinute, 0, 0, 0),
+        };
+        _context.TblTimeslots.Add(timeslot);
+        await _context.SaveChangesAsync();
+        newEvent.TimeslotId = timeslot.TimeslotId;
+
+        newEvent.OrderId = 14;
+
+        ////TblPayment
+        //TblPayment payment = new TblPayment
+        //{
+        //    PaymentAccepted = true,
+        //};
+        //_context.TblPayments.Add(payment);
+        //await _context.SaveChangesAsync();
+
+
+        ////TblOrder
+        //TblOrder order = new TblOrder
+        //{
+        //    OrderAmount = eventWithTimeslotDto.ClientPrice,
+        //    PaymentId = payment.PaymentId
+        //};
+        //_context.TblOrders.Add(order);
+        //await _context.SaveChangesAsync();
+        //newEvent.LocationId = order.OrderId;
+
+
+        _context.TblEvents.Add(_mapper.Map<TblEvent>(newEvent));
+        int rews = await _context.SaveChangesAsync();
+        return newEvent;
+    }
+
     public async Task<bool> DeleteEvent(int id)
     {
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
