@@ -9,5 +9,7 @@ public partial class TblLocation
 
     public string LocationAddress { get; set; } = null!;
 
+    public double UserHourPrice { get; set; }
+
     public virtual ICollection<TblEvent> TblEvents { get; set; } = new List<TblEvent>();
 }

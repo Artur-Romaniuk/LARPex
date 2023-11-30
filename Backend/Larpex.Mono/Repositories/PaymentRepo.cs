@@ -21,9 +21,9 @@ namespace Larpex.Mono.Repositories
             _mapper = mapper;
         }
 
-        public async Task<int> ChangePaymentStatus(int id)
+        public async Task<int> ChangePaymentStatus(string id)
         {
-            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
 
             if (payment == null)
             {
@@ -37,9 +37,9 @@ namespace Larpex.Mono.Repositories
             return 0;
         }
 
-        public async Task<bool> DeletePayment(int id)
+        public async Task<bool> DeletePayment(string id)
         {
-            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
 
             if (payment == null)
             {
@@ -52,9 +52,9 @@ namespace Larpex.Mono.Repositories
             return true;
         }
 
-        public async Task<PaymentDto> GetPaymentStatus(int id)
+        public async Task<PaymentDto> GetPaymentStatus(string id)
         {
-            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
 
             if (payment == null)
             {
@@ -64,9 +64,9 @@ namespace Larpex.Mono.Repositories
             return new PaymentDto { Id = payment.PaymentId, Status = payment.PaymentAccepted };
         }
 
-        public async Task<PaymentDto> SavePayment(int id)
+        public async Task<PaymentDto> SavePayment(string id)
         {
-            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId == id);
+            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
 
             if(payment != null)
             {

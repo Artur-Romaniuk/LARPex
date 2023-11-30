@@ -16,11 +16,11 @@ public class EventDto
 
     public string? EventDescription { get; set; }
 
-    public int? OrderId { get; set; }
+    public string? OrderId { get; set; }
 
     public int? LocationId { get; set; }
 
     public int? GameId { get; set; }
 
-    public int? TimeslotId { get; set; }
+    public string? TimeslotId { get; set; }
 }

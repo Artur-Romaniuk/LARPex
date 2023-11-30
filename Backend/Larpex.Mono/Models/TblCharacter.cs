@@ -19,5 +19,5 @@ public partial class TblCharacter
 
     public virtual TblGame? Game { get; set; }
 
-    public virtual TblParticipant? TblParticipant { get; set; }
+    public virtual ICollection<TblParticipant> TblParticipants { get; set; } = new List<TblParticipant>();
 }

@@ -2,83 +2,76 @@ using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Shared.ModelDto;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Larpex.Mono.Controllers
+namespace Larpex.Mono.Controllers;
+
+[ApiController]
+[Route("api/[controller]")]
+public class EventsController : ControllerBase
 {
-    [ApiController]
-    [Route("api/[controller]")]
-    public class EventsController : ControllerBase
+    private readonly IEventsRepo _eventsRepo;
+
+    public EventsController(
+        IEventsRepo eventsRepo
+        )
     {
-        private readonly IEventsRepo _eventsRepo;
+        _eventsRepo = eventsRepo;
+    }
 
-        public EventsController(
-            IEventsRepo eventsRepo
-            )
+    [HttpPost]
+    [ProducesResponseType(typeof(EventDto), StatusCodes.Status201Created)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EventDto>> CreateEvent([FromBody]EventWithTimeslotDto eventWith)
+    {
+        var createdEvent = await _eventsRepo.CreateEvent(eventWith);
+        return Ok(new { createdEvent.EventId, createdEvent.OrderId});
+        //return CreatedAtAction("GetEvent", new { id = createdEvent.EventId }, eventWith);
+    }
+
+
+    [HttpDelete]
+    [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<bool>> DeleteEvent(int id)
+    {
+        var success = await _eventsRepo.DeleteEvent(id);
+        if (!success)
         {
-            _eventsRepo = eventsRepo;
+            return BadRequest($"Could not delete event with id {id}");
         }
+        return NoContent();
+    }
 
-        [HttpPost]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EventDto>> CreateEvent(EventDto newEvent)
+    [HttpGet("getEvent/{id}")]
+    [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EventDto>> GetEvent(int id)
+    {
+        var existingEvent = await _eventsRepo.GetEvent(id);
+        if(existingEvent != null)
         {
-            var createdEvent = await _eventsRepo.CreateEvent(newEvent);
-            return CreatedAtAction("GetEvent", new { id = createdEvent.EventId }, newEvent);
+            return BadRequest($"No such event with id {id}");
         }
+        return Ok(existingEvent);
+    }
 
-        [HttpPost("createEventWithTimeslot")]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status201Created)]
-        public async Task<ActionResult<EventDto>> CreateEventWithTimeslot([FromBody]EventWithTimeslotDto eventWith)
+    [HttpGet("getEvents")]
+    [ProducesResponseType(typeof(IEnumerable<EventDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
+    {
+        var existingEvents = await _eventsRepo.GetEvents();
+        return Ok(existingEvents);
+    }
+
+    [HttpPut]
+    [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EventDto>> UpdateEvent(int id, EventDto existingEvent)
+    {
+        if(id != existingEvent.EventId)
         {
-            var createdEvent = await _eventsRepo.CreateEventWithTimeslot(eventWith);
-            return CreatedAtAction("GetEvent", new { id = createdEvent.EventId }, eventWith);
+            return BadRequest("Id does not match.");
         }
-
-
-        [HttpDelete]
-        [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<bool>> DeleteEvent(int id)
-        {
-            var success = await _eventsRepo.DeleteEvent(id);
-            if (!success)
-            {
-                return BadRequest($"Could not delete event with id {id}");
-            }
-            return NoContent();
-        }
-
-        [HttpGet("getEvent/{id}")]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<EventDto>> GetEvent(int id)
-        {
-            var existingEvent = await _eventsRepo.GetEvent(id);
-            if(existingEvent != null)
-            {
-                return BadRequest($"No such event with id {id}");
-            }
-            return Ok(existingEvent);
-        }
-
-        [HttpGet("getEvents")]
-        [ProducesResponseType(typeof(IEnumerable<EventDto>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
-        {
-            var existingEvents = await _eventsRepo.GetEvents();
-            return Ok(existingEvents);
-        }
-
-        [HttpPut]
-        [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
-        [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<EventDto>> UpdateEvent(int id, EventDto existingEvent)
-        {
-            if(id != existingEvent.EventId)
-            {
-                return BadRequest("Id does not match.");
-            }
-            var updatedEvent = await _eventsRepo.UpdateEvent(id, existingEvent);
-            return Ok(updatedEvent);
-        }
+        var updatedEvent = await _eventsRepo.UpdateEvent(id, existingEvent);
+        return Ok(updatedEvent);
     }
 }

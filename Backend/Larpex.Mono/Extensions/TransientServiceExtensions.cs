@@ -21,6 +21,8 @@ public static class TransientServiceExtensions
         services.AddTransient<IPaymentService, PaymentService>();
         services.AddTransient<IUserRepo, UserRepo>();
         services.AddTransient<ITimeslotRepo, TimeslotRepo>();
+        services.AddTransient<ILocationRepo, LocationRepo>();
+        services.AddTransient<IImageRepo, ImageRepo>();
     }
     public static void AddSigleton(this IServiceCollection services)
     {

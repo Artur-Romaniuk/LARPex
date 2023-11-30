@@ -23,7 +23,7 @@ namespace Larpex.Mono.Controllers
         [HttpDelete]
         [ProducesResponseType(typeof(bool), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<bool>> CancelPayment(int id)
+        public async Task<ActionResult<bool>> CancelPayment(string id)
         {
             var success = await _paymentService.CancelPayment(id);
             if (!success)
@@ -36,7 +36,7 @@ namespace Larpex.Mono.Controllers
         [HttpGet]
         [ProducesResponseType(typeof(PaymentDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<PaymentDto>> GetPaymentStatus(int id)
+        public async Task<ActionResult<PaymentDto>> GetPaymentStatus(string id)
         {
             var payment = await _paymentService.GetPaymentStatus(id);
             if (payment != null)

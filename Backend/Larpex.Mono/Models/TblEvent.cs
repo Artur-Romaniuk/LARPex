@@ -13,13 +13,15 @@ public partial class TblEvent
 
     public string? EventDescription { get; set; }
 
-    public int? OrderId { get; set; }
+    public string? EventIconUrl { get; set; }
+
+    public string? OrderId { get; set; }
 
     public int? LocationId { get; set; }
 
     public int? GameId { get; set; }
 
-    public int? TimeslotId { get; set; }
+    public string? TimeslotId { get; set; }
 
     public virtual TblGame? Game { get; set; }
 
