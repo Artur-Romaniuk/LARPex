@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Larpex.Mono.Models;
 using Larpex.Shared.ModelDto;
 
 namespace Larpex.Mono.Models;
@@ -36,5 +37,11 @@ public class AutoMapperProfile : Profile
 
         CreateMap<TimeslotDto, TblTimeslot>();
         CreateMap<TblTimeslot, TimeslotDto>();
+
+        CreateMap<LocationDto, TblLocation>();
+        CreateMap<TblLocation, LocationDto>();
+
+        CreateMap<ImageDto, TblImage>();
+        CreateMap<TblImage, ImageDto>();
     }
 }

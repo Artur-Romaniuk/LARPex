@@ -20,4 +20,6 @@ public partial class TblUser
     public DateTime? UserBirthDay { get; set; }
 
     public virtual ICollection<TblParticipant> TblParticipants { get; set; } = new List<TblParticipant>();
+
+    public virtual ICollection<TblPayment> TblPayments { get; set; } = new List<TblPayment>();
 }

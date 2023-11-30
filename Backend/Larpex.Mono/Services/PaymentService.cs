@@ -13,7 +13,7 @@ public class PaymentService : IPaymentService
         _IPaymentRepo = paymentRepo;
     }
 
-    public async Task<bool> CancelPayment(int id)
+    public async Task<bool> CancelPayment(string id)
     {
         var payment = await _IPaymentRepo.GetPaymentStatus(id);
 
@@ -25,7 +25,7 @@ public class PaymentService : IPaymentService
         return true;
     }
 
-    public async Task<PaymentDto> GetPaymentStatus(int id)
+    public async Task<PaymentDto> GetPaymentStatus(string id)
     {
         var payment = await _IPaymentRepo.GetPaymentStatus(id);
 
@@ -37,7 +37,7 @@ public class PaymentService : IPaymentService
         return payment;
     }
 
-    public Task<int> ProcessPayment(int id)
+    public Task<int> ProcessPayment(string id)
     {
         throw new NotImplementedException();
     }

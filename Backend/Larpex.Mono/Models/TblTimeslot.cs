@@ -5,7 +5,7 @@ namespace Larpex.Mono.Models;
 
 public partial class TblTimeslot
 {
-    public int TimeslotId { get; set; }
+    public string TimeslotId { get; set; }
 
     public DateTime TimeslotDatetime { get; set; }
 
