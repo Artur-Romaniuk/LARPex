@@ -9,5 +9,5 @@ public interface IGameService
     public Task<GameDto> GetGame(int id);
     public Task<IEnumerable<GameDto>> GetGames();
     public Task<bool> DeleteGame(int id);
-    public Task<bool> UpdateGame(GameDto game);
+    public Task<bool> UpdateGame(EditGameDto game);
 }

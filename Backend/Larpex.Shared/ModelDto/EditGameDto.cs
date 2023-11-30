@@ -1,8 +1,6 @@
-﻿using Larpex.Shared.ModelDto;
+﻿namespace Larpex.Mono.Models;
 
-namespace Larpex.Mono.Models;
-
-public class GameDto
+public class EditGameDto
 {
     public int GameId { get; set; }
 
@@ -17,8 +15,4 @@ public class GameDto
     public int? GameDifficulty { get; set; }
 
     public int? GameMaxNumberOfParticipants { get; set; }
-
-    public virtual ICollection<CharacterDto> TblCharacters { get; set; } = new List<CharacterDto>();
-
-    public virtual ICollection<EventDto> TblEvents { get; set; } = new List<EventDto>();
 }

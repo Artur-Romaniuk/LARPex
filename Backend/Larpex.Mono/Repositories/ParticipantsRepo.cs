@@ -1,8 +1,10 @@
 ﻿using AutoMapper;
 using Larpex.Mono.Models;
+using Larpex.Mono.Models;
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
+using Microsoft.EntityFrameworkCore;
 
 namespace Larpex.Mono.Repositories;
 
@@ -22,28 +24,52 @@ public class ParticipantsRepo : IParticipantsRepo
         _mapper = mapper;
         _paymentService = paymentService;
     }
-    public Task<int> AddParticipant(ParticipantDto Participant)
+
+    public async Task<int> AddParticipant(ParticipantDto Participant)
     {
-        throw new NotImplementedException();
+        var response = await _context.TblParticipants.AddAsync(_mapper.Map<TblParticipant>(Participant));
+        await _context.SaveChangesAsync();
+        return response.Entity.ParticipantId;
     }
 
-    public Task<bool> DeleteParticipant(int id)
+    public async Task<bool> DeleteParticipant(int id)
     {
-        throw new NotImplementedException();
+        var entity = await _context.TblParticipants.FirstOrDefaultAsync(p => p.ParticipantId == id);
+        if (entity != null)
+        {
+            _context.TblParticipants.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+        return true;
     }
 
-    public Task<ParticipantDto> GetParticipant(int id)
+    public async Task<ParticipantDto> GetParticipant(int id)
     {
-        throw new NotImplementedException();
+        var g = await _context.TblParticipants.FirstOrDefaultAsync(g => g.ParticipantId == id);
+        if (g != null)
+            return _mapper.Map<ParticipantDto>(g);
+        else
+            return null;
+    }
+    public async Task<IEnumerable<ParticipantDto>> GetParticipants()
+    {
+        IEnumerable<TblParticipant> Participants = await _context.TblParticipants.ToListAsync();
+        var r = Participants.Select(u => _mapper.Map<ParticipantDto>(u));
+        return r;
     }
 
-    public Task<IEnumerable<ParticipantDto>> GetParticipants()
+    public async Task<bool> UpdateParticipant(ParticipantDto existingParticipant)
     {
-        throw new NotImplementedException();
-    }
+        var ParticipantDB = await _context.TblParticipants.FirstOrDefaultAsync(u => u.ParticipantId == existingParticipant.ParticipantId);
+        if (ParticipantDB == null)
+            return false;
 
-    public Task<bool> UpdateParticipant(ParticipantDto existingParticipant)
-    {
-        throw new NotImplementedException();
+        TblParticipant Participant = _mapper.Map<TblParticipant>(existingParticipant);
+
+        _context.Entry(ParticipantDB).State = EntityState.Detached;
+        _context.TblParticipants.Attach(Participant);
+        _context.TblParticipants.Entry(Participant).State = EntityState.Modified;
+        await _context.SaveChangesAsync();
+        return true;
     }
 }

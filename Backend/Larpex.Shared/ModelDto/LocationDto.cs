@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace Larpex.Shared.ModelDto;
 
-public class PaymentDto
+public class LocationDto
 {
-    public string Id {  get; set; }
-    public bool Status { get; set; }
+    public int LocationId { get; set; }
+    public string LocationAddress { get; set; }
+    public string UserHourPrice { get; set; }
 }

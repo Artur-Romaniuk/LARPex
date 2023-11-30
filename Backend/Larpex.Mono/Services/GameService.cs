@@ -32,7 +32,7 @@ public class GameService : IGameService
         return await _IGameRepo.GetGames();
     }
 
-    public async Task<bool> UpdateGame(GameDto Game)
+    public async Task<bool> UpdateGame(EditGameDto Game)
     {
         return await _IGameRepo.UpdateGame(Game);
     }

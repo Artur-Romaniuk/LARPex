@@ -1,9 +1,7 @@
 ﻿namespace Larpex.Mono.Models;
 
-public class ParticipantDto
+public class CreateParticipantDto
 {
-    public int ParticipantId { get; set; }
-
     public int? CharacterId { get; set; }
 
     public int? EventId { get; set; }

@@ -1,9 +1,13 @@
-﻿using System;
+﻿using Larpex.Mono.Models;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
-namespace Larpex.Mono.Models;
+namespace Larpex.Shared.ModelDto;
 
-public partial class TblCharacter
+public class CharacterDto
 {
     public int CharacterId { get; set; }
 
@@ -17,7 +21,7 @@ public partial class TblCharacter
 
     public int? GameId { get; set; }
 
-    public virtual TblGame? Game { get; set; }
+    public virtual GameDto? Game { get; set; }
 
-    public virtual ICollection<TblParticipant> TblParticipants { get; set; } = new List<TblParticipant>();
+    public virtual ParticipantDto? TblParticipant { get; set; }
 }

@@ -31,7 +31,7 @@ public class ParticipantService : IParticipantService
 
     public async Task<IEnumerable<ParticipantDto>> GetParticipants()
     {
-       return await _IParticipantRepo.GetParticipants();
+        return await _IParticipantRepo.GetParticipants();
     }
 
     public async Task<bool> UpdateParticipant(ParticipantDto Participant)
