@@ -1,14 +1,12 @@
 interface EventDto {
-  id: number;
+  eventId: number;
   eventName: string;
   eventStatus: string;
   eventDescription: string;
-  game: string;
-  payment: string;
-  location: string;
-  date: Date;
-  peopleCount: number;
-  img: string;
+  orderId: string;
+  locationId: number;
+  gameId: number;
+  timeslotId: string;
 }
 
 export default EventDto;
