@@ -22,11 +22,11 @@ jobs:
         run: |
           cd ./Frontend  # Change directory to Frontend
           npm install
-          npm run build --if-present
+          npm run build
           npm run test --if-present
 
       - name: Zip artifact for deployment
-        run: zip -r release.zip ./Frontend/* 
+        run: zip -r release.zip ./Frontend/build/*
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v3
@@ -48,7 +48,7 @@ jobs:
           name: node-app
 
       - name: Unzip artifact for deployment
-        run: unzip release.zip -d ./Frontend  
+        run: unzip release.zip -d .
 
       - name: 'Deploy to Azure Web App'
         id: deploy-to-webapp
@@ -57,4 +57,4 @@ jobs:
           app-name: 'larpex-fe'
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_F07FE76955A94CA6A9B6FA586B93D9D9 }}
-          package: ./Frontend 
+          package: .
