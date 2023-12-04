@@ -42,9 +42,15 @@ app.UseMiddleware<ExceptionHandlerMiddleware>();
 
 app.UseAuthorization();
 
+var imagesDirectory = Path.Combine(Directory.GetCurrentDirectory(), "Images");
+if (!Directory.Exists(imagesDirectory))
+{
+    Directory.CreateDirectory(imagesDirectory);
+}
+
 app.UseStaticFiles(new StaticFileOptions
 {
-    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "Images")),
+    FileProvider = new PhysicalFileProvider(imagesDirectory),
     RequestPath = "/Images"
 });
 
