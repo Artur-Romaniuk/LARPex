@@ -24,7 +24,6 @@ const VUpdateEvent = () => {
   } = CEventHandler({
     id: Number.parseInt(id ?? "-1"),
   });
-  
 
   const gameNames = games.map((game) => game.name);
 
@@ -117,6 +116,11 @@ const VUpdateEvent = () => {
           //TODO - loading
           updateEventLoading.isLoading && <div>loading</div>
         }
+        <ButtonComp
+          text={"Test na azure :)"}
+          onClick={() => updateEvent()}
+          classElem="confirm"
+        />
       </Container>
     </>
   );
