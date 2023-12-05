@@ -38,5 +38,13 @@ namespace Larpex.Mono.Controllers
             var existingEvents = await _userRepo.GetUsers();
             return Ok(existingEvents);
         }
+
+        [HttpPost]
+        [ProducesResponseType(typeof(IEnumerable<UserDTO>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<int>> CreateUser(UserDTO user)
+        {
+            var userId = await _userRepo.CreateUser(user);
+            return Ok(userId);
+        }
     }
 }

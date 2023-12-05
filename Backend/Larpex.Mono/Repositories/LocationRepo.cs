@@ -23,9 +23,10 @@ public class LocationRepo : ILocationRepo
 
     public async Task<LocationDto> CreateLocation(LocationDto location)
     {
-        var dbLocation = _mapper.Map<LocationDto>( location );
-        await _context.AddAsync( dbLocation );
+        var dbLocation = _mapper.Map<TblLocation>( location );
+        await _context.TblLocations.AddAsync( dbLocation );
         await _context.SaveChangesAsync();
+        var addedLocation = await _context.TblLocations.FirstOrDefaultAsync(l => l.LocationAddress.Equals(location.LocationAddress));
         return location;
     }
 

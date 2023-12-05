@@ -1,19 +1,17 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Larpex.Mono.Models;
 
-public class TblImage
+public partial class TblImage
 {
-    public string ImageId { get; set; }
+    public string ImageId { get; set; } = null!;
 
-    [NotMapped]
-    public IFormFile File { get; set; }
+    public string Filename { get; set; } = null!;
 
-    public string FileName { get; set; }
-
-    public string FileExtension { get; set; }
+    public string FileExtension { get; set; } = null!;
 
     public long FileSizeInBytes { get; set; }
 
-    public string FilePath { get; set; }
+    public string FilePath { get; set; } = null!;
 }

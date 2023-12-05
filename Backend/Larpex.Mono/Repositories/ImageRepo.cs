@@ -43,7 +43,7 @@ public class ImageRepo : IImageRepo
         var newImage = new TblImage 
         { 
             ImageId = Guid.NewGuid().ToString(),
-            FileName = image.FileName,
+            Filename = image.FileName,
             FileExtension = imageExtension,
             FileSizeInBytes = image.Length,
             FilePath = urlFilePath
@@ -65,7 +65,7 @@ public class ImageRepo : IImageRepo
         }
         else
         {
-            dbImage = await _context.TblImages.FirstOrDefaultAsync(x => x.FileName.Equals(description));
+            dbImage = await _context.TblImages.FirstOrDefaultAsync(x => x.Filename.Equals(description));
         }
 
         if (dbImage == null || dbImage.ImageId == string.Empty || dbImage.ImageId == null)
@@ -79,7 +79,7 @@ public class ImageRepo : IImageRepo
     private async void ValidateImageUpload(IFormFile image)
     {
         var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
-        var dbImage = await _context.TblImages.FirstOrDefaultAsync(i => i.FileName.Equals(image.FileName));
+        var dbImage = await _context.TblImages.FirstOrDefaultAsync(i => i.Filename.Equals(image.FileName));
         if(dbImage != null)
         {
             throw new ArgumentException("Filename exists! Change filename of the icon");
