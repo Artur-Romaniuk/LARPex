@@ -43,10 +43,10 @@ public class EventsController : ControllerBase
     [HttpGet("getEvent/{id}")]
     [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<EventDto>> GetEvent(int id)
+    public async Task<ActionResult<EventTimeslotResponseDto>> GetEvent(int id)
     {
         var existingEvent = await _eventsRepo.GetEvent(id);
-        if(existingEvent != null)
+        if(existingEvent == null)
         {
             return BadRequest($"No such event with id {id}");
         }
