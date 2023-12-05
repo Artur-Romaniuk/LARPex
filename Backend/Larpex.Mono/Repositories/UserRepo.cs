@@ -18,6 +18,18 @@ public class UserRepo : IUserRepo
         _context = context;
         _mapper = mapper;
     }
+
+    public async Task<int> CreateUser(UserDTO user)
+    {
+        var userek = _mapper.Map<TblUser>(user);
+        var length = 100;
+        userek.UserPassword = ZarcikMaly(length);
+        await _context.TblUsers.AddAsync(userek);
+        await _context.SaveChangesAsync();
+        var dbUser = await _context.TblUsers.FirstOrDefaultAsync(u => u.UserEmail.Equals(user.UserEmail));
+        return dbUser.UserId;
+    }
+
     public async Task<UserDTO> GetUser(int id)
     {
         var dbUser = await _context.TblUsers.FirstOrDefaultAsync(u => u.UserId == id);
@@ -42,5 +54,15 @@ public class UserRepo : IUserRepo
         }
 
         return users;
+    }
+
+    private byte[] ZarcikMaly(int length)
+    {
+        byte[] byteArray = new byte[length];
+        Random random = new Random();
+
+        random.NextBytes(byteArray);
+
+        return byteArray;
     }
 }

@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Larpex.Mono.Models;
 using Larpex.Shared.ModelDto;
 
 namespace Larpex.Mono.Models;

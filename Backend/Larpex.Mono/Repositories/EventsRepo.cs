@@ -48,13 +48,16 @@ public class EventsRepo : IEventsRepo
         await _context.SaveChangesAsync();
         newEvent.TimeslotId = timeslot.TimeslotId;
         #endregion
-
+        var eventTotalCost = await CalculateOrderAmount(eventWithTimeslotDto.AttendeesCount, eventWithTimeslotDto.LocationId);
         #region PaymentCreation
         var paymentId = Guid.NewGuid().ToString();
         TblPayment payment = new TblPayment
         {
             PaymentId = paymentId,
             PaymentAccepted = true,
+            PaymentAmount = eventTotalCost,
+            PaymentType = "Fast",
+            UserId = 1
         };
         _context.TblPayments.Add(payment);
         await _context.SaveChangesAsync();
@@ -65,7 +68,7 @@ public class EventsRepo : IEventsRepo
         TblOrder order = new TblOrder
         {
             OrderId = orderId,
-            OrderAmount = await CalculateOrderAmount(eventWithTimeslotDto.AttendeesCount, eventWithTimeslotDto.LocationId),
+            OrderAmount = eventTotalCost,
             PaymentId = payment.PaymentId
         };
         _context.TblOrders.Add(order);
