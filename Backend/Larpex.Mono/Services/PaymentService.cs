@@ -2,6 +2,11 @@
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
+using Microsoft.AspNetCore.Mvc;
+using Stripe.Checkout;
+using Stripe;
+using Larpex.Mono.Repositories;
+using static System.Net.WebRequestMethods;
 
 namespace Larpex.Mono.Services;
 
@@ -37,8 +42,49 @@ public class PaymentService : IPaymentService
         return payment;
     }
 
-    public Task<int> ProcessPayment(string id)
+    public async Task<Session> Checkout(OrderDto orderDto, string thisApiUrl, string clientUrl)
     {
-        throw new NotImplementedException();
+        EventDto eventToPayFor = await _IPaymentRepo.GetEventToPayFor(orderDto.OrderId.ToString());
+
+        if(eventToPayFor == null)
+        {
+            return null;
+        }
+
+        var options = new SessionCreateOptions
+        {           
+            SuccessUrl = $"{thisApiUrl}/checkout/success?sessionId=" + "{CHECKOUT_SESSION_ID}", // Customer paid.
+            //CancelUrl = "https://localhost:7226/" + "failed",
+            CancelUrl = clientUrl + "failed",  // Checkout cancelled.
+            PaymentMethodTypes = new List<string>
+            {
+                "card"
+            },
+            LineItems = new List<SessionLineItemOptions>
+            {
+                new()
+                {
+                    PriceData = new SessionLineItemPriceDataOptions
+                    {
+                        UnitAmount = (long) orderDto.OrderAmount * 100,
+                        Currency = "PLN",
+                        ProductData = new SessionLineItemPriceDataProductDataOptions
+                        {
+                            Name = "test",
+                            Description = "testtttttt",
+                            //Name = eventToPayFor.EventName,
+                            //Description = eventToPayFor.EventDescription
+                        },
+                    },
+                    Quantity = 1,
+                },
+            },
+            Mode = "payment" 
+        };
+
+        var service = new SessionService();
+        var session = service.Create(options);
+
+        return session;
     }
 }

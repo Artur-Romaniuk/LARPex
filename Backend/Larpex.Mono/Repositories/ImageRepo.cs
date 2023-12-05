@@ -23,13 +23,14 @@ public class ImageRepo : IImageRepo
         IWebHostEnvironment env
         )
     {
+        _contextAccessor = httpContextAccessor;
         _context = context;
         _mapper = mapper;
         _env = env;
     }
     public async Task<ImageDto> UploadImage(IFormFile image)
     {
-        ValidateImageUpload(image);
+        await ValidateImageUpload(image);
         var imageExtension = Path.GetExtension(image.FileName);
         var localFilePath = Path.Combine(_env.ContentRootPath, "Images",
             $"{image.FileName}{imageExtension}");
@@ -76,7 +77,7 @@ public class ImageRepo : IImageRepo
         return _mapper.Map<ImageDto>(dbImage);
     }
 
-    private async void ValidateImageUpload(IFormFile image)
+    private async Task ValidateImageUpload(IFormFile image)
     {
         var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
         var dbImage = await _context.TblImages.FirstOrDefaultAsync(i => i.Filename.Equals(image.FileName));

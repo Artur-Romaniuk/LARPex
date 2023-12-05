@@ -57,9 +57,9 @@ public class EventsRepo : IEventsRepo
             PaymentAccepted = true,
             PaymentAmount = eventTotalCost,
             PaymentType = "Fast",
-            UserId = 1
+            UserId = 4
         };
-        _context.TblPayments.Add(payment);
+        await _context.TblPayments.AddAsync(payment);
         await _context.SaveChangesAsync();
         #endregion
 
@@ -71,7 +71,7 @@ public class EventsRepo : IEventsRepo
             OrderAmount = eventTotalCost,
             PaymentId = payment.PaymentId
         };
-        _context.TblOrders.Add(order);
+        await _context.TblOrders.AddAsync(order);
         await _context.SaveChangesAsync();
         newEvent.OrderId = order.OrderId;
         #endregion

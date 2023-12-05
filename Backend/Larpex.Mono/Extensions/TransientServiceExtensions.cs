@@ -20,6 +20,7 @@ public static class TransientServiceExtensions
         services.AddTransient<IPaymentRepo, PaymentRepo>();
         services.AddTransient<IPaymentService, PaymentService>();
         services.AddTransient<IUserRepo, UserRepo>();
+        services.AddTransient<IOrderRepo, OrderRepo>();
         services.AddTransient<ITimeslotRepo, TimeslotRepo>();
         services.AddTransient<ILocationRepo, LocationRepo>();
         services.AddTransient<IImageRepo, ImageRepo>();
