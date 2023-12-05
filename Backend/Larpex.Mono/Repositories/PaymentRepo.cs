@@ -68,8 +68,6 @@ namespace Larpex.Mono.Repositories
         {
             var order = await _context.TblOrders.FirstOrDefaultAsync(e => e.OrderId.Equals(id));
             var eventToPayFor = await _context.TblEvents.FirstOrDefaultAsync(ev => ev.OrderId.Equals(id));
-            /*var eventId = order.TblEvent.EventId;
-            var eventToPayFor = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId.Equals(eventId));*/
             
             if(eventToPayFor != null)
             {

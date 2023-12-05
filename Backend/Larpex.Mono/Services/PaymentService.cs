@@ -70,10 +70,8 @@ public class PaymentService : IPaymentService
                         Currency = "PLN",
                         ProductData = new SessionLineItemPriceDataProductDataOptions
                         {
-                            Name = "test",
-                            Description = "testtttttt",
-                            //Name = eventToPayFor.EventName,
-                            //Description = eventToPayFor.EventDescription
+                            Name = eventToPayFor.EventName,
+                            Description = eventToPayFor.EventDescription
                         },
                     },
                     Quantity = 1,
