@@ -8,6 +8,7 @@ namespace Larpex.Shared.ModelDto;
 
 public class UserDTO
 {
+    public string UserId { get; set; }
     public string UserUsername { get; set; } = null!;
 
     public string UserEmail { get; set; } = null!;
