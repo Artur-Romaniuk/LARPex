@@ -18,7 +18,6 @@ public class EventsController : ControllerBase
     }
 
     [HttpPost]
-    [ProducesResponseType(typeof(EventDto), StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<EventDto>> CreateEvent([FromBody]EventWithTimeslotDto eventWith)
     {
