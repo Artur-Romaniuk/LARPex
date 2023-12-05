@@ -23,6 +23,7 @@ public class ImageRepo : IImageRepo
         IWebHostEnvironment env
         )
     {
+        _contextAccessor = httpContextAccessor;
         _context = context;
         _mapper = mapper;
         _env = env;
