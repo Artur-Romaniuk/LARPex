@@ -3,6 +3,7 @@ using Larpex.Mono.Models;
 using Larpex.Shared.Middlewares;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;
+using Stripe;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -32,6 +33,9 @@ builder.Services.AddTransients();
 builder.Services.AddSigleton();
 builder.Services.AddHttpContextAccessor();
 
+/*
+Stripe.StripeConfiguration.ApiKey = "pk_test_51OHojyBOOzQupZscYEIAo69bhrWJMpSDAF67xWvDzpmCYr8jwt7V6a8FxLzxtx1lT5jOG5difuHkJzGpMjM4j66r00WpCRVgNq";*/
+//GetSection("Stripe:SecretKey").Get<string>();
 
 var app = builder.Build();
 
@@ -42,7 +46,7 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
-Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:SecretKey").Get<string>();
+
 
 app.UseHsts();
 app.UseHttpsRedirection();

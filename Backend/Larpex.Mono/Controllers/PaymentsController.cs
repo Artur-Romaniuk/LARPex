@@ -2,9 +2,12 @@
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
+using Microsoft.AspNetCore.Hosting.Server.Features;
+using Microsoft.AspNetCore.Hosting.Server;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json;
+using Stripe;
 using Stripe.Checkout;
 
 namespace Larpex.Mono.Controllers
@@ -14,6 +17,7 @@ namespace Larpex.Mono.Controllers
     public class PaymentsController : ControllerBase
     {
         private readonly IPaymentService _paymentService;
+        private static string s_wasmClientURL = string.Empty;
 
         public PaymentsController(
             IPaymentService paymentService
@@ -48,56 +52,45 @@ namespace Larpex.Mono.Controllers
             return Ok(payment);
         }
 
-        
+
         [HttpPost]
-        [ProducesResponseType(typeof(StripeRequestDto), StatusCodes.Status201Created)]
-        public async Task<ActionResult<StripeRequestDto>> ProcessPayment()
+        public async Task<ActionResult<StripeRequestDto>> Checkout([FromBody] OrderDto orderDto, [FromServices] IServiceProvider sp)
         {
-            // tymczasowo bo nie ma Order zaimplementowanego
-            var domain = Request.Scheme + "://" + Request.Host.Value + "/";
-            StripeRequestDto stripeRequestDto = new()
+            var referer = Request.Headers.Referer;
+            s_wasmClientURL = referer[0];
+
+            // Build the URL to which the customer will be redirected after paying.
+            var server = sp.GetRequiredService<IServer>();
+
+            var serverAddressesFeature = server.Features.Get<IServerAddressesFeature>();
+
+            string? thisApiUrl = null;
+
+            if (serverAddressesFeature is not null)
             {
-                ApprovedUrl = domain + "utworz-wydarzenie", // to do: zmienic
-                CancelUrl = domain + "panel-wydarzen"
-            };
-
-            try
-            {
-                var options = new SessionCreateOptions
-                {
-                    SuccessUrl = stripeRequestDto.ApprovedUrl,
-                    CancelUrl = stripeRequestDto.CancelUrl,
-                    LineItems = new List<SessionLineItemOptions>(),
-                    Mode = "payment",
-                };
-
-                var sessionTemporaryItem = new SessionLineItemOptions
-                {
-                    PriceData = new SessionLineItemPriceDataOptions
-                    {
-                        UnitAmount = 20,
-                        Currency = "PLN",
-                        ProductData = new SessionLineItemPriceDataProductDataOptions
-                        {
-                            Name = "Payment for event"
-                        }
-                    },
-                    Quantity = 1
-                };
-
-                var service = new SessionService();
-                Session session = service.Create(options);
-
-                Response.Headers.Add("Location", session.Url);
-            }
-            catch (Exception ex)
-            {
-
+                thisApiUrl = serverAddressesFeature.Addresses.FirstOrDefault();
             }
 
-            return stripeRequestDto;
+            if (thisApiUrl is not null)
+            {
+                var session = await _paymentService.Checkout(orderDto, thisApiUrl, s_wasmClientURL);
+
+                var stripeRequestDto = new StripeRequestDto()
+                {
+                    StripeSessionUrl = session.Url,
+                    StripeSessionId = session.Id,
+                     ApprovedUrl = session.SuccessUrl,
+                     CancelUrl = session.CancelUrl,
+                    OrderDto = orderDto,
+                };
+
+                return Ok(stripeRequestDto);
+            }
+            else
+            {
+                return StatusCode(500);
+            }
         }
-
 
     }
 }
