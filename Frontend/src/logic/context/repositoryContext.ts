@@ -1,8 +1,8 @@
 import IEventRepository from "../interfaces/repositories/IEventRepository.ts";
-import EventRepository from "../repositories/EventRepository.ts";
+// import EventRepository from "../repositories/EventRepository.ts";
 import EventRepositoryMock from "../repositoryMock/EventRepositoryMock.ts";
 import IGameRepository from "../interfaces/repositories/IGameRepository.ts";
-import GameRepository from "../repositories/GameRepository.ts";
+// import GameRepository from "../repositories/GameRepository.ts";
 import GameRepositoryMock from "../repositoryMock/GameRepositoryMock.ts";
 import IParticipantRepository from "../interfaces/repositories/IParticipantRepository.ts";
 import ParticipantRepository from "../repositories/ParticipantRepository.ts";
@@ -16,10 +16,10 @@ interface IRepositoryContext {
   injectPaymentRepository: () => IPaymentRepository;
 }
 
-const eventRepository: IEventRepository = new EventRepository();
+// const eventRepository: IEventRepository = new EventRepository();
 const eventRepositoryMock: IEventRepository = new EventRepositoryMock();
 
-const gameRepository: IGameRepository = new GameRepository();
+// const gameRepository: IGameRepository = new GameRepository();
 const gameRepositoryMock: IGameRepository = new GameRepositoryMock();
 
 const participantsRepository: IParticipantRepository =

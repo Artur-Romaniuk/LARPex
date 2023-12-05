@@ -19,7 +19,7 @@ public class EventsController : ControllerBase
 
     [HttpPost]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<EventDto>> CreateEvent([FromBody]EventWithTimeslotDto eventWith)
+    public async Task<ActionResult<EventDto>> CreateEvent([FromForm]EventWithTimeslotDto eventWith)
     {
         var createdEvent = await _eventsRepo.CreateEvent(eventWith);
         return Ok(new { createdEvent.EventId, createdEvent.OrderId});

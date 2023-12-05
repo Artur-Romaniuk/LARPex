@@ -16,6 +16,9 @@ public class AutoMapperProfile : Profile
         CreateMap<TblGame, GameDto>();
         CreateMap<GameDto, TblGame>();
 
+        CreateMap<GameGetDto, GameDto>();
+        CreateMap<GameDto, GameGetDto>();
+
         CreateMap<TblGame, EditGameDto>();
         CreateMap<EditGameDto, TblGame>();
 

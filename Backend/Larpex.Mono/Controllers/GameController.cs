@@ -21,8 +21,8 @@ namespace Larpex.Mono.Controllers
         }
 
         [HttpPost]
-        [ProducesResponseType(typeof(GameDto), StatusCodes.Status201Created)]
-        public async Task<ActionResult<GameDto>> AddGame(CreateGameDto newGame)
+        [ProducesResponseType(typeof(GameGetDto), StatusCodes.Status201Created)]
+        public async Task<ActionResult<GameGetDto>> AddGame(CreateGameDto newGame)
         {
             var createdGame = await _GameService.AddGame(_mapper.Map<GameDto>(newGame));
             return CreatedAtAction("GetGame", new { id = createdGame }, newGame);
@@ -42,24 +42,27 @@ namespace Larpex.Mono.Controllers
         }
 
         [HttpGet("getGame/{id}")]
-        [ProducesResponseType(typeof(GameDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GameGetDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-        public async Task<ActionResult<GameDto>> GetGame(int id)
+        public async Task<ActionResult<GameGetDto>> GetGame(int id)
         {
             var existingGame = await _GameService.GetGame(id);
             if (existingGame == null)
             {
                 return BadRequest($"No such Game with id {id}");
             }
-            return Ok(existingGame);
+
+            var resp = _mapper.Map<GameGetDto>(existingGame);
+            return Ok(resp);
         }
 
         [HttpGet("getGames")]
-        [ProducesResponseType(typeof(IEnumerable<GameDto>), StatusCodes.Status200OK)]
-        public async Task<ActionResult<IEnumerable<GameDto>>> GetGames()
+        [ProducesResponseType(typeof(IEnumerable<GameGetDto>), StatusCodes.Status200OK)]
+        public async Task<ActionResult<IEnumerable<GameGetDto>>> GetGames()
         {
             var existingGame = await _GameService.GetGames();
-            return Ok(existingGame);
+            var resp = existingGame.Select(u => _mapper.Map<GameGetDto>(u));
+            return Ok(resp);
         }
 
         [HttpPut]

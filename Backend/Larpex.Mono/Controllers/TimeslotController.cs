@@ -26,7 +26,7 @@ namespace Larpex.Mono.Controllers
             var dailyTimeslots = await _timeslotRepo.GetDailyTimeslots(date);
             return Ok(dailyTimeslots);
         }
-        [HttpGet]
+        [HttpGet("timeslot")]
         [ProducesResponseType(typeof(DailyTimetableDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         public async Task<ActionResult<DailyTimetableDto>> GetDailyTimeslots(string id)
