@@ -25,18 +25,19 @@ public class TimeslotRepo : ITimeslotRepo
 
         if (dbTimeslots.Count == 0 || dbTimeslots == null)
         {
-            return new DailyTimetableDto
-            {
-                AvailableTimeslots = new List<TimeslotDto>
+            DateTime starta = new DateTime(date.Year, date.Month, date.Day);
+            starta.AddHours(9);
+            DateTime enda = new DateTime(date.Year, date.Month, date.Day);
+            starta.AddHours(21);
+            var availableTimeslots = new List<TimeslotDto>
                 {
                     new TimeslotDto
                     {
                         TimeslotDatetime = DateTime.Today.AddHours(9),
                         TimeslotDuration = TimeSpan.FromHours(12)
                     }
-                }
-
-            };
+                };
+            return new DailyTimetableDto(starta, enda, availableTimeslots);
         }
 
         var dtoTimeslots = new List<TimeslotDto>(); 
@@ -47,10 +48,16 @@ public class TimeslotRepo : ITimeslotRepo
 
         dtoTimeslots = dtoTimeslots.OrderBy(timeslot => timeslot.TimeslotDatetime).ToList();
         dtoTimeslots = CalculateAvailableSlots(dtoTimeslots);
-        return new DailyTimetableDto
-        {
-            AvailableTimeslots = dtoTimeslots
-        };
+        DateTime start = new DateTime(date.Year, date.Month, date.Day);
+        start.AddHours(9);
+        DateTime end = new DateTime(date.Year, date.Month, date.Day);
+        start.AddHours(21);
+        return new DailyTimetableDto(start, end, dtoTimeslots);
+    }
+
+    public async Task<TimeslotDto> GetTimeslot(string id)
+    {
+        return _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(id)));
     }
 
     private List<TimeslotDto> CalculateAvailableSlots(List<TimeslotDto> timeslots)
