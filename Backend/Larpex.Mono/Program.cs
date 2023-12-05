@@ -12,7 +12,17 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:5173")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); 
+        });
+});
 builder.Services.AddDbContext<LarpexDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -36,6 +46,7 @@ Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("Stripe:Sec
 
 app.UseHsts();
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin");
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 
