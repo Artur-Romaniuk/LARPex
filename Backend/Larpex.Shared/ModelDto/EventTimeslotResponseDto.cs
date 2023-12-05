@@ -22,5 +22,5 @@ public class EventTimeslotResponseDto
 
     public int? GameId { get; set; }
 
-    public string? TimeslotId { get; set; }
+    public TimeslotDto Timeslot { get; set; }
 }

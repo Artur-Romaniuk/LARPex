@@ -17,5 +17,6 @@ public class EventWithTimeslotDto
     public int DurationHour { get; set; }
     public int DurationMinute { get; set; }
     public int AttendeesCount { get; set; }
+    public int UserId { get; set; }
     public IFormFile Icon { get; set; }
 }
