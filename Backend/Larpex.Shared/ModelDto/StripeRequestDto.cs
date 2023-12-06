@@ -12,5 +12,6 @@ namespace Larpex.Shared.ModelDto
         public string? StripeSessionId { get; set;}
         public string ApprovedUrl { get; set; }
         public string CancelUrl { get; set; }
+        public OrderDto OrderDto { get; set; }
     }
 }

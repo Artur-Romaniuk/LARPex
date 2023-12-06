@@ -20,9 +20,16 @@ public class LocationController : ControllerBase
 
     [HttpGet("getLocations")]
     [ProducesResponseType(typeof(IEnumerable<LocationDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<LocationDto>>> GetEvents()
+    public async Task<ActionResult<IEnumerable<LocationDto>>> GetLocations()
     {
         var existingLocations = await _locationRepo.GetLocations();
         return Ok(existingLocations);
+    }
+    [HttpPost]
+    [ProducesResponseType(typeof(int), StatusCodes.Status200OK)]
+    public async Task<ActionResult<int>> CreateLocation(LocationDto location)
+    {
+        var loc = await _locationRepo.CreateLocation(location);
+        return Ok(loc.LocationId);
     }
 }

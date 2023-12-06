@@ -39,6 +39,10 @@ const router = createBrowserRouter([
         path: "/panel-wydarzen/:id",
         element: <VUpdateEvent />,
       },
+      {
+        path: "/platnosc/:eventId/:orderId",
+        element: <div>platnosc</div>,
+      },
     ],
   },
 ]);

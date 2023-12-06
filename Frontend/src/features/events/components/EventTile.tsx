@@ -1,6 +1,8 @@
 import React from "react";
 import "./eventTile.scss";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
+import useEditEvent from "../../../logic/hooks/useEditEvent.ts";
+import { Container } from "react-bootstrap";
 
 interface EventTileProps {
   id: number;
@@ -11,50 +13,78 @@ interface EventTileProps {
   navigateToEvent: (id: number) => void;
 }
 
-const EventTile: React.FC<EventTileProps> = ({
-  id,
-  title,
-  date,
-  peopleCount,
-  img,
-  navigateToEvent,
-}) => {
-  const yyyyMMdd = () => {
-    const dateObj = new Date(date);
-    return `${dateObj.getFullYear()}-${dateObj
-      .getMonth()
-      .toString()
-      .padStart(2, "0")}-${dateObj.getDate().toString().padStart(2, "0")}`;
-  };
-  const hhmm = () => {
-    const dateObj = new Date(date);
-    return `${dateObj.getHours()}:${dateObj.getMinutes()}`;
-  };
+const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
+  const { getEvent } = useEditEvent(id);
 
+  if (getEvent.isLoading && getEvent.data === null) {
+    return null;
+  }
+
+  const event = getEvent.data;
   return (
-    <div className="event-tile-container">
-      <div
-        className="event-image"
-        style={{ backgroundImage: `url(${img})` }}
-      ></div>
-      <div className="event-details">
-        <div className="event-title">
-          <BsCalendar className="icon" /> {title}
-        </div>
-        <div className="event-date">
-          <BsCalendar className="icon" /> {yyyyMMdd()}
-        </div>
-        <div className="event-hour">
-          <BsClock className="icon" /> {hhmm()}
-        </div>
-        <div className="event-peopleCount">
-          <BsPeople className="icon" /> {peopleCount}
-        </div>
-      </div>
-      <button className="edit-button" onClick={() => navigateToEvent(id)}>
-        edytuj wydarzenie
-      </button>
-    </div>
+    event && (
+      <>
+        <Container className="event-tile-container d-md-none">
+          <div className="event-title mb-2">{event.eventName}</div>
+          <div className="event-details w-100 d-flex flex-row align-items-center justify-content-around mb-3">
+            <div className="event-image ">
+              <img src={event.icon} alt={event.icon} />
+            </div>
+            <div className="event-elems d-flex flex-column mt-2 justify-content-around">
+              <div className="event-date d-flex flex-row align-items-center">
+                <BsCalendar className="icon" />
+                {event.timeslot.timeslotDatetime.split("T")[0]}
+              </div>
+              <div className="event-hour d-flex flex-row align-items-center">
+                <BsClock className="icon" />
+                {event.timeslot.timeslotDatetime.split("T")[1].slice(0, 5)}
+              </div>
+              <div className="event-peopleCount d-flex flex-row align-items-center">
+                {/*// TODO change pepopleCount to event.peopleCount*/}
+                <BsPeople className="icon" />
+                {20}
+              </div>
+            </div>
+          </div>
+          <button className="btn btn-dark" onClick={() => navigateToEvent(id)}>
+            Edytuj wydarzenie
+          </button>
+        </Container>
+
+        <Container className="event-tile-container event-tile-container-width d-none d-md-flex">
+          <div className="event-details w-100 d-flex flex-row align-items-center justify-content-between">
+            <div className="event-image ">
+              <img src={event.icon} alt={event.icon} />
+            </div>
+            <div className="event-elems d-flex flex-column mt-2 justify-content-around">
+              <div className="event-title mb-2">{event.eventName}</div>
+              <div className="event-elems-min-width d-flex w-100 justify-content-around">
+                <div className="event-date d-flex flex-row align-items-center">
+                  <BsCalendar className="icon" />
+                  {event.timeslot.timeslotDatetime.split("T")[0]}
+                </div>
+                <div className="event-hour d-flex flex-row align-items-center">
+                  <BsClock className="icon" />
+                  {event.timeslot.timeslotDatetime.split("T")[1].slice(0, 5)}
+                </div>
+                <div className="event-peopleCount d-flex flex-row align-items-center">
+                  {/*// TODO change pepopleCount to event.peopleCount*/}
+                  <BsPeople className="icon" />
+                  {20}
+                </div>
+              </div>
+            </div>
+
+            <button
+              className="btn btn-dark"
+              onClick={() => navigateToEvent(id)}
+            >
+              Edytuj wydarzenie
+            </button>
+          </div>
+        </Container>
+      </>
+    )
   );
 };
 

@@ -23,13 +23,14 @@ public class ImageRepo : IImageRepo
         IWebHostEnvironment env
         )
     {
+        _contextAccessor = httpContextAccessor;
         _context = context;
         _mapper = mapper;
         _env = env;
     }
     public async Task<ImageDto> UploadImage(IFormFile image)
     {
-        ValidateImageUpload(image);
+        await ValidateImageUpload(image);
         var imageExtension = Path.GetExtension(image.FileName);
         var localFilePath = Path.Combine(_env.ContentRootPath, "Images",
             $"{image.FileName}{imageExtension}");
@@ -37,13 +38,13 @@ public class ImageRepo : IImageRepo
         using var stream = new FileStream(localFilePath, FileMode.Create);
         await image.CopyToAsync(stream);
 
-        var ca = _contextAccessor.HttpContext!.Request;
-        var urlFilePath = $"{ca.Scheme}://{ca.Host}{ca.PathBase}/Images/{image.FileName}{imageExtension}";
+
+        var urlFilePath = $"/Images/{image.FileName}{imageExtension}";
 
         var newImage = new TblImage 
         { 
             ImageId = Guid.NewGuid().ToString(),
-            FileName = image.FileName,
+            Filename = image.FileName,
             FileExtension = imageExtension,
             FileSizeInBytes = image.Length,
             FilePath = urlFilePath
@@ -65,7 +66,7 @@ public class ImageRepo : IImageRepo
         }
         else
         {
-            dbImage = await _context.TblImages.FirstOrDefaultAsync(x => x.FileName.Equals(description));
+            dbImage = await _context.TblImages.FirstOrDefaultAsync(x => x.Filename.Equals(description));
         }
 
         if (dbImage == null || dbImage.ImageId == string.Empty || dbImage.ImageId == null)
@@ -76,10 +77,10 @@ public class ImageRepo : IImageRepo
         return _mapper.Map<ImageDto>(dbImage);
     }
 
-    private async void ValidateImageUpload(IFormFile image)
+    private async Task<bool> ValidateImageUpload(IFormFile image)
     {
         var allowedExtensions = new string[] { ".jpg", ".jpeg", ".png" };
-        var dbImage = await _context.TblImages.FirstOrDefaultAsync(i => i.FileName.Equals(image.FileName));
+        var dbImage = await _context.TblImages.FirstOrDefaultAsync(i => i.Filename.Equals(image.FileName));
         if(dbImage != null)
         {
             throw new ArgumentException("Filename exists! Change filename of the icon");
@@ -93,5 +94,6 @@ public class ImageRepo : IImageRepo
         {
             throw new ArgumentException("File size more than 10MB, please upload smaller size file.");
         }
+        return true;
     }
 }

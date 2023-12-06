@@ -16,11 +16,11 @@ const VEventList = () => {
         {events.map((event, index) => (
           <EventTile
             key={index}
-            id={event.id}
+            id={event.eventId}
             title={event.eventName}
-            date={event.date}
-            peopleCount={event.peopleCount}
-            img={event.img}
+            date={new Date()}
+            peopleCount={20}
+            img={event.icon}
             navigateToEvent={navigateToEvent}
           />
         ))}

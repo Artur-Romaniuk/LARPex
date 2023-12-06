@@ -5,7 +5,7 @@ namespace Larpex.Mono.Models;
 
 public partial class TblPayment
 {
-    public string PaymentId { get; set; }
+    public string PaymentId { get; set; } = null!;
 
     public bool PaymentAccepted { get; set; }
 
@@ -13,11 +13,9 @@ public partial class TblPayment
 
     public string PaymentType { get; set; } = null!;
 
-    public string? OrderId { get; set; }
-
     public int? UserId { get; set; }
 
-    public virtual TblOrder? TblOrder { get; set; }
+    public virtual ICollection<TblOrder> TblOrders { get; set; } = new List<TblOrder>();
 
     public virtual TblUser? User { get; set; }
 }

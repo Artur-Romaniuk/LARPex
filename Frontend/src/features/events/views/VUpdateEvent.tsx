@@ -1,124 +1,129 @@
 import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
-import { ChevronDown } from "react-bootstrap-icons";
-import CEventHandler from "../controllers/CEventHandler.ts";
+import CEditHandler from "../controllers/CEditHandler.ts";
 import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
-import InputComp from "../../../components/forms/Input/InputComp.tsx";
-import TextAreaComp from "../../../components/forms/textAreaComp/TextAreaComp.tsx";
 import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
-import DateInput from "../../../components/forms/DateInput";
+import TextInput from "../../../components/forms/TextInput.tsx";
+import SelectInput from "../../../components/forms/SelectInput.tsx";
+import DateSelector from "../../../components/forms/DateSelector.tsx";
+import TimeslotPicker from "../../../components/forms/TimeslotPicker.tsx";
+import FileInput from "../../../components/forms/FileInput.tsx";
+import TextAreaInput from "../../../components/forms/TextAreaInput.tsx";
 
 const VUpdateEvent = () => {
   const { id } = useParams<{ id: string }>();
   const {
-    event,
-    eventLoading,
-    handleInputChange,
-    handleTextAreaChange,
-    handleDateInputChange,
-    updateEvent,
-    updateEventLoading,
-    goBack,
-    options,
+    locations,
     games,
-  } = CEventHandler({
+
+    gameName,
+    dateSelector,
+    numberOfPlayers,
+    description,
+    timeslotSelector,
+    icon,
+    globalError,
+
+    updateEventExec,
+    goBack,
+  } = CEditHandler({
     id: Number.parseInt(id ?? "-1"),
   });
 
-  const gameNames = games.map((game) => game.name);
+  if (locations.getLocations.isLoading && games.getGames.data) {
+    return <div>loading</div>;
+  }
 
-  if (eventLoading.isLoading) return <div>loading</div>;
   return (
     <>
       <PageTitle title={"Edytuj wydarzenie"} />
       <Container className="d-flex mt-4 flex-row flex-grow-1 flex-wrap justify-content-around">
         <div>
-          <InputComp
+          <TextInput
+            value={gameName.value}
             label={"Nazwa wydarzenia"}
-            typeInput={"datalist"}
+            error={gameName.error}
+            onChange={gameName.onChange}
             placeholder={"Wprowadź nazwę wydarzenia"}
-            name={"eventName"}
-            value={event.eventName}
-            setValue={handleInputChange}
           />
-          <InputComp
-            datalistId={"gameList"}
-            label={"Wybierz grę"}
-            typeInput={"datalist"}
-            placeholder={"Wybierz grę"}
-            icon={<ChevronDown />}
-            name={"game"}
-            value={event.game}
-            setValue={handleInputChange}
-            datalistOptions={gameNames}
+
+          <SelectInput
+            label={"Wybierz rodzaj gry"}
+            options={games.gamesNames}
+            value={(games.selectedGameName && games.selectedGameName) || ""}
+            onChange={games.handleGameChange}
           />
-          <InputComp
-            label={"Płatność od jednej osoby"}
-            typeInput={"pln"}
-            placeholder={"Wprowadź kwotę"}
-            name={"payment"}
-            value={event.payment}
-            setValue={handleInputChange}
-          />
-          <InputComp
-            datalistId={"locationList"}
+
+          <SelectInput
             label={"Wybierz lokalizację"}
-            typeInput={"datalist"}
-            placeholder={"Wprowadź lokalizację"}
-            icon={<ChevronDown />}
-            name={"location"}
-            value={event.location}
-            setValue={handleInputChange}
-            datalistOptions={options}
+            value={
+              (locations.selectedLocationName &&
+                locations.selectedLocationName) ||
+              ""
+            }
+            options={locations.locationsNames}
+            onChange={locations.handleLocationChange}
+          />
+
+          <TextInput
+            type={"number"}
+            value={numberOfPlayers.value.toString()}
+            label={"Wprowadź ilość graczy"}
+            error={numberOfPlayers.error}
+            onChange={numberOfPlayers.onChange}
+            placeholder={"Wprowadź ilość graczy"}
           />
         </div>
         <div>
-          <DateInput
-            name={"date"}
-            className={"w-100"}
-            label={"Wybierz datę"}
-            placeholder={"Wybierz datę"}
-            valueDate={event.date ?? new Date()}
-            setValueDate={handleDateInputChange}
+          <DateSelector
+            label={"Wybierz dzień"}
+            value={dateSelector.date}
+            onChange={dateSelector.handleDateChange}
+            error={dateSelector.error}
           />
-          <InputComp
-            id={"eventIcon"}
-            label={"Wybierz url ikony"}
-            placeholder={"Wprowadź url ikony"}
-            // className={"custom-file-upload"}
-            typeInput={"blank"}
-            name={"img"}
-            type={"text"}
-            value={event.img}
-            setValue={handleInputChange}
+          <TimeslotPicker
+            label={"Wybierz godzinę"}
+            hours={timeslotSelector.hour}
+            minutes={timeslotSelector.minutes}
+            duration={timeslotSelector.durationMinutes}
+            error={timeslotSelector.error}
+            hourChange={timeslotSelector.handleHourChange}
+            minutesChange={timeslotSelector.handleMinutesChange}
+            durationChange={timeslotSelector.handleDurationMinutesChange}
+            possibleHours={timeslotSelector.possibleHours || []}
           />
-          {/*TODO - image display*/}
-          <div className="image">
-            {event.img && <img src={event.img} alt="icon name" />}
-          </div>
+          <TextInput
+            type={"number"}
+            value={timeslotSelector.durationMinutes.toString()}
+            label={"Wprwadź czas w minutach"}
+            error={timeslotSelector.durationError}
+            onChange={timeslotSelector.handleDurationMinutesChange}
+            placeholder={"Wprowadź czas"}
+          />
+
+          <FileInput label={"Wprowadź ikone"} onChange={icon.handleChange} />
+          {icon.preview && (
+            <img src={icon.preview} alt="icon name" className="image" />
+          )}
         </div>
         <div>
-          <TextAreaComp
-            label={"Opis"}
-            value={event.eventDescription}
-            setValue={handleTextAreaChange}
+          <TextAreaInput
+            label={"Wprowadź opis"}
+            value={description.value}
+            setValue={description.onChange}
+            error={description.error}
+            placeholder={"Wprowadź opis"}
           />
         </div>
+        <p className={"globalError"}>
+          <i>{globalError}</i>
+        </p>
       </Container>
       <Container className="w-100 m-auto my-3 d-flex  justify-content-between">
         <ButtonComp text={"Anuluj"} onClick={goBack} classElem="cancel" />
         <ButtonComp
           text={"Zapisz"}
-          onClick={() => updateEvent()}
-          classElem="confirm"
-        />
-        {
-          //TODO - loading
-          updateEventLoading.isLoading && <div>loading</div>
-        }
-        <ButtonComp
-          text={"Test na azure :)"}
-          onClick={() => updateEvent()}
+          onClick={() => updateEventExec()}
           classElem="confirm"
         />
       </Container>

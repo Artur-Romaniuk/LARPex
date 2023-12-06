@@ -64,13 +64,14 @@ namespace Larpex.Mono.Repositories
             return new PaymentDto { Id = payment.PaymentId, Status = payment.PaymentAccepted };
         }
 
-        public async Task<PaymentDto> SavePayment(string id)
+        public async Task<EventDto> GetEventToPayFor(string id)
         {
-            var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
-
-            if(payment != null)
+            var order = await _context.TblOrders.FirstOrDefaultAsync(e => e.OrderId.Equals(id));
+            var eventToPayFor = await _context.TblEvents.FirstOrDefaultAsync(ev => ev.OrderId.Equals(id));
+            
+            if(eventToPayFor != null)
             {
-                return null;
+                return _mapper.Map<EventDto>(eventToPayFor);
             }
 
             return null;

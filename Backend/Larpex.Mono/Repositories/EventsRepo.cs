@@ -48,15 +48,18 @@ public class EventsRepo : IEventsRepo
         await _context.SaveChangesAsync();
         newEvent.TimeslotId = timeslot.TimeslotId;
         #endregion
-
+        var eventTotalCost = await CalculateOrderAmount(eventWithTimeslotDto.AttendeesCount, eventWithTimeslotDto.LocationId);
         #region PaymentCreation
         var paymentId = Guid.NewGuid().ToString();
         TblPayment payment = new TblPayment
         {
             PaymentId = paymentId,
             PaymentAccepted = true,
+            PaymentAmount = eventTotalCost,
+            PaymentType = "Fast",
+            UserId = eventWithTimeslotDto.UserId
         };
-        _context.TblPayments.Add(payment);
+        await _context.TblPayments.AddAsync(payment);
         await _context.SaveChangesAsync();
         #endregion
 
@@ -65,10 +68,10 @@ public class EventsRepo : IEventsRepo
         TblOrder order = new TblOrder
         {
             OrderId = orderId,
-            OrderAmount = await CalculateOrderAmount(eventWithTimeslotDto.AttendeesCount, eventWithTimeslotDto.LocationId),
+            OrderAmount = eventTotalCost,
             PaymentId = payment.PaymentId
         };
-        _context.TblOrders.Add(order);
+        await _context.TblOrders.AddAsync(order);
         await _context.SaveChangesAsync();
         newEvent.OrderId = order.OrderId;
         #endregion
@@ -77,8 +80,11 @@ public class EventsRepo : IEventsRepo
         var image = await _imageRepo.UploadImage(eventWithTimeslotDto.Icon);
         newEvent.EventIconUrl = image.FilePath;
         #endregion
+        await _context.TblEvents.AddAsync(newEvent);
+        await _context.SaveChangesAsync();
 
-        return _mapper.Map<EventDto>(newEvent);
+        var addedEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventName.Equals(newEvent.EventName));
+        return _mapper.Map<EventDto>(addedEvent);
     }
 
     public async Task<bool> DeleteEvent(int id)
@@ -95,7 +101,7 @@ public class EventsRepo : IEventsRepo
         return true;
     }
 
-    public async Task<EventDto> GetEvent(int id)
+    public async Task<EventTimeslotResponseDto> GetEvent(int id)
     {
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
 
@@ -103,8 +109,18 @@ public class EventsRepo : IEventsRepo
         {
             throw new ArgumentNullException("Event with this id does not exist.");
         }
-
-        return _mapper.Map<EventDto>(dbEvent);
+        var existingEventDto = new EventTimeslotResponseDto
+        {
+            EventId = dbEvent.EventId,
+            EventName = dbEvent.EventName,
+            EventStatus = dbEvent.EventStatus,
+            EventDescription = dbEvent.EventDescription,
+            OrderId = dbEvent.OrderId,
+            LocationId = dbEvent.LocationId,
+            GameId = dbEvent.GameId,
+            Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(dbEvent.TimeslotId)))
+        };
+        return existingEventDto;
     }
 
     public async Task<IEnumerable<EventDto>> GetEvents()

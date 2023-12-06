@@ -23,59 +23,64 @@ public class TimeslotRepo : ITimeslotRepo
     {
         var dbTimeslots = await _context.TblTimeslots.Where(t => t.TimeslotDatetime.Date.Equals(date.Date)).ToListAsync();
 
-        if (dbTimeslots.Count == 0 || dbTimeslots == null)
+        DateTime start = new DateTime(date.Year, date.Month, date.Day).AddHours(9);
+        DateTime end = new DateTime(date.Year, date.Month, date.Day).AddHours(21);
+
+        if (dbTimeslots == null || dbTimeslots.Count == 0)
         {
-            return new DailyTimetableDto
+            var availableTimeslots = new List<TimeslotDto>
+        {
+            new TimeslotDto
             {
-                AvailableTimeslots = new List<TimeslotDto>
-                {
-                    new TimeslotDto
-                    {
-                        TimeslotDatetime = DateTime.Today.AddHours(9),
-                        TimeslotDuration = TimeSpan.FromHours(12)
-                    }
-                }
-
-            };
-        }
-
-        var dtoTimeslots = new List<TimeslotDto>(); 
-        foreach(var ts in dbTimeslots)
-        {
-            dtoTimeslots.Add(_mapper.Map<TimeslotDto>(ts));
-        }
-
-        dtoTimeslots = dtoTimeslots.OrderBy(timeslot => timeslot.TimeslotDatetime).ToList();
-        dtoTimeslots = CalculateAvailableSlots(dtoTimeslots);
-        return new DailyTimetableDto
-        {
-            AvailableTimeslots = dtoTimeslots
+                TimeslotDatetime = start,
+                TimeslotDuration = end - start
+            }
         };
+            return new DailyTimetableDto(start, end, availableTimeslots);
+        }
+
+        var occupiedSlots = dbTimeslots.Select(ts => new
+        {
+            Start = ts.TimeslotDatetime,
+            End = ts.TimeslotDatetime + ts.TimeslotDuration
+        }).ToList();
+
+        var availableSlots = new List<TimeslotDto>();
+
+        DateTime currentSlotStart = start;
+        foreach (var slot in occupiedSlots)
+        {
+            if (slot.Start > currentSlotStart)
+            {
+                var availableSlot = new TimeslotDto
+                {
+                    TimeslotDatetime = currentSlotStart,
+                    TimeslotDuration = slot.Start - currentSlotStart
+                };
+                availableSlots.Add(availableSlot);
+            }
+
+            if (slot.End > currentSlotStart)
+            {
+                currentSlotStart = slot.End;
+            }
+        }
+
+        if (currentSlotStart < end)
+        {
+            var lastAvailableSlot = new TimeslotDto
+            {
+                TimeslotDatetime = currentSlotStart,
+                TimeslotDuration = end - currentSlotStart
+            };
+            availableSlots.Add(lastAvailableSlot);
+        }
+
+        return new DailyTimetableDto(start, end, availableSlots);
     }
 
-    private List<TimeslotDto> CalculateAvailableSlots(List<TimeslotDto> timeslots)
+    public async Task<TimeslotDto> GetTimeslot(string id)
     {
-        return timeslots.Select((ts, index) =>
-        {
-            var newTimeslotDatetime = ts.TimeslotDatetime + ts.TimeslotDuration;
-            if (index + 1 < timeslots.Count())
-            {
-                var nextTimeslot = timeslots.ElementAt(index + 1);
-
-                return new TimeslotDto
-                {
-                    TimeslotDatetime = newTimeslotDatetime,
-                    TimeslotDuration = nextTimeslot.TimeslotDatetime - newTimeslotDatetime
-                };
-            }
-            else
-            {
-                return new TimeslotDto
-                {
-                    TimeslotDatetime = ts.TimeslotDatetime,
-                    TimeslotDuration = DateTime.Today.AddHours(21) - newTimeslotDatetime
-                };
-            }
-        }).ToList();
+        return _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(id)));
     }
 }

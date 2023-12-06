@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Larpex.Mono.Models;
 using Larpex.Shared.ModelDto;
 
 namespace Larpex.Mono.Models;
@@ -16,6 +15,9 @@ public class AutoMapperProfile : Profile
 
         CreateMap<TblGame, GameDto>();
         CreateMap<GameDto, TblGame>();
+
+        CreateMap<GameGetDto, GameDto>();
+        CreateMap<GameDto, GameGetDto>();
 
         CreateMap<TblGame, EditGameDto>();
         CreateMap<EditGameDto, TblGame>();
