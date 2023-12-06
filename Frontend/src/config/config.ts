@@ -1,1 +1,1 @@
-export const API_HOST = "http://localhost:5278/api";
+export const API_HOST = "https://larpex.azurewebsites.net/api";
