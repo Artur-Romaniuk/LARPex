@@ -27,3 +27,12 @@ html {
         width: 100%;
     }
 }
+
+.globalError {
+    position: absolute;
+    bottom: 50px;
+    font-size: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    color: var(--red);
+}

@@ -1,8 +1,8 @@
 interface ParticipantDto {
-  id: number;
+  participantId: number;
+  characterId: number;
   eventId: number;
-  name: string;
-  description: string;
+  userId: number;
 }
 
 export default ParticipantDto;
