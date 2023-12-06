@@ -1,5 +1,6 @@
 import CreateGameDto from "../../../entities/CreateGameDto.ts";
 import EditGameDto from "../../../entities/EditGameDto.ts";
+import GameGetDto from "../../../entities/GameGetDto.ts";
 
 interface IGameRepository {
   getGameById(id: number): Promise<GameGetDto>;
