@@ -23,7 +23,17 @@ builder.Services.AddCors(options =>
                 .AllowAnyMethod()
                 .AllowCredentials(); 
         });
+
+    options.AddPolicy("AllowLarpexFE",
+        builder =>
+        {
+            builder.WithOrigins("https://larpex-fe.azurewebsites.net")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials(); 
+        });
 });
+
 builder.Services.AddDbContext<LarpexDbContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -49,7 +59,19 @@ app.UseSwaggerUI();
 
 app.UseHsts();
 app.UseHttpsRedirection();
-app.UseCors("AllowSpecificOrigin");
+app.UseCors(builder =>
+{
+    builder.WithOrigins("http://localhost:5173")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+
+    builder.WithOrigins("https://larpex-fe.azurewebsites.net")
+        .AllowAnyHeader()
+        .AllowAnyMethod()
+        .AllowCredentials();
+});
+
 
 app.UseMiddleware<ExceptionHandlerMiddleware>();
 

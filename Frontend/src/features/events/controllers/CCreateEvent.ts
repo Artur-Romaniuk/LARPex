@@ -40,8 +40,6 @@ const CEditHandler = () => {
     initialValue: "",
     maxLength: 300,
     minLength: 10,
-    // pattern for text numbers with polish character
-    pattern: /^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9]+|\s)*$/,
   });
 
   const timeslotSelector = useTimeslotSelector({
