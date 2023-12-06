@@ -1,7 +1,8 @@
-import IEventRepository from "../interfaces/repositories/IEventRepository.ts";
-import EventDto from "../../entities/EventDto.ts";
+import IEventRepository from "../interfaces/IEventRepository.ts";
+import EventDto from "../../../entities/EventDto.ts";
 import axios from "axios";
-import { API_HOST } from "../../config/config.ts";
+import { API_HOST } from "../../../config/config.ts";
+import EventWithTimeslotDto from "../../../entities/EventWithTimeslotDto.ts";
 
 class EventRepository implements IEventRepository {
   getEvents(): Promise<EventDto[]> {
@@ -14,13 +15,13 @@ class EventRepository implements IEventRepository {
       .then((res) => res.data);
   }
 
-  addEvent(event: EventDto): Promise<EventDto> {
+  addEvent(event: EventWithTimeslotDto): Promise<EventDto> {
     return axios.post(`${API_HOST}/Events`, event).then((res) => res.data);
   }
 
   updateEvent(event: EventDto): Promise<EventDto> {
     return axios
-      .put(`${API_HOST}/Events?id=${event.id}`, event)
+      .put(`${API_HOST}/Events?id=${event.eventId}`, event)
       .then((res) => res.data);
   }
 

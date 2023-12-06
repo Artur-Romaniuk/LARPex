@@ -1,4 +1,4 @@
-import IGameRepository from "../../interfaces/repositories/IGameRepository.ts";
+import IGameRepository from "../../repositories/interfaces/IGameRepository.ts";
 import { useQuery } from "react-query";
 
 interface useGetGamesProps {

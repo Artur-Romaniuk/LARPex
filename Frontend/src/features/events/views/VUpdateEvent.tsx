@@ -1,7 +1,7 @@
 import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import { ChevronDown } from "react-bootstrap-icons";
-import CEventHandler from "../controllers/CEventHandler.ts";
+import CEditHandler from "../controllers/CEditHandler.ts";
 import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
 import InputComp from "../../../components/forms/Input/InputComp.tsx";
 import TextAreaComp from "../../../components/forms/textAreaComp/TextAreaComp.tsx";
@@ -11,23 +11,23 @@ import DateInput from "../../../components/forms/DateInput";
 const VUpdateEvent = () => {
   const { id } = useParams<{ id: string }>();
   const {
-    event,
-    eventLoading,
+    editEvent,
+    locations,
+    games,
+
+    choosenLocation,
+    choosenGame,
+
     handleInputChange,
     handleTextAreaChange,
     handleDateInputChange,
     updateEvent,
-    updateEventLoading,
     goBack,
-    options,
-    games,
-  } = CEventHandler({
+  } = CEditHandler({
     id: Number.parseInt(id ?? "-1"),
   });
 
-  const gameNames = games.map((game) => game.name);
-
-  if (eventLoading.isLoading) return <div>loading</div>;
+  if (editEvent.getEvent.isLoading  && games.getGames.data) return <div>loading</div>;
   return (
     <>
       <PageTitle title={"Edytuj wydarzenie"} />
@@ -38,7 +38,7 @@ const VUpdateEvent = () => {
             typeInput={"datalist"}
             placeholder={"Wprowadź nazwę wydarzenia"}
             name={"eventName"}
-            value={event.eventName}
+            value={editEvent.event.eventName}
             setValue={handleInputChange}
           />
           <InputComp
@@ -48,18 +48,18 @@ const VUpdateEvent = () => {
             placeholder={"Wybierz grę"}
             icon={<ChevronDown />}
             name={"game"}
-            value={event.game}
+            value={choosenGame.gameName}
             setValue={handleInputChange}
-            datalistOptions={gameNames}
+            datalistOptions={games.gamesNames}
           />
-          <InputComp
-            label={"Płatność od jednej osoby"}
-            typeInput={"pln"}
-            placeholder={"Wprowadź kwotę"}
-            name={"payment"}
-            value={event.payment}
-            setValue={handleInputChange}
-          />
+          {/*<InputComp*/}
+          {/*  label={"Płatność od jednej osoby"}*/}
+          {/*  typeInput={"pln"}*/}
+          {/*  placeholder={"Wprowadź kwotę"}*/}
+          {/*  name={"payment"}*/}
+          {/*  value={editEvent.event.eve}*/}
+          {/*  setValue={handleInputChange}*/}
+          {/*/>*/}
           <InputComp
             datalistId={"locationList"}
             label={"Wybierz lokalizację"}
@@ -67,9 +67,9 @@ const VUpdateEvent = () => {
             placeholder={"Wprowadź lokalizację"}
             icon={<ChevronDown />}
             name={"location"}
-            value={event.location}
+            value={choosenLocation.locationAddress}
             setValue={handleInputChange}
-            datalistOptions={options}
+            datalistOptions={locations.locationsNames}
           />
         </div>
         <div>
@@ -78,7 +78,7 @@ const VUpdateEvent = () => {
             className={"w-100"}
             label={"Wybierz datę"}
             placeholder={"Wybierz datę"}
-            valueDate={event.date ?? new Date()}
+            valueDate={new Date()}
             setValueDate={handleDateInputChange}
           />
           <InputComp
@@ -88,19 +88,19 @@ const VUpdateEvent = () => {
             // className={"custom-file-upload"}
             typeInput={"blank"}
             name={"img"}
-            type={"text"}
-            value={event.img}
+            type={"file"}
+            value={editEvent.event.icon}
             setValue={handleInputChange}
           />
           {/*TODO - image display*/}
           <div className="image">
-            {event.img && <img src={event.img} alt="icon name" />}
+            {editEvent.event.icon && <img src={editEvent.event.icon} alt="icon name" />}
           </div>
         </div>
         <div>
           <TextAreaComp
             label={"Opis"}
-            value={event.eventDescription}
+            value={editEvent.event.eventDescription}
             setValue={handleTextAreaChange}
           />
         </div>
@@ -109,15 +109,6 @@ const VUpdateEvent = () => {
         <ButtonComp text={"Anuluj"} onClick={goBack} classElem="cancel" />
         <ButtonComp
           text={"Zapisz"}
-          onClick={() => updateEvent()}
-          classElem="confirm"
-        />
-        {
-          //TODO - loading
-          updateEventLoading.isLoading && <div>loading</div>
-        }
-        <ButtonComp
-          text={"Test na azure :)"}
           onClick={() => updateEvent()}
           classElem="confirm"
         />

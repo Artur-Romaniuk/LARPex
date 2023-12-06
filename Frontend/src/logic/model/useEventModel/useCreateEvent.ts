@@ -1,5 +1,5 @@
 import { useMutation, useQueryClient } from "react-query";
-import IEventRepository from "../../interfaces/repositories/IEventRepository.ts";
+import IEventRepository from "../../repositories/interfaces/IEventRepository.ts";
 import EventDto from "../../../entities/EventDto.ts";
 
 interface useCreateEventProps {

@@ -1,7 +1,7 @@
-import IParticipantRepository from "../interfaces/repositories/IParticipantRepository.ts";
-import ParticipantDto from "../../entities/ParticipantDto.ts";
+import IParticipantRepository from "../interfaces/IParticipantRepository.ts";
+import ParticipantDto from "../../../entities/ParticipantDto.ts";
 import axios from "axios";
-import { API_HOST } from "../../config/config.ts";
+import { API_HOST } from "../../../config/config.ts";
 
 class ParticipantRepository implements IParticipantRepository {
   getParticipants(): Promise<ParticipantDto[]> {
@@ -22,7 +22,7 @@ class ParticipantRepository implements IParticipantRepository {
       .then((res) => res.data);
   }
 
-  updateParticipant(participant: ParticipantDto): Promise<ParticipantDto> {
+  updateParticipant(participant: ParticipantDto): Promise<boolean> {
     return axios
       .put(API_HOST + "/Participant", participant)
       .then((res) => res.data);

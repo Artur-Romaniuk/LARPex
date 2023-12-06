@@ -1,4 +1,4 @@
-import IParticipantRepository from "../../interfaces/repositories/IParticipantRepository.ts";
+import IParticipantRepository from "../../repositories/interfaces/IParticipantRepository.ts";
 import { useMutation } from "react-query";
 
 interface useDeleteParticipantProps {

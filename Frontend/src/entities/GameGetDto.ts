@@ -7,3 +7,5 @@ interface GameGetDto {
   gameDifficulty: number;
   gameMaxNumberOfParticipants: number;
 }
+
+export default GameGetDto;

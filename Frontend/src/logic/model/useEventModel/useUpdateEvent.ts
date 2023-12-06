@@ -1,4 +1,4 @@
-import IEventRepository from "../../interfaces/repositories/IEventRepository.ts";
+import IEventRepository from "../../repositories/interfaces/IEventRepository.ts";
 import { useMutation } from "react-query";
 import EventDto from "../../../entities/EventDto.ts";
 

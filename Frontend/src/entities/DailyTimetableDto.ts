@@ -1,8 +1,8 @@
-import TimeSlotDto from "./TimeslotDto.ts";
+import { TimeSlotDto2 } from "./TimeslotDto.ts";
 
 interface DailyTimetableDto {
   startHour: string;
-  availableTimeslots: TimeSlotDto[];
+  availableTimeslots: TimeSlotDto2[];
   endHour: string;
 }
 

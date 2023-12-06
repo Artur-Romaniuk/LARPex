@@ -1,128 +1,111 @@
-import { useParams } from "react-router-dom";
-import { Alert, Container } from "react-bootstrap";
-import { ChevronDown } from "react-bootstrap-icons";
+import { Container } from "react-bootstrap";
 import TextAreaComp from "../../../components/forms/textAreaComp/TextAreaComp.tsx";
 import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
 import DateInput from "../../../components/forms/DateInput";
 import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
 import InputComp from "../../../components/forms/Input/InputComp.tsx";
-import CEventHandler from "../controllers/CEventHandler.ts";
-import { useState, useEffect } from "react";
+import CCreateEvent from "../controllers/CCreateEvent.ts";
+import SelectInput from "../../../components/forms/SelectInput.tsx";
+import TextInput from "../../../components/forms/TextInput.tsx";
+import DateSelector from "../../../components/forms/DateSelector.tsx";
+import TextAreaInput from "../../../components/forms/TextAreaInput.tsx";
+import TimeslotPicker from "../../../components/forms/TimeslotPicker.tsx";
+import FileInput from "../../../components/forms/FileInput.tsx";
 
 const VCreateEvent = () => {
-  const { id } = useParams<{ id: string }>();
   const {
-    event,
-    handleInputChange,
-    handleTextAreaChange,
-    handleDateInputChange,
-    goBack,
-    saveNewEvent,
-    options,
+    createEvent,
+    locations,
     games,
-  } = CEventHandler({
-    id: Number.parseInt(id ?? "-1"),
-  });
 
-  const areAllFieldsFilled = (): boolean => {
+    gameName,
+    dateSelector,
+    numberOfPlayers,
+    description,
+    timeslotSelector,
+    icon,
 
-   console.log(event.date, event.img, event.eventDescription, event.location, event.payment, event.game, event.eventName);
+    createEventExec,
+    goBack,
+  } = CCreateEvent();
 
-    return (
-      event.eventName !== undefined &&
-      event.game !== undefined &&
-      event.payment !== undefined &&
-     
-      event.location !== undefined &&
-      
-      event.img !== undefined &&
-      event.eventDescription !== undefined
-    );
-  };
+  if (locations.getLocations.isLoading && games.getGames.data) {
+    return <div>loading</div>;
+  }
 
-const [isFieldsIncomplete, setIsFieldsIncomplete] = useState(false);
-
-  useEffect(() => {
-    // Sprawdź, czy pola są niekompletne, zanim zaktualizujesz stan
-    console.log("areAllFieldsFilled", areAllFieldsFilled());
-    setIsFieldsIncomplete(!areAllFieldsFilled());
-  }, [event]);
-
- const gameNames = games.map((game) => game.name);
   return (
     <>
       <PageTitle title={"Utwórz wydarzenie"} />
       <Container className="d-flex mt-4 flex-row flex-grow-1 flex-wrap justify-content-around">
         <div>
-          <InputComp
+          <TextInput
+            value={gameName.value}
             label={"Nazwa wydarzenia"}
-            typeInput={"datalist"}
+            error={gameName.error}
+            onChange={gameName.onChange}
             placeholder={"Wprowadź nazwę wydarzenia"}
-            name={"eventName"}
-            value={event.eventName}
-            setValue={handleInputChange}
           />
-          <InputComp
-            datalistId={"gameList"}
-            label={"Wybierz grę"}
-            typeInput={"datalist"}
-            placeholder={"Wybierz grę"}
-            icon={<ChevronDown />}
-            name={"game"}
-            value={event.game}
-            setValue={handleInputChange}
-            datalistOptions={gameNames}
+
+          <SelectInput
+            label={"Wybierz rodzaj gry"}
+            options={games.gamesNames}
+            onChange={games.handleGameChange}
           />
-          <InputComp
-            label={"Płatność od jednej osoby"}
-            typeInput={"pln"}
-            placeholder={"Wprowadź kwotę"}
-            name={"payment"}
-            value={event.payment}
-            setValue={handleInputChange}
-          />
-          <InputComp
-            datalistId={"locationList"}
+
+          <SelectInput
             label={"Wybierz lokalizację"}
-            typeInput={"datalist"}
-            placeholder={"Wprowadź lokalizację"}
-            icon={<ChevronDown />}
-            name={"location"}
-            value={event.location}
-            setValue={handleInputChange}
-            datalistOptions={options}
+            options={locations.locationsNames}
+            onChange={locations.handleLocationChange}
+          />
+
+          <TextInput
+            type={"number"}
+            value={numberOfPlayers.value.toString()}
+            label={"Wprowadź ilość graczy"}
+            error={numberOfPlayers.error}
+            onChange={numberOfPlayers.onChange}
+            placeholder={"Wprowadź ilość graczy"}
           />
         </div>
         <div>
-          <DateInput
-            name={"date"}
-            className={"w-100"}
-            label={"Wybierz datę"}
-            placeholder={"Wybierz datę"}
-            valueDate={event.date ?? new Date()}
-            setValueDate={handleDateInputChange}
+          <DateSelector
+            label={"Wybierz dzień"}
+            value={dateSelector.date}
+            onChange={dateSelector.handleDateChange}
+            error={dateSelector.error}
           />
-          <InputComp
-            id={"eventIcon"}
-            label={"Wybierz url ikony"}
-            placeholder={"Wprowadź url ikony"}
-            // className={"custom-file-upload"}
-            typeInput={"blank"}
-            name={"img"}
-            type={"text"}
-            value={event.img}
-            setValue={handleInputChange}
+          <TimeslotPicker
+            label={"Wybierz godzinę"}
+            hours={timeslotSelector.hour}
+            minutes={timeslotSelector.minutes}
+            duration={timeslotSelector.durationMinutes}
+            error={timeslotSelector.error}
+            hourChange={timeslotSelector.handleHourChange}
+            minutesChange={timeslotSelector.handleMinutesChange}
+            durationChange={timeslotSelector.handleDurationMinutesChange}
+            possibleHours={timeslotSelector.possibleHours || []}
           />
-          {/*TODO - image display*/}
-          <div className="image">
-            {event.img && <img src={event.img} alt="icon name" />}
-          </div>
+          <TextInput
+            type={"number"}
+            value={timeslotSelector.durationMinutes.toString()}
+            label={"Wprwadź czas w minutach"}
+            error={timeslotSelector.durationError}
+            onChange={timeslotSelector.handleDurationMinutesChange}
+            placeholder={"Wprowadź czas"}
+          />
+
+          <FileInput label={"Wprowadź ikone"} onChange={icon.handleChange} />
+          {icon.preview && (
+            <img src={icon.preview} alt="icon name" className="image" />
+          )}
         </div>
         <div>
-          <TextAreaComp
-            label={"Opis"}
-            value={event.eventDescription}
-            setValue={handleTextAreaChange}
+          <TextAreaInput
+            label={"Wprowadź opis"}
+            value={description.value}
+            setValue={description.onChange}
+            error={description.error}
+            placeholder={"Wprowadź opis"}
           />
         </div>
       </Container>
@@ -131,23 +114,15 @@ const [isFieldsIncomplete, setIsFieldsIncomplete] = useState(false);
         <ButtonComp
           disabled={false}
           text={"Utwórz"}
-          onClick={() => {
-            // Dodaj warunek przed wywołaniem saveNewEvent
-            if (!isFieldsIncomplete) {
-              saveNewEvent();
-            } else {
-              // Tutaj możesz obsłużyć sytuację, gdy pola nie są wypełnione
-              console.error("Wypełnij wszystkie pola przed utworzeniem.");
-            }
-          }}
           classElem="confirm"
+          onClick={() => createEventExec()}
           // Dodaj atrybut disabled, aby zablokować przycisk, jeśli warunek nie jest spełniony
         />
-        <Alert variant="danger"
-          show={isFieldsIncomplete}
-        >
-          {  "Uzupełnij wszystkie pola"}
-        </Alert>
+        {/*<Alert variant="danger"*/}
+        {/*  show={isFieldsIncomplete}*/}
+        {/*>*/}
+        {/*  {  "Uzupełnij wszystkie pola"}*/}
+        {/*</Alert>*/}
       </Container>
     </>
   );

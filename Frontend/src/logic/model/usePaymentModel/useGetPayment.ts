@@ -1,4 +1,4 @@
-import IPaymentRepository from "../../interfaces/repositories/IPaymentRepository.ts";
+import IPaymentRepository from "../../repositories/interfaces/IPaymentRepository.ts";
 import { useQuery } from "react-query";
 
 interface useGetPaymentProps {

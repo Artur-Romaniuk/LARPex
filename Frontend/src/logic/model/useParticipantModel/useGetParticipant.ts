@@ -1,4 +1,4 @@
-import IParticipantRepository from "../../interfaces/repositories/IParticipantRepository.ts";
+import IParticipantRepository from "../../repositories/interfaces/IParticipantRepository.ts";
 import { useQuery } from "react-query";
 
 interface useGetParticipantProps {

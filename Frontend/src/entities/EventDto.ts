@@ -7,6 +7,7 @@ interface EventDto {
   locationId: number;
   gameId: number;
   timeslotId: string;
+  icon: string;
 }
 
 export default EventDto;

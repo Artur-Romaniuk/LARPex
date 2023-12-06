@@ -5,4 +5,12 @@ interface TimeSlotDto {
   timeslotDuration: TimeSpan;
 }
 
-export default TimeSlotDto;
+interface TimeSlotDto2 {
+  timeslotDatetime: string;
+  timeslotDuration: string;
+}
+
+export type {
+  TimeSlotDto,
+  TimeSlotDto2
+}

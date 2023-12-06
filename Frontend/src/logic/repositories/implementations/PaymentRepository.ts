@@ -1,15 +1,17 @@
-import IPaymentRepository from "../interfaces/repositories/IPaymentRepository.ts";
+import IPaymentRepository from "../interfaces/IPaymentRepository.ts";
 import axios from "axios";
-import { API_HOST } from "../../config/config.ts";
+import { API_HOST } from "../../../config/config.ts";
+import StripeRequestDto from "../../../entities/StripeRequestDto.ts";
+import PaymentDto from "../../../entities/PaymentDto.ts";
 
 class PaymentRepository implements IPaymentRepository {
-  createPayment(payment: PaymentDto): Promise<PaymentDto> {
+  createPayment(payment: StripeRequestDto): Promise<PaymentDto> {
     return axios
       .post(API_HOST + "/Payments", payment)
       .then((response) => response.data);
   }
 
-  deletePayment(id: number): Promise<PaymentDto> {
+  deletePayment(id: number): Promise<boolean> {
     return axios
       .delete(API_HOST + "/Payments?id=" + id)
       .then((response) => response.data);

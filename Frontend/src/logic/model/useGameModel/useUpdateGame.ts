@@ -1,4 +1,4 @@
-import IGameRepository from "../../interfaces/repositories/IGameRepository.ts";
+import IGameRepository from "../../repositories/interfaces/IGameRepository.ts";
 import { useMutation } from "react-query";
 import GameDto from "../../../entities/GameDto.ts";
 
