@@ -1,9 +1,6 @@
 import { Container } from "react-bootstrap";
-import TextAreaComp from "../../../components/forms/textAreaComp/TextAreaComp.tsx";
 import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
-import DateInput from "../../../components/forms/DateInput";
 import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
-import InputComp from "../../../components/forms/Input/InputComp.tsx";
 import CCreateEvent from "../controllers/CCreateEvent.ts";
 import SelectInput from "../../../components/forms/SelectInput.tsx";
 import TextInput from "../../../components/forms/TextInput.tsx";
@@ -14,7 +11,6 @@ import FileInput from "../../../components/forms/FileInput.tsx";
 
 const VCreateEvent = () => {
   const {
-    createEvent,
     locations,
     games,
 
@@ -24,6 +20,7 @@ const VCreateEvent = () => {
     description,
     timeslotSelector,
     icon,
+    globalError,
 
     createEventExec,
     goBack,
@@ -49,11 +46,17 @@ const VCreateEvent = () => {
           <SelectInput
             label={"Wybierz rodzaj gry"}
             options={games.gamesNames}
+            value={(games.selectedGameName && games.selectedGameName) || ""}
             onChange={games.handleGameChange}
           />
 
           <SelectInput
             label={"Wybierz lokalizację"}
+            value={
+              (locations.selectedLocationName &&
+                locations.selectedLocationName) ||
+              ""
+            }
             options={locations.locationsNames}
             onChange={locations.handleLocationChange}
           />
@@ -108,6 +111,7 @@ const VCreateEvent = () => {
             placeholder={"Wprowadź opis"}
           />
         </div>
+        <p className={"globalError"}>{globalError}</p>
       </Container>
       <Container className="w-100 m-auto my-3 d-flex  justify-content-between">
         <ButtonComp text={"Anuluj"} onClick={goBack} classElem="cancel" />
@@ -116,13 +120,7 @@ const VCreateEvent = () => {
           text={"Utwórz"}
           classElem="confirm"
           onClick={() => createEventExec()}
-          // Dodaj atrybut disabled, aby zablokować przycisk, jeśli warunek nie jest spełniony
         />
-        {/*<Alert variant="danger"*/}
-        {/*  show={isFieldsIncomplete}*/}
-        {/*>*/}
-        {/*  {  "Uzupełnij wszystkie pola"}*/}
-        {/*</Alert>*/}
       </Container>
     </>
   );

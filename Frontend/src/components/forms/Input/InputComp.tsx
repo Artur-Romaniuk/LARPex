@@ -26,7 +26,7 @@ const InputComp = (props: InputProps) => {
   return (
     <div className={""}>
       <label htmlFor={rest.id}>{props.label}</label>
-      <InputGroup className="mb-3">
+      <InputGroup id={rest.id} className="mb-3">
         <Form.Control
           name={rest.name}
           value={value}
@@ -41,16 +41,18 @@ const InputComp = (props: InputProps) => {
         {typeInput === "pln" && (
           <InputGroup.Text className={"icon"}>PLN</InputGroup.Text>
         )}
-        {typeInput === "datalist" && datalistOptions && datalistOptions.length > 0 && (
-          <>
-            <InputGroup.Text className={"icon"}>{icon}</InputGroup.Text>
-            <datalist id={datalistId}>
-              {datalistOptions.map((option) => (
-                <option key={option} value={option} />
-              ))}
-            </datalist>
-          </>
-        )}
+        {typeInput === "datalist" &&
+          datalistOptions &&
+          datalistOptions.length > 0 && (
+            <>
+              <InputGroup.Text className={"icon"}>{icon}</InputGroup.Text>
+              <datalist id={datalistId}>
+                {datalistOptions.map((option) => (
+                  <option key={option} value={option} />
+                ))}
+              </datalist>
+            </>
+          )}
       </InputGroup>
     </div>
   );

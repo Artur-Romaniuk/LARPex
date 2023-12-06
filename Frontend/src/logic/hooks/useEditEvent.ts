@@ -1,10 +1,10 @@
 import repositoryContext from "../repositories/repositoryContext.ts";
-import {useMutation, useQuery, useQueryClient} from "react-query";
-import EventDto from "../../entities/EventDto.ts";
-import {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { EventDtoWithTime } from "../../entities/EventDto.ts";
+import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
-const initialState: EventDto = {
+const initialState: EventDtoWithTime = {
   eventId: 0,
   eventName: "",
   eventStatus: "",
@@ -12,7 +12,10 @@ const initialState: EventDto = {
   orderId: "",
   locationId: 0,
   gameId: 0,
-  timeslotId: "",
+  timeslot: {
+    timeslotDatetime: "",
+    timeslotDuration: "",
+  },
   icon: "",
 };
 
@@ -21,7 +24,9 @@ const useEditEvent = (id: number) => {
   const eventRepository = repositoryContext.injectEventRepository();
   const queryClient = useQueryClient();
 
-  const getEvent = useQuery(["events", id], () => eventRepository.getEventById(id));
+  const getEvent = useQuery(["events", id], () =>
+    eventRepository.getEventById(id),
+  );
   const updateEventMutation = useMutation({
     mutationFn: eventRepository.updateEvent,
     onSuccess: () => {
@@ -34,7 +39,7 @@ const useEditEvent = (id: number) => {
     },
   });
 
-  const [event, setEvent] = useState<EventDto>(initialState);
+  const [event, setEvent] = useState<EventDtoWithTime>(initialState);
 
   useEffect(() => {
     if (getEvent.data) {
@@ -43,10 +48,10 @@ const useEditEvent = (id: number) => {
   }, [getEvent.data]);
 
   const updateEvent = () => {
-    updateEventMutation.mutate(event);
-  }
+    // updateEventMutation.mutate(event);
+  };
 
-  return {event, setEvent, getEvent, updateEvent};
-}
+  return { event, setEvent, getEvent, updateEvent };
+};
 
 export default useEditEvent;

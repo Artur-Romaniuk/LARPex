@@ -1,9 +1,7 @@
 import IEventRepository from "../repositories/interfaces/IEventRepository.ts";
 import EventRepository from "../repositories/implementations/EventRepository.ts";
-// import EventRepositoryMock from "../repositoryMock/EventRepositoryMock.ts";
 import IGameRepository from "../repositories/interfaces/IGameRepository.ts";
 import GameRepository from "../repositories/implementations/GameRepository.ts";
-// import GameRepositoryMock from "../repositoryMock/GameRepositoryMock.ts";
 import IParticipantRepository from "../repositories/interfaces/IParticipantRepository.ts";
 import ParticipantRepository from "../repositories/implementations/ParticipantRepository.ts";
 import IPaymentRepository from "../repositories/interfaces/IPaymentRepository.ts";
@@ -16,6 +14,8 @@ import ImageRepository from "../repositories/implementations/ImageRepository.ts"
 import LocationRepository from "../repositories/implementations/LocationRepository.ts";
 import TimeslotRepository from "../repositories/implementations/TimeslotRepository.ts";
 import UserRepository from "../repositories/implementations/UserRepository.ts";
+import IOrderRepository from "./interfaces/IOrderRepository.ts";
+import OrderRepository from "./implementations/OrderRepository.ts";
 
 interface IRepositoryContext {
   injectEventRepository: () => IEventRepository;
@@ -26,6 +26,7 @@ interface IRepositoryContext {
   injectPaymentRepository: () => IPaymentRepository;
   injectTimeslotRepository: () => ITimeslotRepository;
   injectUserRepository: () => IUserRepository;
+  injectOrderRepository: () => IOrderRepository;
 }
 
 const eventRepository: IEventRepository = new EventRepository();
@@ -46,6 +47,8 @@ const paymentRepository: IPaymentRepository = new PaymentRepository();
 const timeslotRepository: ITimeslotRepository = new TimeslotRepository();
 
 const userRepository: IUserRepository = new UserRepository();
+
+const orderRepository: IOrderRepository = new OrderRepository();
 
 const injectEventRepository = () => {
   return eventRepository;
@@ -75,11 +78,15 @@ const injectPaymentRepository = () => {
 
 const injectTimeslotRepository = () => {
   return timeslotRepository;
-}
+};
 
 const injectUserRepository = () => {
   return userRepository;
-}
+};
+
+const injectOrderRepository = () => {
+  return orderRepository;
+};
 
 const repositoryContext = {
   injectEventRepository,
@@ -90,6 +97,7 @@ const repositoryContext = {
   injectPaymentRepository,
   injectTimeslotRepository,
   injectUserRepository,
+  injectOrderRepository,
 } as IRepositoryContext;
 
 export default repositoryContext;

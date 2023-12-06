@@ -8,7 +8,7 @@ const useCreateEvent = () => {
   const queryClient = useQueryClient();
   const createEventMutation = useMutation({
     mutationFn: eventRepository.addEvent,
-    onSuccess: () => {
+    onSuccess: (data) => {
       queryClient.invalidateQueries("events");
       navigate("/events");
     },

@@ -5,6 +5,10 @@ import DailyTimetableDto from "../../entities/DailyTimetableDto.ts";
 
 interface UseTimeslotSelectorProps {
   day: string;
+
+  hours?: number;
+  minutes?: number;
+  durationMinutes?: number;
 }
 
 export interface PossibleHours {
@@ -12,22 +16,36 @@ export interface PossibleHours {
   end: Date;
 }
 
-const useTimeslotSelector = ({ day }: UseTimeslotSelectorProps) => {
+const useTimeslotSelector = (props: UseTimeslotSelectorProps) => {
   const timeslotsRepository = repositoryContext.injectTimeslotRepository();
   const timeslots = useQuery({
-    queryKey: ["timeslots", day],
-    queryFn: () => timeslotsRepository.getTimeSlotsFromDay(day),
+    queryKey: ["timeslots", props.day],
+    queryFn: () => timeslotsRepository.getTimeSlotsFromDay(props.day),
   });
 
   const [possibleHours, setPossibleHours] = useState<PossibleHours[] | null>(
     null,
   );
 
-  const [hour, setHour] = useState<number>(0);
-  const [minutes, setMinutes] = useState<number>(0);
+  useEffect(() => {
+    console.log(props);
+    if (props.hours && props.minutes) {
+      setHour(props.hours);
+      setMinutes(props.minutes);
+    }
+
+    if (props.durationMinutes) {
+      setDurationMinutes(props.durationMinutes);
+    }
+  }, [props, props.durationMinutes, props.hours, props.minutes]);
+
+  const [hour, setHour] = useState<number>(props.hours ?? 0);
+  const [minutes, setMinutes] = useState<number>(props.minutes ?? 0);
   const [error, setError] = useState<string>("");
 
-  const [durationMinutes, setDurationMinutes] = useState<number>(0);
+  const [durationMinutes, setDurationMinutes] = useState<number>(
+    props.durationMinutes ?? 0,
+  );
   const [durationError, setDurationError] = useState<string>("");
 
   useEffect(() => {
@@ -41,18 +59,12 @@ const useTimeslotSelector = ({ day }: UseTimeslotSelectorProps) => {
     }
   }, [timeslots.data]);
 
-  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (!timeslots.data) {
-      return;
-    }
-
-    if (e.target.value === "") {
-      setHour(0);
-      return;
-    }
-
-    const newHour = e.target.valueAsNumber;
+  const handleHourChangeValue = (newHour: number) => {
     if (newHour < 0 || newHour > 23) {
+      return;
+    }
+
+    if (!timeslots.data) {
       return;
     }
 
@@ -82,15 +94,26 @@ const useTimeslotSelector = ({ day }: UseTimeslotSelectorProps) => {
     }
     setHour(newHour);
   };
-
-  const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleHourChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!timeslots.data) {
       return;
     }
 
-    const newMinutes = e.target.valueAsNumber;
+    if (e.target.value === "") {
+      setHour(0);
+      return;
+    }
 
+    const newHour = e.target.valueAsNumber;
+    handleHourChangeValue(newHour);
+  };
+
+  const handleMinutesChangeValue = (newMinutes: number) => {
     if (newMinutes < 0 || newMinutes > 59) {
+      return;
+    }
+
+    if (!timeslots.data) {
       return;
     }
 
@@ -116,21 +139,19 @@ const useTimeslotSelector = ({ day }: UseTimeslotSelectorProps) => {
     }
     setMinutes(newMinutes);
   };
-
-  const handleDurationMinutesChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-  ) => {
+  const handleMinutesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (!timeslots.data) {
       return;
     }
 
-    if (e.target.value === "") {
-      setDurationMinutes(0);
-      setDurationError("Czas trwania nie może być pusty");
+    const newMinutes = e.target.valueAsNumber;
+    handleMinutesChangeValue(newMinutes);
+  };
+
+  const handleDurationMinutesChangeValue = (newDurationMinutes: number) => {
+    if (!timeslots.data) {
       return;
     }
-
-    const newDurationMinutes = e.target.valueAsNumber;
 
     const date = new Date(timeslots.data.startHour);
     date.setHours(hour);
@@ -157,6 +178,22 @@ const useTimeslotSelector = ({ day }: UseTimeslotSelectorProps) => {
     }
     setDurationMinutes(newDurationMinutes);
   };
+  const handleDurationMinutesChange = (
+    e: React.ChangeEvent<HTMLInputElement>,
+  ) => {
+    if (!timeslots.data) {
+      return;
+    }
+
+    if (e.target.value === "") {
+      setDurationMinutes(0);
+      setDurationError("Czas trwania nie może być pusty");
+      return;
+    }
+
+    const newDurationMinutes = e.target.valueAsNumber;
+    handleDurationMinutesChangeValue(newDurationMinutes);
+  };
 
   return {
     hour,
@@ -169,8 +206,13 @@ const useTimeslotSelector = ({ day }: UseTimeslotSelectorProps) => {
     possibleHours,
 
     handleHourChange,
+    handleHourChangeValue,
+
     handleMinutesChange,
+    handleMinutesChangeValue,
+
     handleDurationMinutesChange,
+    handleDurationMinutesChangeValue,
   };
 };
 

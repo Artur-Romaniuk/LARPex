@@ -1,13 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 interface UseDateSelectorProps {
-  initialDate: Date;
+  initialDate: string;
 }
 
 const useDateSelector = (props: UseDateSelectorProps) => {
-  const [date, setDate] = useState(props.initialDate || new Date());
+  const [date, setDate] = useState(
+    new Date(props.initialDate !== "" ? props.initialDate : new Date()),
+  );
   const [error, setError] = useState("");
-  const startDate = new Date();
+  const startDate = new Date(
+    props.initialDate !== "" ? props.initialDate : new Date(),
+  );
+
+  useEffect(() => {
+    console.log("useDateSelector", props.initialDate);
+    if (props.initialDate === "") {
+      return;
+    }
+    setDate(new Date(props.initialDate));
+  }, [props.initialDate]);
 
   const handleDateChange = (date: Date) => {
     if (date < startDate) {

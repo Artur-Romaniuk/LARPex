@@ -8,6 +8,7 @@ import useNumberInput from "../../hooks/useNumberInput.ts";
 import useTextAreaInput from "../../hooks/useTextAreaInput.ts";
 import useTimeslotSelector from "../../hooks/useTimeslotSelector.ts";
 import useFileInput from "../../hooks/useFileInput.ts";
+import { useState } from "react";
 
 const CEditHandler = () => {
   const navigate = useNavigate();
@@ -15,6 +16,7 @@ const CEditHandler = () => {
   const createEvent = useCreateEvent();
   const locations = useGetLocations();
   const games = useGetGames();
+  const [globalError, setGlobalError] = useState("");
 
   const eventName = useTextInput({
     initialValue: "",
@@ -25,7 +27,7 @@ const CEditHandler = () => {
   });
 
   const dateSelector = useDateSelector({
-    initialDate: new Date(),
+    initialDate: "",
   });
 
   const numberOfPlayers = useNumberInput({
@@ -46,25 +48,59 @@ const CEditHandler = () => {
     day: dateSelector.date.toUTCString(),
   });
 
-  const icon = useFileInput();
+  const icon = useFileInput({
+    url: "",
+  });
 
   const createEventExec = () => {
+    if (eventName.error || eventName.value.length === 0) {
+      setGlobalError("Wprowadź poprawną nazwę wydarzenia");
+      return;
+    }
+
+    if (description.error || description.value.length === 0) {
+      setGlobalError("Wprowadź poprawny opis wydarzenia");
+      return;
+    }
+
+    timeslotSelector.handleHourChangeValue(timeslotSelector.hour);
+    timeslotSelector.handleMinutesChangeValue(timeslotSelector.minutes);
+    if (timeslotSelector.error) {
+      setGlobalError("Wybierz godzinę wydarzenia");
+      return;
+    }
+
+    if (numberOfPlayers.error) {
+      setGlobalError("Wybierz liczbę graczy");
+      return;
+    }
+
+    timeslotSelector.handleDurationMinutesChangeValue(
+      timeslotSelector.durationMinutes,
+    );
+    if (
+      timeslotSelector.durationError ||
+      timeslotSelector.durationMinutes === 0
+    ) {
+      setGlobalError("Wybierz długość wydarzenia");
+      return;
+    }
+
+    if (!icon.file) {
+      setGlobalError("Wybierz ikonę wydarzenia");
+      return;
+    }
+
+    setGlobalError("");
     const formData = new FormData();
     formData.append("EventName", eventName.value);
     formData.append("EventDescription", description.value);
     formData.append("LocationId", locations.currentLocationId.toString());
     formData.append("GameId", games.currentGameId.toString());
-    formData.append(
-      "StartDate",
-      dateSelector.date.getFullYear() +
-        "-" +
-        (dateSelector.date.getMonth() + 1) +
-        "-" +
-        dateSelector.date.getDate(),
-    );
+    formData.append("StartDate", dateSelector.date.toISOString());
     formData.append(
       "DurationHour",
-      (timeslotSelector.durationMinutes / 60).toString(),
+      (~~(timeslotSelector.durationMinutes / 60)).toString(),
     );
     formData.append(
       "DurationMinute",
@@ -85,6 +121,7 @@ const CEditHandler = () => {
     createEvent,
     locations,
     games,
+    globalError,
 
     gameName: eventName,
     dateSelector,
