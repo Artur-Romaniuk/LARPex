@@ -5,6 +5,7 @@ import VUpdateEvent from "./features/events/views/VUpdateEvent.tsx";
 import VCreateEvent from "./features/events/views/VCreateEvent.tsx";
 import VEventList from "./features/events/views/VEventList.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
+import VPayment from "./features/events/views/VPayment.tsx";
 
 const router = createBrowserRouter([
   {
@@ -41,7 +42,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/platnosc/:eventId/:orderId",
-        element: <div>platnosc</div>,
+        element: <VPayment />,
       },
     ],
   },

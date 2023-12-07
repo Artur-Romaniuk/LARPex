@@ -1,5 +1,5 @@
 interface IOrderRepository {
-  getOrderById(id: number): Promise<{
+  getOrderById(id: string): Promise<{
     orderId: number;
     paymentId: number;
     orderAmount: number;
