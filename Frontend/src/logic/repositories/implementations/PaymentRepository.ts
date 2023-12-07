@@ -3,9 +3,10 @@ import axios from "axios";
 import { API_HOST } from "../../../config/config.ts";
 import StripeRequestDto from "../../../entities/StripeRequestDto.ts";
 import PaymentDto from "../../../entities/PaymentDto.ts";
+import OrderDto from "../../../entities/OrderDto.ts";
 
 class PaymentRepository implements IPaymentRepository {
-  createPayment(payment: StripeRequestDto): Promise<PaymentDto> {
+  createPayment(payment: OrderDto): Promise<StripeRequestDto> {
     return axios
       .post(API_HOST + "/Payments", payment)
       .then((response) => response.data);
