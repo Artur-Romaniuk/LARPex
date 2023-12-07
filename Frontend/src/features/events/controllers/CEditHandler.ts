@@ -57,7 +57,6 @@ const CEditHandler = (props: CEventHandlerProps) => {
 
   console.log(editEvent.event.timeslot.timeslotDatetime);
   const timeslotSelector = useTimeslotSelector({
-    // TODO: change to event date
     day: dateSelector.date.toUTCString(),
     hours: Number.parseInt(
       editEvent.event.timeslot.timeslotDatetime
@@ -81,6 +80,7 @@ const CEditHandler = (props: CEventHandlerProps) => {
 
   const updateEventExec = () => {
     // TODO: make update event with form data
+    setGlobalError("Not implemented yet");
     editEvent.updateEvent();
   };
 
