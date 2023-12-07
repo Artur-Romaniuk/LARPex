@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import repositoryContext from "../repositories/repositoryContext.ts";
 
-const useGetOrder = (id: number) => {
+const useGetOrder = (id: string) => {
   const orderRepository = repositoryContext.injectOrderRepository();
 
   const getOrder = useQuery({
