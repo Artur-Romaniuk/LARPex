@@ -6,6 +6,9 @@ import VCreateEvent from "./features/events/views/VCreateEvent.tsx";
 import VEventList from "./features/events/views/VEventList.tsx";
 import { QueryClient, QueryClientProvider } from "react-query";
 import VPayment from "./features/events/views/VPayment.tsx";
+import VUserEventsList from "./features/userEvents/views/VUserEventsList.tsx";
+import VEventDetails from "./features/userEvents/views/VEventDetails.tsx";
+import VJoinEvent from "./features/userEvents/views/VJoinEvent.tsx";
 
 const router = createBrowserRouter([
   {
@@ -43,6 +46,19 @@ const router = createBrowserRouter([
       {
         path: "/platnosc/:eventId/:orderId",
         element: <VPayment />,
+      },
+
+      {
+        path: "/user/events",
+        element: <VUserEventsList />,
+      },
+      {
+        path: "/user/event/:id",
+        element: <VEventDetails />,
+      },
+      {
+        path: "/user/event/:id/join",
+        element: <VJoinEvent />,
       },
     ],
   },
