@@ -31,6 +31,11 @@ const Navigation = () => {
             <Link to="/utworz-wydarzenie" className={"nav-link"}>
               Utwórz wydarzenie
             </Link>
+
+            <Link to="/user/events" className={"nav-link"}>
+              Wydarzenia użytkownika
+            </Link>
+
             <Link
               to="/logout"
               onClick={() => console.log("Wyloguj się")}
