@@ -16,24 +16,11 @@ import TimeslotRepository from "../repositories/implementations/TimeslotReposito
 import UserRepository from "../repositories/implementations/UserRepository.ts";
 import IOrderRepository from "./interfaces/IOrderRepository.ts";
 import OrderRepository from "./implementations/OrderRepository.ts";
-
-interface IRepositoryContext {
-  injectEventRepository: () => IEventRepository;
-  injectGameRepository: () => IGameRepository;
-  injectImageRepository: () => IImageRepository;
-  injectLocationRepository: () => ILocationRepository;
-  injectParticipantRepository: () => IParticipantRepository;
-  injectPaymentRepository: () => IPaymentRepository;
-  injectTimeslotRepository: () => ITimeslotRepository;
-  injectUserRepository: () => IUserRepository;
-  injectOrderRepository: () => IOrderRepository;
-}
+import IRepositoryContext from "./IRepositoryContext.ts";
 
 const eventRepository: IEventRepository = new EventRepository();
-// const eventRepositoryMock: IEventRepository = new EventRepositoryMock();
 
 const gameRepository: IGameRepository = new GameRepository();
-// const gameRepositoryMock: IGameRepository = new GameRepositoryMock();
 
 const imageRepository: IImageRepository = new ImageRepository();
 

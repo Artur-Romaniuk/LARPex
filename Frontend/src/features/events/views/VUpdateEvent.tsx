@@ -1,14 +1,15 @@
 import { useParams } from "react-router-dom";
 import { Container } from "react-bootstrap";
 import CEditHandler from "../controllers/CEditHandler.ts";
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
-import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
+import ButtonComp from "../../../components/ui/ButtonComp.tsx";
 import TextInput from "../../../components/forms/TextInput.tsx";
 import SelectInput from "../../../components/forms/SelectInput.tsx";
 import DateSelector from "../../../components/forms/DateSelector.tsx";
 import TimeslotPicker from "../../../components/forms/TimeslotPicker.tsx";
 import FileInput from "../../../components/forms/FileInput.tsx";
 import TextAreaInput from "../../../components/forms/TextAreaInput.tsx";
+import { API_HOST } from "../../../config/config.ts";
 
 const VUpdateEvent = () => {
   const { id } = useParams<{ id: string }>();

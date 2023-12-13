@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import useGetEvents from "../../../logic/hooks/useGetEvents.ts";
+import useGetEvents from "../../../logic/hooks/events/useGetEvents.ts";
 
 const CEventList = () => {
   const events = useGetEvents();

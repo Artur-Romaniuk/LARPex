@@ -1,13 +1,13 @@
 import { useNavigate } from "react-router-dom";
-import useEditEvent from "../../../logic/hooks/useEditEvent.ts";
-import useGetLocations from "../../../logic/hooks/useGetLocations.ts";
-import useGetGames from "../../../logic/hooks/useGetGames.ts";
-import useTextInput from "../../hooks/useTextInput.ts";
-import useDateSelector from "../../hooks/useDateSelector.ts";
-import useNumberInput from "../../hooks/useNumberInput.ts";
-import useTextAreaInput from "../../hooks/useTextAreaInput.ts";
-import useTimeslotSelector from "../../hooks/useTimeslotSelector.ts";
-import useFileInput from "../../hooks/useFileInput.ts";
+import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
+import useGetLocations from "../../../logic/hooks/locations/useGetLocations.ts";
+import useGetGames from "../../../logic/hooks/game/useGetGames.ts";
+import useTextInput from "../../../components/hooks/useTextInput.ts";
+import useDateSelector from "../../../components/hooks/useDateSelector.ts";
+import useNumberInput from "../../../components/hooks/useNumberInput.ts";
+import useTextAreaInput from "../../../components/hooks/useTextAreaInput.ts";
+import useTimeslotSelector from "../../../components/hooks/useTimeslotSelector.ts";
+import useFileInput from "../../../components/hooks/useFileInput.ts";
 import { useState } from "react";
 
 interface CEventHandlerProps {

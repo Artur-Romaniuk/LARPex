@@ -1,23 +1,22 @@
 import React from "react";
-import "./eventTile.scss";
+import "./../../events/components/eventTile.scss";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
 import { Container } from "react-bootstrap";
-import EventLogic from "../../../logic/hooks/IEventLogic.ts";
-import { API_HOST, IMAGE_HOST } from "../../../config/config.ts";
+import { IMAGE_HOST } from "../../../config/config.ts";
 
 interface EventTileProps {
   id: number;
-  title: string;
-  date: Date;
-  peopleCount: number;
-  img: string;
-  navigateToEvent: (id: number) => void;
+  // title: string;
+  // date: Date;
+  // peopleCount: number;
+  // img: string;
+  navigateToEventDetails: (id: number) => void;
+  navigateToJoinEvent: (id: number) => void;
 }
 
-const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
-  // TODO change to event from list not from request
-  const { getEvent } = EventLogic.useGetEvent(id);
+const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
+  const { getEvent } = useEditEvent(props.id);
 
   if (getEvent.isLoading && getEvent.data === null) {
     return null;
@@ -49,9 +48,20 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
               </div>
             </div>
           </div>
-          <button className="btn btn-dark" onClick={() => navigateToEvent(id)}>
-            Edytuj wydarzenie
-          </button>
+          <div className="d-flex flex-row">
+            <button
+              className="btn btn-dark px-4 me-2"
+              onClick={() => props.navigateToEventDetails(props.id)}
+            >
+              Opis
+            </button>
+            <button
+              className="btn btn-dark px-4"
+              onClick={() => props.navigateToJoinEvent(props.id)}
+            >
+              Dołącz
+            </button>
+          </div>
         </Container>
 
         <Container className="event-tile-container event-tile-container-width d-none d-md-flex">
@@ -78,12 +88,20 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
               </div>
             </div>
 
-            <button
-              className="btn btn-dark"
-              onClick={() => navigateToEvent(id)}
-            >
-              Edytuj wydarzenie
-            </button>
+            <div className="d-flex flex-column">
+              <button
+                className="btn btn-dark px-5 m-1"
+                onClick={() => props.navigateToEventDetails(props.id)}
+              >
+                Opis
+              </button>
+              <button
+                className="btn btn-dark px-5 m-1"
+                onClick={() => props.navigateToJoinEvent(props.id)}
+              >
+                Dołącz
+              </button>
+            </div>
           </div>
         </Container>
       </>
@@ -91,4 +109,4 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
   );
 };
 
-export default EventTile;
+export default UserEventTile;

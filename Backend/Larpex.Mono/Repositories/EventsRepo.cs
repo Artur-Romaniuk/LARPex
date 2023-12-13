@@ -4,6 +4,11 @@ using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Mono.Services.Interfaces;
 using Larpex.Shared.ModelDto;
 using Microsoft.EntityFrameworkCore;
+using Stripe;
+using Stripe.Terminal;
+using System.ComponentModel;
+using System.Drawing;
+using System.IO;
 
 namespace Larpex.Mono.Repositories;
 
@@ -109,6 +114,7 @@ public class EventsRepo : IEventsRepo
         {
             throw new ArgumentNullException("Event with this id does not exist.");
         }
+        var icon = await _context.TblImages.FirstOrDefaultAsync(i => i.FilePath.Equals(dbEvent.EventIconUrl));
         var existingEventDto = new EventTimeslotResponseDto
         {
             EventId = dbEvent.EventId,
@@ -118,12 +124,29 @@ public class EventsRepo : IEventsRepo
             OrderId = dbEvent.OrderId,
             LocationId = dbEvent.LocationId,
             GameId = dbEvent.GameId,
-            Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(dbEvent.TimeslotId)))
+            Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(dbEvent.TimeslotId))),
         };
+        if (icon != null)
+        {
+            var pathuwa = Directory.GetCurrentDirectory();
+            if (System.IO.File.Exists(pathuwa + icon.FilePath))
+            {
+                existingEventDto.Icon = icon.FilePath;
+            }
+            else
+            {
+                throw new ArgumentException("No image found");
+            }
+        }
+        else
+        {
+            throw new ArgumentException("No image found");
+        }
+
         return existingEventDto;
     }
 
-    public async Task<IEnumerable<EventDto>> GetEvents()
+    public async Task<IEnumerable<EventTimeslotResponseDto>> GetEvents()
     {
         var dbEvents = await _context.TblEvents.ToListAsync();
 
@@ -132,11 +155,22 @@ public class EventsRepo : IEventsRepo
             throw new ArgumentNullException("No available events!!!!!!!!!!");
         }
 
-        var eventList = new List<EventDto>();
+        var eventList = new List<EventTimeslotResponseDto>();
 
         foreach(var e in dbEvents)
         {
-            eventList.Add(_mapper.Map<EventDto>(e));
+            var evencik = new EventTimeslotResponseDto();
+            evencik.EventId = e.EventId;
+            evencik.EventName = e.EventName;
+            evencik.EventStatus = e.EventStatus;
+            evencik.EventDescription = e.EventDescription;
+            evencik.OrderId = e.OrderId;
+            evencik.LocationId = e.LocationId;
+            evencik.GameId = e.GameId;
+            evencik.Icon = e.EventIconUrl;
+            evencik.Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(e.TimeslotId)));
+
+            eventList.Add(evencik);
         }
 
         return eventList;
