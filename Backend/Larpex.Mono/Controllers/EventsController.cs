@@ -54,8 +54,8 @@ public class EventsController : ControllerBase
     }
 
     [HttpGet("getEvents")]
-    [ProducesResponseType(typeof(IEnumerable<EventDto>), StatusCodes.Status200OK)]
-    public async Task<ActionResult<IEnumerable<EventDto>>> GetEvents()
+    [ProducesResponseType(typeof(IEnumerable<EventTimeslotResponseDto>), StatusCodes.Status200OK)]
+    public async Task<ActionResult<IEnumerable<EventTimeslotResponseDto>>> GetEvents()
     {
         var existingEvents = await _eventsRepo.GetEvents();
         return Ok(existingEvents);
