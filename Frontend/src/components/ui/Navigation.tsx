@@ -1,8 +1,8 @@
 import { Container, Nav, Navbar } from "react-bootstrap";
 import { Link } from "react-router-dom";
 
-import "./navigation.scss";
-import ButtonComp from "../buttonComp/ButtonComp.tsx";
+import "./styles/navigation.scss";
+import ButtonComp from "./ButtonComp.tsx";
 
 const Navigation = () => {
   return (

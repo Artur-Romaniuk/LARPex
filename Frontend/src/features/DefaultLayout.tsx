@@ -1,4 +1,4 @@
-import Navigation from "../components/ui/navigation/Navigation.tsx";
+import Navigation from "../components/ui/Navigation.tsx";
 import { Outlet } from "react-router-dom";
 
 const DefaultLayout = () => {

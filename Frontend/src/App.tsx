@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import DefaultLayout from "./features/DefaultLayout.tsx";
-import PageTitle from "./components/ui/pageTItle/PageTitle.tsx";
+import PageTitle from "./components/ui/PageTitle.tsx";
 import VUpdateEvent from "./features/events/views/VUpdateEvent.tsx";
 import VCreateEvent from "./features/events/views/VCreateEvent.tsx";
 import VEventList from "./features/events/views/VEventList.tsx";

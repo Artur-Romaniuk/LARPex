@@ -1,11 +1,12 @@
 import { Container } from "react-bootstrap";
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
 import React from "react";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 
 import "./../styles/index.scss";
 import { useParams } from "react-router-dom";
 import CUserEvent from "../controllers/CUserEvent.ts";
+import { IMAGE_HOST } from "../../../config/config.ts";
 
 const VEventDetails = () => {
   const { id } = useParams();
@@ -30,7 +31,7 @@ const VEventDetails = () => {
         <div className="w-100 me-4">
           <div className="d-flex flex-row flex-wrap align-items-center justify-content-center my-3">
             <div className="img-container me-4 border-5">
-              <img src={event?.icon} alt={""} />
+              <img src={IMAGE_HOST + event?.icon} alt={""} />
             </div>
             <div className="d-flex flex-column mt-2 justify-content-around">
               <div className="icon d-flex flex-row align-items-center mb-2">

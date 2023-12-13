@@ -1,5 +1,5 @@
 import { useQuery } from "react-query";
-import repositoryContext from "../repositories/repositoryContext.ts";
+import repositoryContext from "../../repositories/repositoryContext.ts";
 
 const useGetGame = (id: number) => {
   const gameRepository = repositoryContext.injectGameRepository();

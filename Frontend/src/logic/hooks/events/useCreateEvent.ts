@@ -1,4 +1,4 @@
-import repositoryContext from "../repositories/repositoryContext.ts";
+import repositoryContext from "../../repositories/repositoryContext.ts";
 import { useMutation, useQueryClient } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -23,5 +23,7 @@ const useCreateEvent = () => {
 
   return { createEvent };
 };
+
+export type CreateEvent = ReturnType<typeof useCreateEvent>;
 
 export default useCreateEvent;

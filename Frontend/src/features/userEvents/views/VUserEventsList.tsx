@@ -1,5 +1,5 @@
 import CUserEvents from "../controllers/CUserEvents.ts";
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
 import { Container } from "react-bootstrap";
 import UserEventTile from "../components/UserEventTile.tsx";
 

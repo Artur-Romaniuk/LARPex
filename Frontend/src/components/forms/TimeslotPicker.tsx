@@ -1,6 +1,6 @@
 import Form from "react-bootstrap/Form";
 import { InputGroup } from "react-bootstrap";
-import { PossibleHours } from "../../features/hooks/useTimeslotSelector.ts";
+import { PossibleHours } from "../hooks/useTimeslotSelector.ts";
 import { useState } from "react";
 import { InfoCircle } from "react-bootstrap-icons";
 

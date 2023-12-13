@@ -1,4 +1,4 @@
-import repositoryContext from "../repositories/repositoryContext.ts";
+import repositoryContext from "../../repositories/repositoryContext.ts";
 import { useMutation } from "react-query";
 import { useNavigate } from "react-router-dom";
 
@@ -8,7 +8,6 @@ const useCreatePayment = () => {
   const createPayment = useMutation({
     mutationFn: paymentRepository.createPayment,
     onSuccess: (data) => {
-      console.log(data);
       navigate("/" + data.stripeSessionUrl);
     },
   });
