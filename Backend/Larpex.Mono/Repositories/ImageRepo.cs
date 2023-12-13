@@ -33,13 +33,13 @@ public class ImageRepo : IImageRepo
         await ValidateImageUpload(image);
         var imageExtension = Path.GetExtension(image.FileName);
         var localFilePath = Path.Combine(_env.ContentRootPath, "Images",
-            $"{image.FileName}{imageExtension}");
+            $"{image.FileName}");
 
         using var stream = new FileStream(localFilePath, FileMode.Create);
         await image.CopyToAsync(stream);
 
 
-        var urlFilePath = $"/Images/{image.FileName}{imageExtension}";
+        var urlFilePath = $"/Images/{image.FileName}";
 
         var newImage = new TblImage 
         { 
