@@ -1,8 +1,9 @@
-import repositoryContext from "../repositories/repositoryContext.ts";
-import { useMutation, useQuery, useQueryClient } from "react-query";
-import { EventDtoWithTime } from "../../entities/EventDto.ts";
+import { useMutation, useQueryClient } from "react-query";
+import { EventDtoWithTime } from "../../../entities/EventDto.ts";
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import useGetEvent from "./useGetEvent.ts";
+import repositoryContext from "../../repositories/repositoryContext.ts";
 
 const initialState: EventDtoWithTime = {
   eventId: 0,
@@ -24,9 +25,8 @@ const useEditEvent = (id: number) => {
   const eventRepository = repositoryContext.injectEventRepository();
   const queryClient = useQueryClient();
 
-  const getEvent = useQuery(["events", id], () =>
-    eventRepository.getEventById(id),
-  );
+  const { getEvent } = useGetEvent(id);
+
   const updateEventMutation = useMutation({
     mutationFn: eventRepository.updateEvent,
     onSuccess: () => {

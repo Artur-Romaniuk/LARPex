@@ -1,4 +1,4 @@
-import "./pageTitle.scss";
+import "./styles/pageTitle.scss";
 import { Container } from "react-bootstrap";
 
 interface PageTitleProps {

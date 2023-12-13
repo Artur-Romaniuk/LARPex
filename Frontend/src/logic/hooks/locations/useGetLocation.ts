@@ -1,4 +1,4 @@
-import repositoryContext from "../repositories/repositoryContext.ts";
+import repositoryContext from "../../repositories/repositoryContext.ts";
 import { useQuery } from "react-query";
 
 const useGetLocation = (id: number) => {

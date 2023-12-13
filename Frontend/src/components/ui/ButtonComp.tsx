@@ -1,5 +1,5 @@
 import { Button } from "react-bootstrap";
-import "./button.scss";
+import "./styles/button.scss";
 
 interface ButtonCompProps extends React.HTMLProps<HTMLButtonElement> {
   text: string;

@@ -1,5 +1,4 @@
 import EventDto, { EventDtoWithTime } from "../../../entities/EventDto.ts";
-import EventWithTimeslotDto from "../../../entities/EventWithTimeslotDto.ts";
 
 interface IEventRepository {
   getEvents(): Promise<EventDto[]>;

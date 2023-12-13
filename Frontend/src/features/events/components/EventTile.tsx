@@ -1,8 +1,10 @@
 import React from "react";
 import "./eventTile.scss";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
-import useEditEvent from "../../../logic/hooks/useEditEvent.ts";
+import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
 import { Container } from "react-bootstrap";
+import EventLogic from "../../../logic/hooks/IEventLogic.ts";
+import { API_HOST, IMAGE_HOST } from "../../../config/config.ts";
 
 interface EventTileProps {
   id: number;
@@ -14,7 +16,8 @@ interface EventTileProps {
 }
 
 const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
-  const { getEvent } = useEditEvent(id);
+  // TODO change to event from list not from request
+  const { getEvent } = EventLogic.useGetEvent(id);
 
   if (getEvent.isLoading && getEvent.data === null) {
     return null;
@@ -28,7 +31,7 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
           <div className="event-title mb-2">{event.eventName}</div>
           <div className="event-details w-100 d-flex flex-row align-items-center justify-content-around mb-3">
             <div className="event-image ">
-              <img src={event.icon} alt={event.icon} />
+              <img src={IMAGE_HOST + event.icon} alt={event.icon} />
             </div>
             <div className="event-elems d-flex flex-column mt-2 justify-content-around">
               <div className="event-date d-flex flex-row align-items-center">
@@ -54,7 +57,7 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
         <Container className="event-tile-container event-tile-container-width d-none d-md-flex">
           <div className="event-details w-100 d-flex flex-row align-items-center justify-content-between">
             <div className="event-image ">
-              <img src={event.icon} alt={event.icon} />
+              <img src={IMAGE_HOST + event.icon} alt={event.icon} />
             </div>
             <div className="event-elems d-flex flex-column mt-2 justify-content-around">
               <div className="event-title mb-2">{event.eventName}</div>

@@ -1,6 +1,6 @@
 import { Container } from "react-bootstrap";
-import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import ButtonComp from "../../../components/ui/ButtonComp.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
 import CCreateEvent from "../controllers/CCreateEvent.ts";
 import SelectInput from "../../../components/forms/SelectInput.tsx";
 import TextInput from "../../../components/forms/TextInput.tsx";
@@ -8,6 +8,7 @@ import DateSelector from "../../../components/forms/DateSelector.tsx";
 import TextAreaInput from "../../../components/forms/TextAreaInput.tsx";
 import TimeslotPicker from "../../../components/forms/TimeslotPicker.tsx";
 import FileInput from "../../../components/forms/FileInput.tsx";
+import { API_HOST } from "../../../config/config.ts";
 
 const VCreateEvent = () => {
   const {

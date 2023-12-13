@@ -1,4 +1,4 @@
-import repositoryContext from "../repositories/repositoryContext.ts";
+import repositoryContext from "../../repositories/repositoryContext.ts";
 import { useQuery } from "react-query";
 
 const useGetEvent = (id: number) => {
@@ -9,5 +9,7 @@ const useGetEvent = (id: number) => {
 
   return { getEvent };
 };
+
+export type GetEvent = ReturnType<typeof useGetEvent>;
 
 export default useGetEvent;

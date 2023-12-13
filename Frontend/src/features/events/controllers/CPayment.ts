@@ -1,8 +1,8 @@
-import useEditEvent from "../../../logic/hooks/useEditEvent.ts";
-import useGetOrder from "../../../logic/hooks/useGetOrder.ts";
-import useGetGame from "../../../logic/hooks/useGetGame.ts";
-import useGetLocation from "../../../logic/hooks/useGetLocation.ts";
-import useCreatePayment from "../../../logic/hooks/useCreatePayment.ts";
+import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
+import useGetOrder from "../../../logic/hooks/order/useGetOrder.ts";
+import useGetGame from "../../../logic/hooks/game/useGetGame.ts";
+import useGetLocation from "../../../logic/hooks/locations/useGetLocation.ts";
+import useCreatePayment from "../../../logic/hooks/paymetns/useCreatePayment.ts";
 import { useNavigate } from "react-router-dom";
 
 interface CPaymentProps {

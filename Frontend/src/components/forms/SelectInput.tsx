@@ -1,7 +1,7 @@
 import Form from "react-bootstrap/Form";
 import { InputGroup } from "react-bootstrap";
 
-import "./Input.scss";
+import "./styles/Input.scss";
 
 interface SelectInputProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {

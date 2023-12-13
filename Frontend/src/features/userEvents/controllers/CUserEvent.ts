@@ -1,6 +1,6 @@
-import useGetEvent from "../../../logic/hooks/useGetEvent.ts";
-import useGetLocation from "../../../logic/hooks/useGetLocation.ts";
-import useGetGame from "../../../logic/hooks/useGetGame.ts";
+import useGetEvent from "../../../logic/hooks/events/useGetEvent.ts";
+import useGetLocation from "../../../logic/hooks/locations/useGetLocation.ts";
+import useGetGame from "../../../logic/hooks/game/useGetGame.ts";
 import { useNavigate } from "react-router-dom";
 
 const CUserEvent = (id: number) => {

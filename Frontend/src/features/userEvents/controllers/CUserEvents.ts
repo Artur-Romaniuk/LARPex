@@ -1,4 +1,4 @@
-import useGetEvents from "../../../logic/hooks/useGetEvents.ts";
+import useGetEvents from "../../../logic/hooks/events/useGetEvents.ts";
 import { useNavigate } from "react-router-dom";
 
 const CUserEvents = () => {
