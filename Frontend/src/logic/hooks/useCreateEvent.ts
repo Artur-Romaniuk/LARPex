@@ -10,7 +10,7 @@ const useCreateEvent = () => {
     mutationFn: eventRepository.addEvent,
     onSuccess: (data) => {
       queryClient.invalidateQueries("events");
-      navigate("/events");
+      navigate("/platnosc/" + data.eventId + "/" + data.orderId);
     },
     onError: (error) => {
       console.log(error);

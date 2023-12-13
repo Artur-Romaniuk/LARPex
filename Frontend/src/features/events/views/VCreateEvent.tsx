@@ -91,7 +91,7 @@ const VCreateEvent = () => {
           <TextInput
             type={"number"}
             value={timeslotSelector.durationMinutes.toString()}
-            label={"Wprwadź czas w minutach"}
+            label={"Wprowadź czas w minutach"}
             error={timeslotSelector.durationError}
             onChange={timeslotSelector.handleDurationMinutesChange}
             placeholder={"Wprowadź czas"}

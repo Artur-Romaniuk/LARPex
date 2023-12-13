@@ -1,4 +1,4 @@
-import { ChangeEvent, useCallback, useState } from "react";
+import { ChangeEvent, useCallback, useEffect, useState } from "react";
 
 interface IUseTextAreaInput {
   initialValue: string;
@@ -11,6 +11,10 @@ interface IUseTextAreaInput {
 const useTextAreaInput = (props: IUseTextAreaInput) => {
   const [value, setValue] = useState(props.initialValue);
   const [error, setError] = useState<string>("");
+
+  useEffect(() => {
+    setValue(props.initialValue);
+  }, [props.initialValue]);
 
   const onChange = useCallback(
     (event: ChangeEvent<HTMLTextAreaElement>) => {

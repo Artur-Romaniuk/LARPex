@@ -4,7 +4,7 @@ import { API_HOST } from "../../../config/config.ts";
 
 class OrderRepository implements IOrderRepository {
   getOrderById(
-    id: number,
+    id: string,
   ): Promise<{ orderId: number; paymentId: number; orderAmount: number }> {
     return axios.get(`${API_HOST}/Order/getOrder?id=${id}`).then((response) => {
       return response.data;
