@@ -17,4 +17,6 @@ public class GameGetDto
     public int? GameDifficulty { get; set; }
 
     public int? GameMaxNumberOfParticipants { get; set; }
+
+    public virtual ICollection<GameCharacterDto> Characters { get; set; } = new List<GameCharacterDto>();
 }

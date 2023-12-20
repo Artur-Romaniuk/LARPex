@@ -48,21 +48,17 @@ namespace Larpex.Mono.Controllers
         {
             var existingGame = await _GameService.GetGame(id);
             if (existingGame == null)
-            {
                 return BadRequest($"No such Game with id {id}");
-            }
-
-            var resp = _mapper.Map<GameGetDto>(existingGame);
-            return Ok(resp);
+            else
+                return Ok(existingGame);
         }
 
         [HttpGet("getGames")]
         [ProducesResponseType(typeof(IEnumerable<GameGetDto>), StatusCodes.Status200OK)]
         public async Task<ActionResult<IEnumerable<GameGetDto>>> GetGames()
         {
-            var existingGame = await _GameService.GetGames();
-            var resp = existingGame.Select(u => _mapper.Map<GameGetDto>(u));
-            return Ok(resp);
+            var existingGames = await _GameService.GetGames();
+            return Ok(existingGames);
         }
 
         [HttpPut]
