@@ -28,6 +28,9 @@ public class AutoMapperProfile : Profile
         CreateMap<TblCharacter, CharacterDto>();
         CreateMap<CharacterDto, TblCharacter>();
 
+        CreateMap<TblCharacter, GameCharacterDto>();
+        CreateMap<GameCharacterDto, TblCharacter>();
+
         CreateMap<TblParticipant, ParticipantDto>();
         CreateMap<ParticipantDto, TblParticipant>();
 
