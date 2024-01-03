@@ -1,3 +1,4 @@
+using Larpex.Mono.Models;
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Shared.ModelDto;
 using Microsoft.AspNetCore.Mvc;
@@ -72,5 +73,21 @@ public class EventsController : ControllerBase
         }
         var updatedEvent = await _eventsRepo.UpdateEvent(id, existingEvent);
         return Ok(updatedEvent);
+    }
+
+    [HttpPost("assignUser")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<bool>> AssignUser([FromForm] AssignUserToEventDto eventWith)
+    {
+        var assignUser = await _eventsRepo.AssignUser(eventWith);
+        return Ok(assignUser);
+    }
+
+    [HttpPost("unassignUser")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EventDto>> UnassignUser([FromForm] UnassignUserDto eventWith)
+    {
+        var unassignUser = await _eventsRepo.UnassignUser(eventWith);
+        return Ok(unassignUser);
     }
 }

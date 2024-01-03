@@ -17,17 +17,20 @@ public class EventsRepo : IEventsRepo
     private readonly LarpexDbContext _context;
     private readonly IMapper _mapper;
     private readonly IPaymentService _paymentService;
+    private readonly IParticipantService _participantService;
     private readonly IImageRepo _imageRepo;
 
     public EventsRepo(
         LarpexDbContext context,
         IMapper mapper,
         IPaymentService paymentService,
+        IParticipantService participantService,
         IImageRepo imageRepo
         )
     {
         _context = context;
         _mapper = mapper;
+        _participantService = participantService;
         _paymentService = paymentService;
         _imageRepo = imageRepo;
     }
@@ -208,5 +211,25 @@ public class EventsRepo : IEventsRepo
         var dbLocation = await _context.TblLocations.FirstOrDefaultAsync(l => l.LocationId == locationId);
         var price = attendeeCount * dbLocation.UserHourPrice;
         return (decimal)price;
+    }
+
+
+    public async Task<bool> AssignUser(AssignUserToEventDto assignUser)
+    {
+        ParticipantDto dto = new ParticipantDto
+        {
+            CharacterId = assignUser.CharacterId,
+            EventId = assignUser.EventId,
+            UserId = assignUser.UserId,
+        };
+        var ret = await _participantService.AddParticipant(dto);
+
+        if (ret < 0) return false;
+        else         return true;
+    }
+
+    public async Task<bool> UnassignUser(UnassignUserDto unassignUser)
+    {
+        return await _participantService.DeleteParticipant(unassignUser);
     }
 }

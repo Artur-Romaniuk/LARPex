@@ -1,4 +1,5 @@
-﻿using Larpex.Shared.ModelDto;
+﻿using Larpex.Mono.Models;
+using Larpex.Shared.ModelDto;
 
 namespace Larpex.Mono.Repositories.Interfaces;
 
@@ -9,4 +10,6 @@ public interface IEventsRepo
     public Task<bool> DeleteEvent(int id);
     public Task<EventTimeslotResponseDto> GetEvent(int id);
     public Task<IEnumerable<EventTimeslotResponseDto>> GetEvents();
+    public Task<bool> AssignUser(AssignUserToEventDto assignUser);
+    public Task<bool> UnassignUser(UnassignUserDto unassignUser);
 }
