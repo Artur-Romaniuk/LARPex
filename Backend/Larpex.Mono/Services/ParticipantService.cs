@@ -23,6 +23,10 @@ public class ParticipantService : IParticipantService
     {
         return await _IParticipantRepo.DeleteParticipant(id);
     }
+    public async Task<bool> DeleteParticipant(UnassignUserDto unassignUser)
+    {
+        return await _IParticipantRepo.DeleteParticipant(unassignUser);
+    }
 
     public async Task<ParticipantDto> GetParticipant(int id)
     {
