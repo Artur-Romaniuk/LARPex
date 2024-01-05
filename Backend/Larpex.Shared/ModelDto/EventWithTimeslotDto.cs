@@ -11,8 +11,6 @@ public class EventWithTimeslotDto
 {
     public string EventName { get; set; } = string.Empty;
     public string EventDescription { get; set; } = string.Empty;
-    //public string GameName { get; set; } = string.Empty;
-    //public int ParticipantsCount { get; set; }
     public int LocationId { get; set; }
     public int GameId { get; set; }
     public DateTime StartDate { get; set; }
