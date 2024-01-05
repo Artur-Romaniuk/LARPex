@@ -77,7 +77,7 @@ public class EventsController : ControllerBase
 
     [HttpPost("assignUser")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<bool>> AssignUser([FromForm] AssignUserToEventDto eventWith)
+    public async Task<ActionResult<bool>> AssignUser([FromBody] AssignUserToEventDto eventWith)
     {
         var assignUser = await _eventsRepo.AssignUser(eventWith);
         return Ok(assignUser);
@@ -85,7 +85,7 @@ public class EventsController : ControllerBase
 
     [HttpPost("unassignUser")]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<EventDto>> UnassignUser([FromForm] UnassignUserDto eventWith)
+    public async Task<ActionResult<EventDto>> UnassignUser([FromBody] UnassignUserDto eventWith)
     {
         var unassignUser = await _eventsRepo.UnassignUser(eventWith);
         return Ok(unassignUser);
