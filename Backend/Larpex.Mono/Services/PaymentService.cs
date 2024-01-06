@@ -53,7 +53,7 @@ public class PaymentService : IPaymentService
 
         var options = new SessionCreateOptions
         {           
-            SuccessUrl = $"{thisApiUrl}/checkout/success?sessionId=" + "{CHECKOUT_SESSION_ID}", // Customer paid.
+            SuccessUrl = $"{thisApiUrl}/checkout/success", // Customer paid.
             //CancelUrl = "https://localhost:7226/" + "failed",
             CancelUrl = clientUrl + "failed",  // Checkout cancelled.
             PaymentMethodTypes = new List<string>
