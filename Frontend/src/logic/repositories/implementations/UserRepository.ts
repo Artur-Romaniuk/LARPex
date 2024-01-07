@@ -1,7 +1,10 @@
 import IUserRepository from "../interfaces/IUserRepository.ts";
+import ISignInEventData from "../interfaces/ISignInEventData.ts";
+import ISignOutFromData from "../interfaces/ISignOutFromData.ts";
 import UserDto from "../../../entities/UserDto.ts";
 import axios from "axios";
 import {API_HOST} from "../../../config/config.ts";
+
 
 class UserRepository implements IUserRepository {
   getUser(id: number): Promise<UserDto> {
@@ -16,13 +19,7 @@ class UserRepository implements IUserRepository {
     });
   }
 
-  signInToEvent(eventId: number, userId: number, characterId: number): Promise<boolean> {
-    const data = {
-      CharacterId: characterId, 
-      EventId: eventId,
-      UserId: userId,
-    };
-
+  signInToEvent(data: ISignInEventData): Promise<boolean> {
     return axios
       .post(`${API_HOST}/Events/assignUser`, data)
       .then((response) => {
@@ -30,20 +27,14 @@ class UserRepository implements IUserRepository {
       });
   }
 
-  signOutFromEvent(eventId: number, userId: number): Promise<boolean> {
-    const data = {
-      EventId: eventId,
-      UserId: userId,
+  signOutFromEvent(data: ISignOutFromData): Promise<boolean> {
+      return axios
+        .post(`${API_HOST}/Events/unassignUser`, data)
+        .then((response) => {
+          return response.data;
+        });
     };
-
-    return axios
-      .post(
-        `${API_HOST}/Events/unassignUser`, data
-      )
-      .then((response) => {
-        return response.data;
-      });
-  }
+  
 }
 
 export default UserRepository;
