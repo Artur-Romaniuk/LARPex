@@ -16,6 +16,34 @@ class UserRepository implements IUserRepository {
     });
   }
 
+  signInToEvent(eventId: number, userId: number, characterId: number): Promise<boolean> {
+    const data = {
+      CharacterId: characterId, 
+      EventId: eventId,
+      UserId: userId,
+    };
+
+    return axios
+      .post(`${API_HOST}/Events/assignUser`, data)
+      .then((response) => {
+        return response.data;
+      });
+  }
+
+  signOutFromEvent(eventId: number, userId: number): Promise<boolean> {
+    const data = {
+      EventId: eventId,
+      UserId: userId,
+    };
+
+    return axios
+      .post(
+        `${API_HOST}/Events/unassignUser`, data
+      )
+      .then((response) => {
+        return response.data;
+      });
+  }
 }
 
 export default UserRepository;
