@@ -13,6 +13,7 @@ interface EventTileProps {
   // img: string;
   navigateToEventDetails: (id: number) => void;
   navigateToJoinEvent: (id: number) => void;
+  navigateToLeaveEvent: (id: number) => void;
 }
 
 const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
@@ -23,6 +24,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
   }
 
   const event = getEvent.data;
+  const isUserInEvent = true;
   return (
     event && (
       <>
@@ -30,7 +32,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
           <div className="event-title mb-2">{event.eventName}</div>
           <div className="event-details w-100 d-flex flex-row align-items-center justify-content-around mb-3">
             <div className="event-image ">
-              <img src={IMAGE_HOST + event.icon} alt={event.icon} />
+              <img src={IMAGE_HOST + event.icon} alt={""} />
             </div>
             <div className="event-elems d-flex flex-column mt-2 justify-content-around">
               <div className="event-date d-flex flex-row align-items-center">
@@ -55,19 +57,28 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
             >
               Opis
             </button>
-            <button
-              className="btn btn-dark px-4"
-              onClick={() => props.navigateToJoinEvent(props.id)}
-            >
-              Dołącz
-            </button>
+            {!isUserInEvent ? (
+              <button
+                className="btn btn-dark px-5 m-1"
+                onClick={() => props.navigateToJoinEvent(props.id)}
+              >
+                Dołącz
+              </button>
+            ) : (
+              <button
+                className="btn btn-dark px-5 m-1"
+                onClick={() => props.navigateToLeaveEvent(props.id)}
+              >
+                Opuść
+              </button>
+            )}
           </div>
         </Container>
 
         <Container className="event-tile-container event-tile-container-width d-none d-md-flex">
           <div className="event-details w-100 d-flex flex-row align-items-center justify-content-between">
             <div className="event-image ">
-              <img src={IMAGE_HOST + event.icon} alt={event.icon} />
+              <img src={IMAGE_HOST + event.icon} />
             </div>
             <div className="event-elems d-flex flex-column mt-2 justify-content-around">
               <div className="event-title mb-2">{event.eventName}</div>
@@ -95,12 +106,21 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
               >
                 Opis
               </button>
-              <button
-                className="btn btn-dark px-5 m-1"
-                onClick={() => props.navigateToJoinEvent(props.id)}
-              >
-                Dołącz
-              </button>
+              {!isUserInEvent ? (
+                <button
+                  className="btn btn-dark px-5 m-1"
+                  onClick={() => props.navigateToJoinEvent(props.id)}
+                >
+                  Dołącz
+                </button>
+              ) : (
+                <button
+                  className="btn btn-dark px-5 m-1"
+                  onClick={() => props.navigateToLeaveEvent(props.id)}
+                >
+                  Opuść
+                </button>
+              )}
             </div>
           </div>
         </Container>

@@ -13,6 +13,7 @@ const ButtonComp = (props: ButtonCompProps) => {
   return (
     <Button
       className={`button ${props.className} ${classElem}`}
+      style={{ minWidth: "150px" }}
       onClick={onClick}
     >
       {text}

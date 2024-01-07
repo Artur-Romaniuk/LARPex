@@ -9,6 +9,7 @@ import VPayment from "./features/events/views/VPayment.tsx";
 import VUserEventsList from "./features/userEvents/views/VUserEventsList.tsx";
 import VEventDetails from "./features/userEvents/views/VEventDetails.tsx";
 import VJoinEvent from "./features/userEvents/views/VJoinEvent.tsx";
+import { UserContextProvider } from "./logic/contexts/userContext.tsx";
 
 const router = createBrowserRouter([
   {
@@ -69,7 +70,9 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <UserContextProvider>
+        <RouterProvider router={router} />
+      </UserContextProvider>
     </QueryClientProvider>
   );
 };

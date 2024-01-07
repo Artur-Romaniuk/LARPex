@@ -12,6 +12,7 @@ const VUserEventsList = () => {
       id={event.eventId}
       navigateToEventDetails={controller.navigateToEventDetails}
       navigateToJoinEvent={controller.navigateToJoinEvent}
+      navigateToLeaveEvent={controller.navigateToLeaveEvent}
     />
   ));
 

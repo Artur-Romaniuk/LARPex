@@ -31,7 +31,7 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
           <div className="event-title mb-2">{event.eventName}</div>
           <div className="event-details w-100 d-flex flex-row align-items-center justify-content-around mb-3">
             <div className="event-image ">
-              <img src={IMAGE_HOST + event.icon} alt={event.icon} />
+              <img src={IMAGE_HOST + event.icon} />
             </div>
             <div className="event-elems d-flex flex-column mt-2 justify-content-around">
               <div className="event-date d-flex flex-row align-items-center">
