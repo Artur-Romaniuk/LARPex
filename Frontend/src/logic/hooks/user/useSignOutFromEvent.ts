@@ -1,12 +1,31 @@
 import repositoryContext from "../../repositories/repositoryContext.ts";
-import { useQuery } from "react-query";
+import {
+  useMutation,
+  UseMutationOptions,
+  UseMutationResult,
+  MutationKey,
+} from "react-query";
+import ISignOutFromData from "../../repositories/interfaces/ISignOutFromData.ts";
 
-const useSignOutFromEvent = (eventId: number, userId: number) => {
+const useSignOutFromEvent = (): {
+  signOutFromEvent: (
+    data: ISignOutFromData,
+    options?: UseMutationOptions<boolean, Error, ISignOutFromData, MutationKey>
+  ) => UseMutationResult<boolean, Error, ISignOutFromData, MutationKey>;
+} => {
   const userRepository = repositoryContext.injectUserRepository();
-  const signOutFromEvent = useQuery(
-    ["signOutFromEvent", eventId, userId],
-    () => userRepository.signOutFromEvent(eventId, userId),
-  );
+
+  const signOutFromEvent = (
+    data: ISignOutFromData,
+    options?: UseMutationOptions<boolean, Error, ISignOutFromData, MutationKey>
+  ): UseMutationResult<boolean, Error, ISignOutFromData, MutationKey> => {
+    return useMutation(
+      ["signOutFromEvent", data],
+      (variables: ISignOutFromData) =>
+        userRepository.signOutFromEvent(variables),
+      options
+    );
+  };
 
   return { signOutFromEvent };
 };

@@ -1,14 +1,14 @@
 import UserDto from "../../../entities/UserDto.ts";
+import ISignInEventData from "../interfaces/ISignInEventData.ts";
+import ISignOutFromData from "./ISignOutFromData.ts";
 
 interface IUserRepository {
   getUser(id: number): Promise<UserDto>;
   getUsers(): Promise<UserDto[]>;
   signInToEvent(
-    eventId: number,
-    userId: number,
-    characterId: number
+    data: ISignInEventData,
   ): Promise<boolean>;
-  signOutFromEvent(eventId: number, userId: number): Promise<boolean>;
+  signOutFromEvent(data: ISignOutFromData): Promise<boolean>;
 }
 
 export default IUserRepository;

@@ -1,9 +1,9 @@
 import repositoryContext from "../../repositories/repositoryContext.ts";
-import { useQuery } from "react-query";
+import { useMutation } from "react-query";
 
 const useGetEvents = () => {
   const eventsRepository = repositoryContext.injectEventRepository();
-  const getEvents = useQuery("events", eventsRepository.getEvents);
+  const getEvents = useMutation("events", eventsRepository.getEvents);
   return getEvents;
 };
 
