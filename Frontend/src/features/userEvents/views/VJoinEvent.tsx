@@ -5,6 +5,7 @@ import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 import React from "react";
 import CUserEvent from "../controllers/CUserEvent.ts";
 import { IMAGE_HOST } from "../../../config/config.ts";
+import RadioInput from "../../../components/forms/RadioInput.tsx";
 
 const VJoinEvent = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const VJoinEvent = () => {
 
   const event = controller.event.data;
   const game = controller.game.data;
+  const handleCharacterChange = controller.handleCharacterChange;
   return (
     <>
       <PageTitle title={"Dołącz do wydarzenia"} />
@@ -67,7 +69,18 @@ const VJoinEvent = () => {
         </div>
 
         {/*Game character selection section*/}
-        <div className="w-100">{"Characters selector"}</div>
+        {/*Jeśli defaultValue jest podane - brak możliwości zmiany postaci. Jeśli podane - możliwość wyboru*/}
+        <div className="w-100">
+        <RadioInput
+          key={"chooseCharacter"}
+          label={"Wybierz postać"}
+          setValue={handleCharacterChange}
+          name={"characterSelector"}
+          values={["Postać 1", "Postać 2", "Postać 3"]}
+          defaultValue={undefined}
+        />
+        </div>
+        {/*<div className="w-100">{"Characters selector"}</div>*/}
       </Container>
       <Container className="my-5 d-flex justify-content-between">
         <button

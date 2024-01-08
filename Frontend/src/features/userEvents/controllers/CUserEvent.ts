@@ -13,7 +13,11 @@ const CUserEvent = (id: number) => {
     navigate(-1);
   };
 
-  return { event, location, game, goBack };
+  const  handleCharacterChange = () => {
+    console.log("Not implemented")
+  }
+
+  return { event, location, game, goBack, handleCharacterChange };
 };
 
 export default CUserEvent;
