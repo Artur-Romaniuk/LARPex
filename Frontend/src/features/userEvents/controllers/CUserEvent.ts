@@ -3,7 +3,6 @@ import useGetLocation from "../../../logic/hooks/locations/useGetLocation.ts";
 import useGetGame from "../../../logic/hooks/game/useGetGame.ts";
 import { useNavigate } from "react-router-dom";
 import useCreateParticipant from "../../../logic/hooks/user/useCreateParticipant.ts";
-import CreateParticipantDto from "../../../entities/CreateParticipantDto.ts";
 import { useState } from "react";
 import GameCharacterDto from "../../../entities/GameCharacterDto.ts";
 
@@ -15,8 +14,9 @@ const CUserEvent = (id: number) => {
   const navigate = useNavigate();
 
   const [error, setError] = useState("");
+  const [selectedCharacter, setSelectedCharacter] = useState<GameCharacterDto | undefined>(undefined);
 
-  const characters: GameCharacterDto[] = [// HACK: Dowload character list for current event from repository
+  const characters: GameCharacterDto[] = [// TODO: Download character list for current event from repository
     {
       characterClass: 'Warrior',
       characterId: 1,
@@ -47,28 +47,26 @@ const CUserEvent = (id: number) => {
     },
   ];
 
-  const participant: CreateParticipantDto = {
-    characterId: -1,
-    eventId: event.data?.eventId || id,
-    userId: 4,  // TODO: Get current user Id
-  };
-
   const goBack = () => {
     navigate(-1);
   };
 
   const handleCharacterChange = (index: number) => {
-    participant.characterId = characters[index].characterId;
+    setSelectedCharacter(characters[index]);
   }
 
   const joinGameExec = () => {
 
-    if (participant.characterId == -1) {
+    if (selectedCharacter == undefined) {
       setError("Wybierz postać");
       return;
     }
 
-    createParticipant.createParticipant(participant);
+    createParticipant.createParticipant({
+      characterId: selectedCharacter.characterId,
+      eventId: event.data?.eventId || id,
+      userId: 4,  // TODO: Get current user Id
+    });
     navigate(-1);
 
   }
@@ -78,6 +76,7 @@ const CUserEvent = (id: number) => {
     location,
     game,
     characters,
+    selectedCharacter,
     error,
 
     goBack,
