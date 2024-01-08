@@ -71,16 +71,16 @@ const VJoinEvent = () => {
         {/*Game character selection section*/}
         {/*Jeśli defaultValue jest podane - brak możliwości zmiany postaci. Jeśli podane - możliwość wyboru*/}
         <div className="w-100">
-        <RadioInput
-          key={"chooseCharacter"}
-          label={"Wybierz postać"}
-          setValue={handleCharacterChange}
-          name={"characterSelector"}
-          values={["Postać 1", "Postać 2", "Postać 3"]}
-          defaultValue={undefined}
-        />
+          <RadioInput
+            key={"chooseCharacter"}
+            label={"Wybierz postać"}
+            setValue={handleCharacterChange}
+            name={"characterSelector"}
+            values={controller.characters}
+            defaultValue={undefined}
+          />
         </div>
-        {/*<div className="w-100">{"Characters selector"}</div>*/}
+        <p className={"globalError"}>{controller.error}</p>
       </Container>
       <Container className="my-5 d-flex justify-content-between">
         <button
@@ -89,7 +89,11 @@ const VJoinEvent = () => {
         >
           Anuluj
         </button>
-        <button className="btn btn-success px-4 py-2">Dołącz</button>
+        <button
+          className="btn btn-success px-4 py-2"
+          onClick={controller.joinGameExec}>
+          Dołącz
+        </button>
       </Container>
     </>
   );
