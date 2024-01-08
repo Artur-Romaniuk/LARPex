@@ -5,13 +5,66 @@ import { useNavigate } from "react-router-dom";
 import useCreateParticipant from "../../../logic/hooks/user/useCreateParticipant.ts";
 import { useState } from "react";
 import GameCharacterDto from "../../../entities/GameCharacterDto.ts";
+import { ChangeEvent, useEffect, useState } from "react";
+import useSignToEvent from "../../../logic/hooks/user/useSignToEvent.ts";
+import { useUser } from "../../../logic/contexts/userContext.tsx";
+import CharacterDto from "../../../entities/CharacterDto.ts";
 
 const CUserEvent = (id: number) => {
   const { getEvent: event } = useGetEvent(id);
+  const user = useUser();
   const location = useGetLocation(event.data?.locationId || 0);
   const game = useGetGame(event.data?.gameId || 0);
   const createParticipant = useCreateParticipant();
   const navigate = useNavigate();
+  const signToEvent = useSignToEvent();
+
+  const [selectedCharacter, setSelectedCharacter] = useState<number>();
+  const handleSelectChange = (e: ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCharacter(parseInt(e.target.value));
+  };
+
+  const charactersMock: CharacterDto[] = [
+    {
+      characterId: 1,
+      characterName: "Kowalski",
+      characterClass: "Klasa Kowalskiego",
+      characterRace: "Rasa Kowalskiego",
+      characterLore: "Lory Kowalskiego",
+    },
+    {
+      characterId: 2,
+      characterName: "Nowak",
+      characterClass: "Klasa Nowaka",
+      characterRace: "Rasa Nowaka",
+      characterLore: "Lory Nowaka",
+    },
+    {
+      characterId: 3,
+      characterName: "Kowal",
+      characterClass: "Klasa Kowala",
+      characterRace: "Rasa Kowala",
+      characterLore: "Lory Kowala",
+    },
+  ];
+
+  useEffect(() => {
+    if (game.data?.gameId) {
+      setSelectedCharacter(game.data.characters[0].characterId);
+    }
+  }, [game.data]);
+
+  const handleJoinEvent = () => {
+    console.log(selectedCharacter);
+    console.log(user.user);
+    if (selectedCharacter) {
+      signToEvent.signToEvent.mutate({
+        eventId: id,
+        userId: user.user.userId || 0,
+        characterId: selectedCharacter,
+      });
+    }
+  };
 
   const [error, setError] = useState("");
   const [selectedCharacter, setSelectedCharacter] = useState<GameCharacterDto | undefined>(undefined);
@@ -82,6 +135,18 @@ const CUserEvent = (id: number) => {
     goBack,
     handleCharacterChange,
     joinGameExec
+  };
+  return {
+    event,
+    location,
+
+    charactersMock,
+    handleSelectChange,
+
+    game,
+    goBack,
+    handleJoinEvent,
+    selectedCharacter,
   };
 };
 

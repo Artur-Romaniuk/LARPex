@@ -1,29 +1,17 @@
 import React from "react";
 import "./eventTile.scss";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
-import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
 import { Container } from "react-bootstrap";
-import EventLogic from "../../../logic/hooks/IEventLogic.ts";
-import { API_HOST, IMAGE_HOST } from "../../../config/config.ts";
+import { IMAGE_HOST } from "../../../config/config.ts";
+import EventTimeslotResponseDto from "../../../entities/EventTimeslotResponseDto.ts";
 
 interface EventTileProps {
-  id: number;
-  title: string;
-  date: Date;
-  peopleCount: number;
-  img: string;
+  event: EventTimeslotResponseDto;
   navigateToEvent: (id: number) => void;
 }
 
-const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
-  // TODO change to event from list not from request
-  const { getEvent } = EventLogic.useGetEvent(id);
-
-  if (getEvent.isLoading && getEvent.data === null) {
-    return null;
-  }
-
-  const event = getEvent.data;
+const EventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
+  const event = props.event;
   return (
     event && (
       <>
@@ -49,7 +37,10 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
               </div>
             </div>
           </div>
-          <button className="btn btn-dark" onClick={() => navigateToEvent(id)}>
+          <button
+            className="btn btn-dark"
+            onClick={() => props.navigateToEvent(event.eventId)}
+          >
             Edytuj wydarzenie
           </button>
         </Container>
@@ -57,7 +48,7 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
         <Container className="event-tile-container event-tile-container-width d-none d-md-flex">
           <div className="event-details w-100 d-flex flex-row align-items-center justify-content-between">
             <div className="event-image ">
-              <img src={IMAGE_HOST + event.icon} alt={event.icon} />
+              <img src={IMAGE_HOST + event.icon} />
             </div>
             <div className="event-elems d-flex flex-column mt-2 justify-content-around">
               <div className="event-title mb-2">{event.eventName}</div>
@@ -80,7 +71,7 @@ const EventTile: React.FC<EventTileProps> = ({ id, navigateToEvent }) => {
 
             <button
               className="btn btn-dark"
-              onClick={() => navigateToEvent(id)}
+              onClick={() => props.navigateToEvent(event.eventId)}
             >
               Edytuj wydarzenie
             </button>

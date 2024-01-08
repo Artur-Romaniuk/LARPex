@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 import CUserEvent from "../controllers/CUserEvent.ts";
 import { IMAGE_HOST } from "../../../config/config.ts";
+import Form from "react-bootstrap/Form";
 import RadioInput from "../../../components/forms/RadioInput.tsx";
 
 const VJoinEvent = () => {
@@ -97,6 +98,12 @@ const VJoinEvent = () => {
           onClick={controller.goBack}
         >
           Anuluj
+        </button>
+        <button
+          className="btn btn-success px-4 py-2"
+          onClick={controller.handleJoinEvent}
+        >
+          Dołącz
         </button>
         <button
           className="btn btn-success px-4 py-2"

@@ -1,12 +1,12 @@
 import repositoryContext from "../../repositories/repositoryContext.ts";
 import { useMutation } from "react-query";
 
-const useGetEvents = () => {
-  const eventsRepository = repositoryContext.injectEventRepository();
-  const getEvents = useMutation("events", eventsRepository.getEvents);
-  return getEvents;
+const useSignToEvent = () => {
+  const userRepository = repositoryContext.injectUserRepository();
+  const signToEvent = useMutation("signToEvent", userRepository.signInToEvent);
+
+  return { signToEvent };
 };
 
-export type GetEvents = ReturnType<typeof useGetEvents>;
-
-export default useGetEvents;
+export type SignToEvent = ReturnType<typeof useSignToEvent>;
+export default useSignToEvent;

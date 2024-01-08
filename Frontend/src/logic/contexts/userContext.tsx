@@ -1,17 +1,24 @@
-import { createContext, useContext, useEffect, useState } from "react";
+import {
+  ChangeEvent,
+  createContext,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import useGetUsers from "../hooks/user/useGetUsers.ts";
 import UserDto from "../../entities/UserDto.ts";
 
 const useCreateUserContext = () => {
   const [user, setUser] = useState<UserDto>({} as UserDto);
   const getUsers = useGetUsers();
-  const users: string[] = getUsers.data
-    ? getUsers.data.map((user) => user.userEmail)
-    : [];
 
-  const handleUserChange = (userEmail: string) => {
-    const u = getUsers.data?.find((user) => user.userEmail === userEmail);
-    if (u) setUser(u);
+  const handleSelectUser = (e: ChangeEvent<HTMLSelectElement>) => {
+    const selectedUser = getUsers.data?.find(
+      (user) => user.userId === Number.parseInt(e.target.value),
+    );
+    if (selectedUser) {
+      setUser(selectedUser);
+    }
   };
 
   useEffect(() => {
@@ -20,7 +27,7 @@ const useCreateUserContext = () => {
     }
   }, [getUsers.data]);
 
-  return { user, users, handleUserChange };
+  return { user, getUsers, handleSelectUser };
 };
 
 export type UserContext = ReturnType<typeof useCreateUserContext>;

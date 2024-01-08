@@ -9,14 +9,14 @@ const ChangeUserSelect = (props: ChangeUserSelectProps) => {
   const user = useUser();
 
   return (
-    <Form.Select className={props.className} style={{ height: "40px" }}>
-      {user.users.map((userEmail) => (
-        <option
-          key={userEmail}
-          value={userEmail}
-          onClick={() => user.handleUserChange(userEmail)}
-        >
-          {userEmail}
+    <Form.Select
+      className={props.className}
+      style={{ height: "40px" }}
+      onChange={user.handleSelectUser}
+    >
+      {user.getUsers.data?.map((userDto) => (
+        <option key={userDto.userId} value={userDto.userId}>
+          {userDto.userEmail}
         </option>
       ))}
     </Form.Select>

@@ -10,6 +10,7 @@ const VUserEventsList = () => {
     <UserEventTile
       key={idx}
       id={event.eventId}
+      event={event}
       navigateToEventDetails={controller.navigateToEventDetails}
       navigateToJoinEvent={controller.navigateToJoinEvent}
       navigateToLeaveEvent={controller.navigateToLeaveEvent}

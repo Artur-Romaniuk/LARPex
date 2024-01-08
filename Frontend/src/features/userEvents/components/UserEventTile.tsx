@@ -4,27 +4,18 @@ import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
 import { Container } from "react-bootstrap";
 import { IMAGE_HOST } from "../../../config/config.ts";
+import EventTimeslotResponseDto from "../../../entities/EventTimeslotResponseDto.ts";
 
 interface EventTileProps {
   id: number;
-  // title: string;
-  // date: Date;
-  // peopleCount: number;
-  // img: string;
+  event: EventTimeslotResponseDto;
   navigateToEventDetails: (id: number) => void;
   navigateToJoinEvent: (id: number) => void;
   navigateToLeaveEvent: (id: number) => void;
 }
 
 const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
-  const { getEvent } = useEditEvent(props.id);
-
-  if (getEvent.isLoading && getEvent.data === null) {
-    return null;
-  }
-
-  const event = getEvent.data;
-  const isUserInEvent = true;
+  const event = props.event;
   return (
     event && (
       <>
@@ -57,7 +48,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
             >
               Opis
             </button>
-            {!isUserInEvent ? (
+            {!false ? (
               <button
                 className="btn btn-dark px-5 m-1"
                 onClick={() => props.navigateToJoinEvent(props.id)}
@@ -106,7 +97,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
               >
                 Opis
               </button>
-              {!isUserInEvent ? (
+              {!false ? (
                 <button
                   className="btn btn-dark px-5 m-1"
                   onClick={() => props.navigateToJoinEvent(props.id)}

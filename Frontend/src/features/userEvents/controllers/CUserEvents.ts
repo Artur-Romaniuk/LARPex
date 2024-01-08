@@ -1,12 +1,13 @@
 import useGetEvents from "../../../logic/hooks/events/useGetEvents.ts";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../logic/contexts/userContext.tsx";
+import useSignOutFromEvent from "../../../logic/hooks/user/useSignOutFromEvent.ts";
 
 const CUserEvents = () => {
   const events = useGetEvents();
   const navigate = useNavigate();
   const user = useUser();
-  // const leaveEvent = useLeaveEvent();
+  const leaveEvent = useSignOutFromEvent();
 
   const navigateToEventDetails = (id: number) => {
     navigate(`/user/event/${id}`);
@@ -18,7 +19,10 @@ const CUserEvents = () => {
 
   const navigateToLeaveEvent = (id: number) => {
     if (confirm("Czy jesteś pewien, że chcesz opuścić to wydarzenie?")) {
-      // leaveEvent.mutate(id, user.user.userId);
+      leaveEvent.signOutFromEvent.mutate({
+        eventId: id,
+        userId: user.user.userId || 0,
+      });
     }
   };
 
