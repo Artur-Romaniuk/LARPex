@@ -76,7 +76,7 @@ const VJoinEvent = () => {
             label={"Wybierz postać"}
             setValue={handleCharacterChange}
             name={"characterSelector"}
-            values={controller.characters}
+            values={controller.characters.map(character => character.characterName)}
             defaultValue={undefined}
           />
         </div>

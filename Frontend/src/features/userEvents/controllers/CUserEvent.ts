@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import useCreateParticipant from "../../../logic/hooks/user/useCreateParticipant.ts";
 import CreateParticipantDto from "../../../entities/CreateParticipantDto.ts";
 import { useState } from "react";
+import GameCharacterDto from "../../../entities/GameCharacterDto.ts";
 
 const CUserEvent = (id: number) => {
   const { getEvent: event } = useGetEvent(id);
@@ -15,7 +16,36 @@ const CUserEvent = (id: number) => {
 
   const [error, setError] = useState("");
 
-  const characters = ["Postać 1", "Postać 2", "Postać 3", "Postać 4"]; // HACK: Dowload character list for current event from repository
+  const characters: GameCharacterDto[] = [// HACK: Dowload character list for current event from repository
+    {
+      characterClass: 'Warrior',
+      characterId: 1,
+      characterLore: 'Warrior lore',
+      characterName: 'John Doe',
+      characterRace: 'Human',
+    },
+    {
+      characterClass: 'Mage',
+      characterId: 2,
+      characterLore: 'Mage lore',
+      characterName: 'Jane Doe',
+      characterRace: 'Elf',
+    },
+    {
+      characterClass: 'Rogue',
+      characterId: 3,
+      characterLore: 'Rogue lore',
+      characterName: 'Bob Smith',
+      characterRace: 'Dwarf',
+    },
+    {
+      characterClass: 'Paladin',
+      characterId: 4,
+      characterLore: 'Paladin lore',
+      characterName: 'Alice Johnson',
+      characterRace: 'Half-elf',
+    },
+  ];
 
   const participant: CreateParticipantDto = {
     characterId: -1,
@@ -28,7 +58,7 @@ const CUserEvent = (id: number) => {
   };
 
   const handleCharacterChange = (index: number) => {
-    participant.characterId = index;
+    participant.characterId = characters[index].characterId;
   }
 
   const joinGameExec = () => {
