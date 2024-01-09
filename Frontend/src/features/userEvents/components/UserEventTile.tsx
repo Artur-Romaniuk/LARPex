@@ -1,14 +1,13 @@
 import React from "react";
 import "./../../events/components/eventTile.scss";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
-import useEditEvent from "../../../logic/hooks/events/useEditEvent.ts";
 import { Container } from "react-bootstrap";
 import { IMAGE_HOST } from "../../../config/config.ts";
-import EventTimeslotResponseDto from "../../../entities/EventTimeslotResponseDto.ts";
+import UserEventDto from "../../../entities/UserEventDto.ts";
 
 interface EventTileProps {
   id: number;
-  event: EventTimeslotResponseDto;
+  event: UserEventDto;
   navigateToEventDetails: (id: number) => void;
   navigateToJoinEvent: (id: number) => void;
   navigateToLeaveEvent: (id: number) => void;
@@ -16,6 +15,7 @@ interface EventTileProps {
 
 const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
   const event = props.event;
+  console.log(event.eventId + " " + !event.isEnrolled);
   return (
     event && (
       <>
@@ -48,7 +48,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
             >
               Opis
             </button>
-            {!false ? (
+            {!event.isEnrolled ? (
               <button
                 className="btn btn-dark px-5 m-1"
                 onClick={() => props.navigateToJoinEvent(props.id)}
@@ -97,7 +97,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
               >
                 Opis
               </button>
-              {!false ? (
+              {!event.isEnrolled ? (
                 <button
                   className="btn btn-dark px-5 m-1"
                   onClick={() => props.navigateToJoinEvent(props.id)}
@@ -106,7 +106,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
                 </button>
               ) : (
                 <button
-                  className="btn btn-dark px-5 m-1"
+                  className="btn btn-danger px-5 m-1"
                   onClick={() => props.navigateToLeaveEvent(props.id)}
                 >
                   Opuść

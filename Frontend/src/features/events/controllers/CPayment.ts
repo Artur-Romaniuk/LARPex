@@ -22,11 +22,18 @@ const CPayment = (props: CPaymentProps) => {
   const createPayment = useCreatePayment();
 
   const pay = () => {
-    createPayment.mutate({
-      orderId: (order.data?.orderId ?? "").toString(),
-      paymentId: "",
-      orderAmount: order.data?.orderAmount ?? 0,
-    });
+    createPayment.mutate(
+      {
+        orderId: (order.data?.orderId ?? "").toString(),
+        paymentId: "",
+        orderAmount: order.data?.orderAmount ?? 0,
+      },
+      {
+        onSuccess: (data) => {
+          window.open(data.stripeSessionUrl);
+        },
+      },
+    );
   };
 
   const goBack = () => {

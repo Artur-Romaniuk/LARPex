@@ -6,9 +6,8 @@ import UserEventTile from "../components/UserEventTile.tsx";
 const VUserEventsList = () => {
   const controller = CUserEvents();
 
-  const mapEvents = controller.events.data?.map((event, idx) => (
+  const mapEvents = controller.events.getUserEvents.data?.map((event, idx) => (
     <UserEventTile
-      key={idx}
       id={event.eventId}
       event={event}
       navigateToEventDetails={controller.navigateToEventDetails}
@@ -17,7 +16,7 @@ const VUserEventsList = () => {
     />
   ));
 
-  if (controller.events.isLoading) {
+  if (controller.events.getUserEvents.isLoading) {
     return <div>Ładowanie...</div>;
   }
 

@@ -77,7 +77,11 @@ const VJoinEvent = () => {
               label={"Wybierz postać"}
               setValue={handleCharacterChange}
               name={"characterSelector"}
-              values={controller.characters.map(character => character.characterName)}
+              values={
+                controller.characters?.map(
+                  (character) => character.characterName,
+                ) || []
+              }
               defaultValue={undefined}
             />
           </div>
@@ -85,10 +89,20 @@ const VJoinEvent = () => {
           {controller.selectedCharacter && (
             <div className="w-100">
               <h2>{controller.selectedCharacter.characterName}</h2>
-              <p><b>Klasa: </b>{controller.selectedCharacter.characterClass}</p>
-              <p><b>Rasa: </b>{controller.selectedCharacter.characterRace}</p>
-              <p><b>Opis: </b>{controller.selectedCharacter.characterLore}</p>
-            </div>)}
+              <p>
+                <b>Klasa: </b>
+                {controller.selectedCharacter.characterClass}
+              </p>
+              <p>
+                <b>Rasa: </b>
+                {controller.selectedCharacter.characterRace}
+              </p>
+              <p>
+                <b>Opis: </b>
+                {controller.selectedCharacter.characterLore}
+              </p>
+            </div>
+          )}
         </div>
         <p className={"globalError"}>{controller.error}</p>
       </Container>
@@ -103,11 +117,6 @@ const VJoinEvent = () => {
           className="btn btn-success px-4 py-2"
           onClick={controller.handleJoinEvent}
         >
-          Dołącz
-        </button>
-        <button
-          className="btn btn-success px-4 py-2"
-          onClick={controller.joinGameExec}>
           Dołącz
         </button>
       </Container>

@@ -3,7 +3,6 @@ import { Form } from "react-bootstrap";
 import "./styles/Input.scss";
 
 interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  key: string;
   label: string;
   values: string[];
   setValue?: (index: number) => void;
@@ -11,23 +10,26 @@ interface RadioProps extends React.InputHTMLAttributes<HTMLInputElement> {
 }
 
 const RadioInput = (props: RadioProps) => {
-  const { key, values, setValue, defaultValue, ...rest } = props;
+  const { values, setValue, defaultValue, ...rest } = props;
 
   return (
     <div className={"input radio"}>
-      <div className="title"><label htmlFor={rest.id}>{props.label}</label></div>
+      <div className="title">
+        <label htmlFor={rest.id}>{props.label}</label>
+      </div>
       <Form className="box">
-        <div key={key} className="mb-3">
+        <div className="mb-3">
           {values.map((v, index) => (
             <Form.Check
               className="radio-button"
               type="radio"
-              name={`${key}-group`}
               key={v}
               id={v}
               label={v}
               onChange={() => setValue?.(index)}
-              {...(defaultValue !== undefined && { checked: defaultValue === v })}
+              {...(defaultValue !== undefined && {
+                checked: defaultValue === v,
+              })}
             />
           ))}
         </div>

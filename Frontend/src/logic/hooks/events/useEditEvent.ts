@@ -50,7 +50,17 @@ const useEditEvent = (id: number) => {
   }, [getEvent.data]);
 
   const updateEvent = () => {
-    // updateEventMutation.mutate(event);
+    updateEventMutation.mutate({
+      eventId: event.eventId,
+      eventName: event.eventName,
+      eventDescription: event.eventDescription,
+      locationId: event.locationId,
+      gameId: event.gameId,
+      timeslotDatetime: event.timeslot.timeslotDatetime,
+      timeslotDuration: event.timeslot.timeslotDuration,
+      icon: event.icon,
+      userId: user.user.userId || 0,
+    });
   };
 
   return { event, setEvent, getEvent, updateEvent };

@@ -1,12 +1,12 @@
-import useGetEvents from "../../../logic/hooks/events/useGetEvents.ts";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../../../logic/contexts/userContext.tsx";
 import useSignOutFromEvent from "../../../logic/hooks/user/useSignOutFromEvent.ts";
+import useGetUserEvents from "../../../logic/hooks/user/useGetUserEvents.ts";
 
 const CUserEvents = () => {
-  const events = useGetEvents();
-  const navigate = useNavigate();
   const user = useUser();
+  const events = useGetUserEvents(user.user.userId);
+  const navigate = useNavigate();
   const leaveEvent = useSignOutFromEvent();
 
   const navigateToEventDetails = (id: number) => {

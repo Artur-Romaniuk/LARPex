@@ -5,8 +5,8 @@ interface EventTimeslotResponseDto {
   eventName: string;
   eventStatus: number;
   gamaName: string;
-  participantsCount: number;
   eventDescription: string;
+  participantsCount: number;
   orderId: number;
   locationId: number;
   gameId: number;

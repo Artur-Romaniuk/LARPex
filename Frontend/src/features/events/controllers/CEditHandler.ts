@@ -80,7 +80,6 @@ const CEditHandler = (props: CEventHandlerProps) => {
 
   const updateEventExec = () => {
     // TODO: make update event with form data
-    setGlobalError("Not implemented yet");
     editEvent.updateEvent();
   };
 
