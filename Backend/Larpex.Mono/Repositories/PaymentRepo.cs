@@ -55,7 +55,7 @@ namespace Larpex.Mono.Repositories
         public async Task<PaymentDto> GetPaymentStatus(string id)
         {
             var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
-
+            var payments = await _context.TblPayments.ToListAsync();
             if (payment == null)
             {
                 return null;

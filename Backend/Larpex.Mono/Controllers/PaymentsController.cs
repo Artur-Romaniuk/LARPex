@@ -45,7 +45,7 @@ namespace Larpex.Mono.Controllers
         public async Task<ActionResult<PaymentDto>> GetPaymentStatus(string id)
         {
             var payment = await _paymentService.GetPaymentStatus(id);
-            if (payment != null)
+            if (payment == null)
             {
                 return BadRequest($"No such payment with id {id}");
             }

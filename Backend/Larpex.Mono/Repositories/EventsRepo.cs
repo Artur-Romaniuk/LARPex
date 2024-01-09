@@ -255,21 +255,25 @@ public class EventsRepo : IEventsRepo
         }
         else
         {
+            var orderId = Guid.NewGuid().ToString();
+            var evento = await _context.TblEvents.FirstOrDefaultAsync(x => x.EventId.Equals(assignUser.EventId));
+            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == evento!.LocationId);
+
             var newPayment = new TblPayment
             {
                 PaymentId = Guid.NewGuid().ToString(),
                 UserId = assignUser.UserId,
                 PaymentType = "Fast",
+                PaymentAmount = location.UserHourPrice,
+                PaymentAccepted = true,
             };
             await _context.TblPayments.AddAsync(newPayment);
             await _context.SaveChangesAsync();
-            var orderId = Guid.NewGuid().ToString();
-            var evento = await _context.TblEvents.FirstOrDefaultAsync(x => x.EventId.Equals(assignUser.EventId));
-            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == evento!.LocationId);
+
             TblOrder order = new TblOrder
             {
                 OrderId = orderId,
-                OrderAmount = location!.UserHourPrice,
+                OrderAmount = 1,
                 PaymentId = newPayment.PaymentId
             };
             await _context.TblOrders.AddAsync(order);
@@ -285,6 +289,11 @@ public class EventsRepo : IEventsRepo
 
     public async Task<IEnumerable<UserEvent>> GetUserEvents(int userId)
     {
+        var dbUser = await _context.TblUsers.FirstOrDefaultAsync(x => x.UserId == userId);
+        if (dbUser == null)
+        {
+            throw new ArgumentNullException("No user in db xd");
+        }
         var dbEvents = await _context.TblEvents.ToListAsync();
 
         if (dbEvents.Count == 0)
@@ -311,7 +320,7 @@ public class EventsRepo : IEventsRepo
         }
 
         var participantList = await _context.TblParticipants.ToListAsync();
-
+        
         var userEventIds = participantList.Where(p => p.UserId == userId).Select(p => p.EventId);
 
         foreach(var userEventId in userEventIds)
