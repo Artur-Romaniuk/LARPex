@@ -40,6 +40,10 @@ const CPayment = (props: CPaymentProps) => {
     navigate("/panel-wydarzen");
   };
 
+  const tryAgain = () => {
+    navigate(`/platnosc/${eventId}/${orderId}`);
+  };
+
   return {
     event,
     order,
@@ -49,7 +53,10 @@ const CPayment = (props: CPaymentProps) => {
 
     pay,
     goBack,
+    tryAgain,
   };
+
+  
 };
 
 export default CPayment;

@@ -10,6 +10,8 @@ import VUserEventsList from "./features/userEvents/views/VUserEventsList.tsx";
 import VEventDetails from "./features/userEvents/views/VEventDetails.tsx";
 import VJoinEvent from "./features/userEvents/views/VJoinEvent.tsx";
 import { UserContextProvider } from "./logic/contexts/userContext.tsx";
+import VPaymentAccepted from "./features/events/views/VPaymentAccepted.tsx";
+import VPaymentDeclined from "./features/events/views/VPaymentDeclined.tsx";
 
 const router = createBrowserRouter([
   {
@@ -48,7 +50,14 @@ const router = createBrowserRouter([
         path: "/platnosc/:eventId/:orderId",
         element: <VPayment />,
       },
-
+      {
+        path: "/platnosc/:eventId/:orderId/accepted",
+        element: <VPaymentAccepted />,
+      },
+      {
+        path: "/platnosc/:eventId/:orderId/declined",
+        element: <VPaymentDeclined />,
+      },
       {
         path: "/user/events",
         element: <VUserEventsList />,
