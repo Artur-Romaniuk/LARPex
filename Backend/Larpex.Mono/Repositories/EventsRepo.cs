@@ -258,7 +258,8 @@ public class EventsRepo : IEventsRepo
             var newPayment = new TblPayment
             {
                 PaymentId = Guid.NewGuid().ToString(),
-                UserId = assignUser.UserId
+                UserId = assignUser.UserId,
+                PaymentType = "Fast",
             };
             await _context.TblPayments.AddAsync(newPayment);
             await _context.SaveChangesAsync();
