@@ -1,5 +1,6 @@
 ﻿using Larpex.Mono.Models;
 using Larpex.Shared.ModelDto;
+using Microsoft.AspNetCore.Mvc;
 
 namespace Larpex.Mono.Repositories.Interfaces;
 
@@ -12,4 +13,5 @@ public interface IEventsRepo
     public Task<IEnumerable<EventTimeslotResponseDto>> GetEvents();
     public Task<bool> AssignUser(AssignUserToEventDto assignUser);
     public Task<bool> UnassignUser(UnassignUserDto unassignUser);
+    public Task<IEnumerable<UserEvent>> GetUserEvents(int userId);
 }

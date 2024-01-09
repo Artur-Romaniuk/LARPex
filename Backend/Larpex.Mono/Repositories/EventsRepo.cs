@@ -232,4 +232,47 @@ public class EventsRepo : IEventsRepo
     {
         return await _participantService.DeleteParticipant(unassignUser);
     }
+
+    public async Task<IEnumerable<UserEvent>> GetUserEvents(int userId)
+    {
+        var dbEvents = await _context.TblEvents.ToListAsync();
+
+        if (dbEvents.Count == 0)
+        {
+            throw new ArgumentNullException("No available events!!!!!!!!!!");
+        }
+
+        var eventList = new List<UserEvent>();
+
+        foreach (var e in dbEvents)
+        {
+            var evencik = new UserEvent();
+            evencik.EventId = e.EventId;
+            evencik.EventName = e.EventName;
+            evencik.EventStatus = e.EventStatus;
+            evencik.EventDescription = e.EventDescription;
+            evencik.OrderId = e.OrderId;
+            evencik.LocationId = e.LocationId;
+            evencik.GameId = e.GameId;
+            evencik.Icon = e.EventIconUrl;
+            evencik.Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(e.TimeslotId)));
+
+            eventList.Add(evencik);
+        }
+
+        var participantList = await _context.TblParticipants.ToListAsync();
+
+        var userEventIds = participantList.Where(p => p.UserId == userId).Select(p => p.EventId);
+
+        foreach(var userEventId in userEventIds)
+        {
+            var userEventToUpdate = eventList.FirstOrDefault(e => e.EventId == userEventId);
+            if (userEventToUpdate != null)
+            {
+                userEventToUpdate.IsEnrolled = true;
+            }
+        }
+
+        return eventList;
+    }
 }
