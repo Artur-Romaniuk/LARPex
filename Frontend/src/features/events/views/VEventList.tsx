@@ -1,7 +1,7 @@
 import "../styles/eventList.scss";
 import EventTile from "../components/EventTile.tsx";
 import CEventList from "../controllers/CEventList.ts";
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
 
 const VEventList = () => {
   const { events, navigateToEvent } = CEventList();

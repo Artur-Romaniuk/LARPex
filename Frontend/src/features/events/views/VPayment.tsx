@@ -1,12 +1,12 @@
 import { useParams } from "react-router-dom";
 import CPayment from "../controllers/CPayment.ts";
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
 import { Container } from "react-bootstrap";
 import React from "react";
 import DisabledInput from "../../../components/forms/DisabledInput.tsx";
 import DisabledTextArea from "../../../components/forms/DisabledTextArea.tsx";
-import TextInput from "../../../components/forms/TextInput.tsx";
-import ButtonComp from "../../../components/ui/buttonComp/ButtonComp.tsx";
+import ButtonComp from "../../../components/ui/ButtonComp.tsx";
+import { API_HOST, IMAGE_HOST } from "../../../config/config.ts";
 
 const VPayment = () => {
   const { eventId, orderId } = useParams();
@@ -21,7 +21,7 @@ const VPayment = () => {
       <Container className="d-flex flex-wrap justify-content-around mt-3">
         <div className="d-flex flex-column align-items-center my-2">
           <div className="event-image mb-3">
-            <img src={controller.event.event.icon} />
+            <img src={IMAGE_HOST + controller.event.event.icon} />
           </div>
           <DisabledInput
             label={"Nazwa wydarzenia"}

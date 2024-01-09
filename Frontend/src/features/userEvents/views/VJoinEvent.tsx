@@ -1,9 +1,10 @@
-import PageTitle from "../../../components/ui/pageTItle/PageTitle.tsx";
+import PageTitle from "../../../components/ui/PageTitle.tsx";
 import { Container } from "react-bootstrap";
 import { useParams } from "react-router-dom";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
-import React from "react";
 import CUserEvent from "../controllers/CUserEvent.ts";
+import { IMAGE_HOST } from "../../../config/config.ts";
+import RadioInput from "../../../components/forms/RadioInput.tsx";
 
 const VJoinEvent = () => {
   const { id } = useParams();
@@ -20,6 +21,7 @@ const VJoinEvent = () => {
 
   const event = controller.event.data;
   const game = controller.game.data;
+  const handleCharacterChange = controller.handleCharacterChange;
   return (
     <>
       <PageTitle title={"Dołącz do wydarzenia"} />
@@ -28,7 +30,7 @@ const VJoinEvent = () => {
         <div className="w-100 me-4">
           <div className="d-flex flex-row flex-wrap align-items-center justify-content-center my-3">
             <div className="img-container me-4 border-5">
-              <img src={event?.icon} alt={""} />
+              <img src={IMAGE_HOST + event?.icon} alt={""} />
             </div>
             <div className="d-flex flex-column mt-2 justify-content-around">
               <div className="icon d-flex flex-row align-items-center mb-2">
@@ -66,7 +68,28 @@ const VJoinEvent = () => {
         </div>
 
         {/*Game character selection section*/}
-        <div className="w-100">{"Characters selector"}</div>
+        {/*Jeśli defaultValue jest podane - brak możliwości zmiany postaci. Jeśli podane - możliwość wyboru*/}
+        <div className="w-100">
+          <div className="w-100">
+            <RadioInput
+              key={"chooseCharacter"}
+              label={"Wybierz postać"}
+              setValue={handleCharacterChange}
+              name={"characterSelector"}
+              values={controller.characters.map(character => character.characterName)}
+              defaultValue={undefined}
+            />
+          </div>
+          {/* Character info */}
+          {controller.selectedCharacter && (
+            <div className="w-100">
+              <h2>{controller.selectedCharacter.characterName}</h2>
+              <p><b>Klasa: </b>{controller.selectedCharacter.characterClass}</p>
+              <p><b>Rasa: </b>{controller.selectedCharacter.characterRace}</p>
+              <p><b>Opis: </b>{controller.selectedCharacter.characterLore}</p>
+            </div>)}
+        </div>
+        <p className={"globalError"}>{controller.error}</p>
       </Container>
       <Container className="my-5 d-flex justify-content-between">
         <button
@@ -75,7 +98,11 @@ const VJoinEvent = () => {
         >
           Anuluj
         </button>
-        <button className="btn btn-success px-4 py-2">Dołącz</button>
+        <button
+          className="btn btn-success px-4 py-2"
+          onClick={controller.joinGameExec}>
+          Dołącz
+        </button>
       </Container>
     </>
   );
