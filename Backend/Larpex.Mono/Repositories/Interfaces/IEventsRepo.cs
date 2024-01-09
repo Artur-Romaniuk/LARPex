@@ -11,7 +11,7 @@ public interface IEventsRepo
     public Task<bool> DeleteEvent(int id);
     public Task<EventTimeslotResponseDto> GetEvent(int id);
     public Task<IEnumerable<EventTimeslotResponseDto>> GetEvents();
-    public Task<bool> AssignUser(AssignUserToEventDto assignUser);
+    public Task<string> AssignUser(AssignUserToEventDto assignUser);
     public Task<bool> UnassignUser(UnassignUserDto unassignUser);
     public Task<IEnumerable<UserEvent>> GetUserEvents(int userId);
 }

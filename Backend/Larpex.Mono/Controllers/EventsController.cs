@@ -79,8 +79,8 @@ public class EventsController : ControllerBase
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
     public async Task<ActionResult<bool>> AssignUser([FromBody] AssignUserToEventDto eventWith)
     {
-        var assignUser = await _eventsRepo.AssignUser(eventWith);
-        return Ok(assignUser);
+        var orderId = await _eventsRepo.AssignUser(eventWith);
+        return Ok(orderId);
     }
 
     [HttpPost("unassignUser")]

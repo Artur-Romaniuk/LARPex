@@ -227,19 +227,19 @@ public class EventsRepo : IEventsRepo
     }
 
 
-    public async Task<bool> AssignUser(AssignUserToEventDto assignUser)
+    public async Task<string> AssignUser(AssignUserToEventDto assignUser)
     {
         var dbUser = await _context.TblUsers.FirstOrDefaultAsync(e => e.UserId == assignUser.UserId);
         if (dbUser == null)
-            return false;
+            return String.Empty;
 
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == assignUser.EventId);
         if (dbEvent == null)
-            return false;
+            return String.Empty;
 
         var dbParti = await _context.TblParticipants.FirstOrDefaultAsync(e => e.EventId == assignUser.EventId && e.UserId == assignUser.UserId);
         if(dbParti != null)
-            return false;
+            return String.Empty;
 
         ParticipantDto dto = new ParticipantDto
         {
@@ -249,8 +249,31 @@ public class EventsRepo : IEventsRepo
         };
         var ret = await _participantService.AddParticipant(dto);
 
-        if (ret < 0) return false;
-        else         return true;
+        if (ret < 0)
+        {
+            return String.Empty;
+        }
+        else
+        {
+            var newPayment = new TblPayment
+            {
+                PaymentId = Guid.NewGuid().ToString(),
+                UserId = assignUser.UserId
+            };
+            await _context.TblPayments.AddAsync(newPayment);
+            await _context.SaveChangesAsync();
+            var orderId = Guid.NewGuid().ToString();
+            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == assignUser.EventId);
+            TblOrder order = new TblOrder
+            {
+                OrderId = orderId,
+                OrderAmount = location!.UserHourPrice,
+                PaymentId = newPayment.PaymentId
+            };
+            await _context.TblOrders.AddAsync(order);
+            await _context.SaveChangesAsync();
+            return order.OrderId;
+        }
     }
 
     public async Task<bool> UnassignUser(UnassignUserDto unassignUser)
