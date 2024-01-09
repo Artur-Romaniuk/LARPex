@@ -44,7 +44,7 @@ builder.Services.AddSigleton();
 builder.Services.AddHttpContextAccessor();
 
 
-Stripe.StripeConfiguration.ApiKey = builder.Configuration.GetSection("StripeSecretKey").Get<string>();
+Stripe.StripeConfiguration.ApiKey = "sk_test_51OHojyBOOzQupZscQfOMEJc9H78Wid6oF7ngTPgdUOZUVnrOXg7rs0aUFHvsAI3UT1cIiwx1qjFEag7RgPWG5Yje00hDkR5fwA";
 
 var app = builder.Build();
 
