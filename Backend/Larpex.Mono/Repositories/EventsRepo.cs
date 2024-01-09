@@ -99,6 +99,27 @@ public class EventsRepo : IEventsRepo
         return _mapper.Map<EventDto>(addedEvent);
     }
 
+    public async Task<EventDto> UpdateEvent(int id, EventUpdate existingEvent)
+    {
+        if (id != existingEvent.EventId)
+        {
+            throw new ArgumentException("Event id and provided id does not match!!!!!!!!");
+        }
+
+        var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
+
+        if (dbEvent == null)
+        {
+            throw new ArgumentNullException("Event with this id does not exist.");
+        }
+
+        dbEvent.EventDescription = existingEvent.EventDescription;
+        var image = await _imageRepo.UploadImage(existingEvent.Icon);
+        dbEvent.EventIconUrl = image.FilePath;
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<EventDto>(dbEvent);
+    }
     public async Task<bool> DeleteEvent(int id)
     {
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
@@ -198,33 +219,6 @@ public class EventsRepo : IEventsRepo
         return eventList;
     }
 
-    public async Task<EventDto> UpdateEvent(int id, EventDto existingEvent)
-    {
-        if(id != existingEvent.EventId)
-        {
-            throw new ArgumentException("Event id and provided id does not match!!!!!!!!");
-        }
-
-        var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
-
-        if (dbEvent == null)
-        {
-            throw new ArgumentNullException("Event with this id does not exist.");
-        }
-
-        dbEvent.EventDescription = existingEvent.EventDescription;
-        dbEvent.EventName = existingEvent.EventName;
-        dbEvent.EventStatus = existingEvent.EventStatus;
-        dbEvent.EventDescription = existingEvent?.EventDescription;
-        dbEvent.OrderId = existingEvent?.OrderId;
-        dbEvent.LocationId = existingEvent?.LocationId;
-        dbEvent.GameId = existingEvent?.GameId;
-        dbEvent.TimeslotId = existingEvent?.TimeslotId;
-
-        await _context.SaveChangesAsync();
-
-        return _mapper.Map<EventDto>(dbEvent);
-    }
     private async Task<decimal> CalculateOrderAmount(int attendeeCount, int locationId)
     {
         var dbLocation = await _context.TblLocations.FirstOrDefaultAsync(l => l.LocationId == locationId);

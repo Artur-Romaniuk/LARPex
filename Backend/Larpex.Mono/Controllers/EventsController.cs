@@ -65,7 +65,7 @@ public class EventsController : ControllerBase
     [HttpPut]
     [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<EventDto>> UpdateEvent(int id, EventDto existingEvent)
+    public async Task<ActionResult<EventDto>> UpdateEvent([FromQuery]int id, [FromForm] EventUpdate existingEvent)
     {
         if(id != existingEvent.EventId)
         {
