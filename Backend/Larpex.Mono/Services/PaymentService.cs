@@ -52,10 +52,12 @@ public class PaymentService : IPaymentService
         }
 
         var options = new SessionCreateOptions
-        {           
-            SuccessUrl = $"{thisApiUrl}/checkout/success", // Customer paid.
+        {
+            //paymeny/event/{ eventId}/order/{ orderId}/(accept/decline)
+
+            SuccessUrl = $"{clientUrl}/payment/event/{eventToPayFor.EventId}/order/{orderDto.OrderId}/accepted", // Customer paid.
             //CancelUrl = "https://localhost:7226/" + "failed",
-            CancelUrl = clientUrl + "failed",  // Checkout cancelled.
+            CancelUrl = $"{clientUrl}/payment/event/{eventToPayFor.EventId}/order/{orderDto.OrderId}/declined",  // Checkout cancelled.
             PaymentMethodTypes = new List<string>
             {
                 "card"
