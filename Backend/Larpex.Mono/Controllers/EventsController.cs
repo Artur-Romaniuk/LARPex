@@ -90,4 +90,15 @@ public class EventsController : ControllerBase
         var unassignUser = await _eventsRepo.UnassignUser(eventWith);
         return Ok(unassignUser);
     }
+
+    [HttpGet("userEvents")]
+    public async Task<ActionResult<IEnumerable<UserEvent>>> GetUserEvents(int userId)
+    {
+        if(userId == null)
+        {
+            return BadRequest();
+        }
+        var existingEvents = await _eventsRepo.GetUserEvents(userId);
+        return Ok(existingEvents);
+    }
 }
