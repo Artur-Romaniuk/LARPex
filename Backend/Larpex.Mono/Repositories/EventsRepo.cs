@@ -264,7 +264,8 @@ public class EventsRepo : IEventsRepo
             await _context.TblPayments.AddAsync(newPayment);
             await _context.SaveChangesAsync();
             var orderId = Guid.NewGuid().ToString();
-            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == assignUser.EventId);
+            var evento = await _context.TblEvents.FirstOrDefaultAsync(x => x.EventId.Equals(assignUser.EventId));
+            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == evento!.LocationId);
             TblOrder order = new TblOrder
             {
                 OrderId = orderId,
