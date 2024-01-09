@@ -216,6 +216,11 @@ public class EventsRepo : IEventsRepo
 
     public async Task<bool> AssignUser(AssignUserToEventDto assignUser)
     {
+        var participant = await _context.TblParticipants.FirstOrDefaultAsync(x => x.UserId == assignUser.UserId && x.EventId.Equals(assignUser.EventId));
+        if (participant != null)
+        {
+            return false;
+        }
         ParticipantDto dto = new ParticipantDto
         {
             CharacterId = assignUser.CharacterId,
