@@ -316,7 +316,7 @@ public class EventsRepo : IEventsRepo
         {
             throw new ArgumentNullException("No user in db xd");
         }
-        var dbEvents = await _context.TblEvents.ToListAsync();
+        var dbEvents = await _context.TblEvents.Include("TblParticipants").ToListAsync();
 
         if (dbEvents.Count == 0)
         {
@@ -336,7 +336,21 @@ public class EventsRepo : IEventsRepo
             evencik.LocationId = e.LocationId;
             evencik.GameId = e.GameId;
             evencik.Icon = e.EventIconUrl;
+            evencik.ParticipantsCount = e.TblParticipants.Count;
             evencik.Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(e.TimeslotId)));
+
+            if (e.GameId != null)
+            {
+                var game = await _gameRepo.GetGame(e.GameId ?? default(int));
+                if (game != null)
+                {
+                    evencik.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
+                }
+            }
+            else
+            {
+                evencik.MaxParticipants = 0;
+            }
 
             eventList.Add(evencik);
         }

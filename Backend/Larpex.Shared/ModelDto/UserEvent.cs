@@ -16,6 +16,10 @@ public class UserEvent
 
     public string? EventDescription { get; set; }
 
+    public int ParticipantsCount { get; set; }
+
+    public int MaxParticipants { get; set; }
+
     public string? OrderId { get; set; }
 
     public int? LocationId { get; set; }
