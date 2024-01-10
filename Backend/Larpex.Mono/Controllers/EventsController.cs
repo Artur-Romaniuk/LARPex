@@ -80,6 +80,10 @@ public class EventsController : ControllerBase
     public async Task<ActionResult<bool>> AssignUser([FromBody] AssignUserToEventDto eventWith)
     {
         var orderId = await _eventsRepo.AssignUser(eventWith);
+        if (orderId.Equals(String.Empty))
+        {
+            return BadRequest("probably something bad happened, check if user is enrolled for this event : )");
+        }
         return Ok(orderId);
     }
 

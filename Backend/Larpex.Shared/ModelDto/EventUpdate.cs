@@ -11,7 +11,7 @@ public class EventUpdate
 {
     public int EventId { get; set; }
 
-    public string EventName { get; set; } = null!;
+    public string? EventName { get; set; } = null!;
 
     public string? EventDescription { get; set; }
 
@@ -23,11 +23,11 @@ public class EventUpdate
 
     public string? TimeslotId { get; set; }
 
-    public bool ChangeTimeslot { get; set; }
-    public DateTime StartDate { get; set; }
-    public int DurationHour { get; set; }
-    public int DurationMinute { get; set; }
-    public int AttendeesCount { get; set; }
-    public int UserId { get; set; }
-    public IFormFile Icon { get; set; }
+    public bool? ChangeTimeslot { get; set; }
+    public DateTime? StartDate { get; set; }
+    public int? DurationHour { get; set; }
+    public int? DurationMinute { get; set; }
+    public int? AttendeesCount { get; set; }
+    public int? UserId { get; set; }
+    public IFormFile? Icon { get; set; }
 }

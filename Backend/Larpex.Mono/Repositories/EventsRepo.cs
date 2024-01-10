@@ -115,8 +115,17 @@ public class EventsRepo : IEventsRepo
         }
 
         dbEvent.EventDescription = existingEvent.EventDescription;
-        var image = await _imageRepo.UploadImage(existingEvent.Icon);
-        dbEvent.EventIconUrl = image.FilePath;
+        if(existingEvent.Icon != null)
+        {
+            var image = await _imageRepo.UploadImage(existingEvent.Icon);
+            dbEvent.EventIconUrl = image.FilePath;
+        }
+
+        if (existingEvent.EventName != null || !existingEvent.EventName!.Equals(String.Empty))
+        {
+            dbEvent.EventName = existingEvent.EventName;
+        }
+
         await _context.SaveChangesAsync();
 
         return _mapper.Map<EventDto>(dbEvent);
@@ -161,10 +170,16 @@ public class EventsRepo : IEventsRepo
         {
             var game = await _gameRepo.GetGame(dbEvent.GameId ?? default(int));
             if (game != null)
+            {
+                existingEventDto.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
                 existingEventDto.GameName = game.GameName;
+            }
         }
         else
+        {
+            existingEventDto.MaxParticipants = 0;
             existingEventDto.GameName = "";
+        }
 
         var icon = await _context.TblImages.FirstOrDefaultAsync(i => i.FilePath.Equals(dbEvent.EventIconUrl));
         var pathuwa = Directory.GetCurrentDirectory();
@@ -209,10 +224,16 @@ public class EventsRepo : IEventsRepo
             {
                 var game = await _gameRepo.GetGame(e.GameId ?? default(int));
                 if (game != null)
+                {
+                    evencik.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
                     evencik.GameName = game.GameName;
+                }
             }
             else
+            {
+                evencik.MaxParticipants = 0;
                 evencik.GameName = "";
+            }
 
             eventList.Add(evencik);
         }
@@ -256,21 +277,25 @@ public class EventsRepo : IEventsRepo
         }
         else
         {
+            var orderId = Guid.NewGuid().ToString();
+            var evento = await _context.TblEvents.FirstOrDefaultAsync(x => x.EventId.Equals(assignUser.EventId));
+            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == evento!.LocationId);
+
             var newPayment = new TblPayment
             {
                 PaymentId = Guid.NewGuid().ToString(),
                 UserId = assignUser.UserId,
                 PaymentType = "Fast",
+                PaymentAmount = location.UserHourPrice,
+                PaymentAccepted = true,
             };
             await _context.TblPayments.AddAsync(newPayment);
             await _context.SaveChangesAsync();
-            var orderId = Guid.NewGuid().ToString();
-            var evento = await _context.TblEvents.FirstOrDefaultAsync(x => x.EventId.Equals(assignUser.EventId));
-            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == evento!.LocationId);
+
             TblOrder order = new TblOrder
             {
                 OrderId = orderId,
-                OrderAmount = location!.UserHourPrice,
+                OrderAmount = 1,
                 PaymentId = newPayment.PaymentId
             };
             await _context.TblOrders.AddAsync(order);
@@ -286,6 +311,11 @@ public class EventsRepo : IEventsRepo
 
     public async Task<IEnumerable<UserEvent>> GetUserEvents(int userId)
     {
+        var dbUser = await _context.TblUsers.FirstOrDefaultAsync(x => x.UserId == userId);
+        if (dbUser == null)
+        {
+            throw new ArgumentNullException("No user in db xd");
+        }
         var dbEvents = await _context.TblEvents.ToListAsync();
 
         if (dbEvents.Count == 0)
@@ -312,7 +342,7 @@ public class EventsRepo : IEventsRepo
         }
 
         var participantList = await _context.TblParticipants.ToListAsync();
-
+        
         var userEventIds = participantList.Where(p => p.UserId == userId).Select(p => p.EventId);
 
         foreach(var userEventId in userEventIds)
