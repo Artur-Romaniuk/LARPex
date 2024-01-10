@@ -56,6 +56,11 @@ namespace Larpex.Mono.Controllers
         [HttpPost]
         public async Task<ActionResult<StripeRequestDto>> Checkout([FromBody] OrderDto orderDto, [FromServices] IServiceProvider sp)
         {
+            if (orderDto.OrderAmount < 5)
+            {
+                return null;
+            }
+
             var referer = Request.Headers.Referer;
             s_wasmClientURL = referer[0];
 
