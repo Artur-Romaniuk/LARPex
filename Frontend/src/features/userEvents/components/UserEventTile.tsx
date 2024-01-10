@@ -15,7 +15,6 @@ interface EventTileProps {
 
 const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
   const event = props.event;
-  console.log(event.eventId + " " + !event.isEnrolled);
   return (
     event && (
       <>

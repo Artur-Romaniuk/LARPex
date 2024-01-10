@@ -19,9 +19,9 @@ class EventRepository implements IEventRepository {
     return axios.post(`${API_HOST}/Events`, event).then((res) => res.data);
   }
 
-  updateEvent(event: EventDto): Promise<EventDto> {
+  updateEvent(event: FormData): Promise<EventDto> {
     return axios
-      .put(`${API_HOST}/Events?id=${event.eventId}`, event)
+      .put(`${API_HOST}/Events?id=${event.get("eventId")}`, event)
       .then((res) => res.data);
   }
 

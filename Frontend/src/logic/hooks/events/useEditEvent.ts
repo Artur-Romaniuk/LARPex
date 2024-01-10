@@ -34,7 +34,7 @@ const useEditEvent = (id: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries("events");
       setEvent(initialState);
-      navigate("/events");
+      navigate("/panel-wydarzen");
     },
     onError: (error) => {
       console.log(error);
@@ -49,21 +49,7 @@ const useEditEvent = (id: number) => {
     }
   }, [getEvent.data]);
 
-  const updateEvent = () => {
-    updateEventMutation.mutate({
-      eventId: event.eventId,
-      eventName: event.eventName,
-      eventDescription: event.eventDescription,
-      locationId: event.locationId,
-      gameId: event.gameId,
-      timeslotDatetime: event.timeslot.timeslotDatetime,
-      timeslotDuration: event.timeslot.timeslotDuration,
-      icon: event.icon,
-      userId: user.user.userId || 0,
-    });
-  };
-
-  return { event, setEvent, getEvent, updateEvent };
+  return { event, setEvent, getEvent, updateEventMutation };
 };
 
 export default useEditEvent;

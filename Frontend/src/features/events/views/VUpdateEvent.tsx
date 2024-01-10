@@ -9,11 +9,13 @@ import DateSelector from "../../../components/forms/DateSelector.tsx";
 import TimeslotPicker from "../../../components/forms/TimeslotPicker.tsx";
 import FileInput from "../../../components/forms/FileInput.tsx";
 import TextAreaInput from "../../../components/forms/TextAreaInput.tsx";
-import { API_HOST } from "../../../config/config.ts";
+import { API_HOST, IMAGE_HOST } from "../../../config/config.ts";
+import DisabledInput from "../../../components/forms/DisabledInput.tsx";
 
 const VUpdateEvent = () => {
   const { id } = useParams<{ id: string }>();
   const {
+    editEvent,
     locations,
     games,
 
@@ -48,63 +50,55 @@ const VUpdateEvent = () => {
             placeholder={"Wprowadź nazwę wydarzenia"}
           />
 
-          <SelectInput
+          <DisabledInput
             label={"Wybierz rodzaj gry"}
-            options={games.gamesNames}
-            value={(games.selectedGameName && games.selectedGameName) || ""}
-            onChange={games.handleGameChange}
+            value={games.selectedGameName || ""}
           />
 
-          <SelectInput
+          <DisabledInput
             label={"Wybierz lokalizację"}
-            value={
-              (locations.selectedLocationName &&
-                locations.selectedLocationName) ||
-              ""
-            }
-            options={locations.locationsNames}
-            onChange={locations.handleLocationChange}
+            value={locations.selectedLocationName || ""}
           />
 
-          <TextInput
-            type={"number"}
+          <DisabledInput
+            label={"Wprowadź "}
             value={numberOfPlayers.value.toString()}
-            label={"Wprowadź ilość graczy"}
-            error={numberOfPlayers.error}
-            onChange={numberOfPlayers.onChange}
-            placeholder={"Wprowadź ilość graczy"}
           />
         </div>
         <div>
-          <DateSelector
+          <DisabledInput
             label={"Wybierz dzień"}
-            value={dateSelector.date}
-            onChange={dateSelector.handleDateChange}
-            error={dateSelector.error}
+            // YYYY MM DD format
+            value={dateSelector.date.toISOString().split("T")[0]}
           />
-          <TimeslotPicker
+          <DisabledInput
             label={"Wybierz godzinę"}
-            hours={timeslotSelector.hour}
-            minutes={timeslotSelector.minutes}
-            duration={timeslotSelector.durationMinutes}
-            error={timeslotSelector.error}
-            hourChange={timeslotSelector.handleHourChange}
-            minutesChange={timeslotSelector.handleMinutesChange}
-            durationChange={timeslotSelector.handleDurationMinutesChange}
-            possibleHours={timeslotSelector.possibleHours || []}
+            value={timeslotSelector.hour.toString()}
           />
-          <TextInput
-            type={"number"}
-            value={timeslotSelector.durationMinutes.toString()}
+          <DisabledInput
             label={"Wprowadź czas w minutach"}
-            error={timeslotSelector.durationError}
-            onChange={timeslotSelector.handleDurationMinutesChange}
-            placeholder={"Wprowadź czas"}
+            value={timeslotSelector.durationMinutes.toString()}
+          />
+          <DisabledInput
+            label={"Czas trwania w minutach"}
+            value={timeslotSelector.durationMinutes.toString()}
           />
 
           <FileInput label={"Wprowadź ikone"} onChange={icon.handleChange} />
           {icon.preview && (
-            <img src={icon.preview} alt="icon name" className="image" />
+            <>
+              <div>Nowa ikona:</div>
+              <img src={icon.preview} alt="icon name" className="image" />
+            </>
+          )}
+          {editEvent.getEvent.data?.icon && (
+            <>
+              <div>Obecna ikona:</div>
+              <img
+                src={`${IMAGE_HOST}/${editEvent.getEvent.data?.icon}`}
+                className="image"
+              />
+            </>
           )}
         </div>
         <div>

@@ -19,7 +19,10 @@ class UserRepository implements IUserRepository {
     });
   }
 
-  signInToEvent(data: ISignInEventData): Promise<boolean> {
+  signInToEvent(data: ISignInEventData): Promise<{
+    eventId: number;
+    orderId: string;
+  }> {
     return axios
       .post(`${API_HOST}/Events/assignUser`, data)
       .then((response) => {

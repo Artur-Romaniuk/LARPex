@@ -25,19 +25,12 @@ const CUserEvent = (id: number) => {
 
   const handleJoinEvent = () => {
     if (selectedCharacter) {
-      signToEvent.signToEvent.mutate(
-        {
-          eventId: id,
-          userId: user.user.userId || 0,
-          characterId: selectedCharacter.characterId,
-        },
-        {
-          onSuccess: () => {
-            // TODO - move to payment page
-            navigate(-1);
-          },
-        },
-      );
+      localStorage.setItem("paymentFrom", "/user/events");
+      signToEvent.signToEvent.mutate({
+        eventId: id,
+        userId: user.user.userId || 0,
+        characterId: selectedCharacter.characterId,
+      });
     } else {
       setError("Nie wybrano postaci");
     }

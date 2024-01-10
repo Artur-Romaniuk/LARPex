@@ -51,11 +51,11 @@ const router = createBrowserRouter([
         element: <VPayment />,
       },
       {
-        path: "/platnosc/:eventId/:orderId/accepted",
+        path: "/payment/event/:eventId/order/:orderId/accepted",
         element: <VPaymentAccepted />,
       },
       {
-        path: "/platnosc/:eventId/:orderId/declined",
+        path: "/payment/event/:eventId/order/:orderId/declined",
         element: <VPaymentDeclined />,
       },
       {

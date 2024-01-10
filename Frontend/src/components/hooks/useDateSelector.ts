@@ -14,7 +14,6 @@ const useDateSelector = (props: UseDateSelectorProps) => {
   );
 
   useEffect(() => {
-    console.log("useDateSelector", props.initialDate);
     if (props.initialDate === "") {
       return;
     }
