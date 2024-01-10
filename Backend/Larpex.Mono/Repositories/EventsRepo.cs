@@ -114,9 +114,17 @@ public class EventsRepo : IEventsRepo
         }
 
         dbEvent.EventDescription = existingEvent.EventDescription;
-        var image = await _imageRepo.UploadImage(existingEvent.Icon);
-        dbEvent.EventIconUrl = image.FilePath;
-        dbEvent.EventName = existingEvent.EventName;
+        if(existingEvent.Icon != null)
+        {
+            var image = await _imageRepo.UploadImage(existingEvent.Icon);
+            dbEvent.EventIconUrl = image.FilePath;
+        }
+
+        if (existingEvent.EventName != null || !existingEvent.EventName!.Equals(String.Empty))
+        {
+            dbEvent.EventName = existingEvent.EventName;
+        }
+
         await _context.SaveChangesAsync();
 
         return _mapper.Map<EventDto>(dbEvent);
