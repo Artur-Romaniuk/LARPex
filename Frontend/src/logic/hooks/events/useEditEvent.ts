@@ -4,13 +4,15 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetEvent from "./useGetEvent.ts";
 import repositoryContext from "../../repositories/repositoryContext.ts";
-import { useUser } from "../../contexts/userContext.tsx";
 
 const initialState: EventDtoWithTime = {
   eventId: 0,
   eventName: "",
   eventStatus: "",
   eventDescription: "",
+  gameName: "",
+  participantsCount: 0,
+  maxParticipants: 0,
   orderId: "",
   locationId: 0,
   gameId: 0,
@@ -22,7 +24,6 @@ const initialState: EventDtoWithTime = {
 };
 
 const useEditEvent = (id: number) => {
-  const user = useUser();
   const navigate = useNavigate();
   const eventRepository = repositoryContext.injectEventRepository();
   const queryClient = useQueryClient();
