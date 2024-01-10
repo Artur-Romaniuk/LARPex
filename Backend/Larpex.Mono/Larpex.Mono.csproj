@@ -33,8 +33,4 @@
     <ProjectReference Include="..\Larpex.Shared\Larpex.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Images\" />
-  </ItemGroup>
-
 </Project>
