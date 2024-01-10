@@ -53,9 +53,13 @@ public class PaymentService : IPaymentService
             return null;
         }
 
+        if(orderDto.OrderAmount < 5)
+        {
+            return null;
+        }
+
         var options = new SessionCreateOptions
         {
-          
             SuccessUrl = $"{clientUrl}payment/event/{eventToPayFor.EventId}/order/{orderDto.OrderId}/accepted", // Customer paid.
             //CancelUrl = "https://localhost:7226/" + "failed",
             CancelUrl = $"{clientUrl}payment/event/{eventToPayFor.EventId}/order/{orderDto.OrderId}/declined",  // Checkout cancelled.
