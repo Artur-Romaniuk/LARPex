@@ -61,8 +61,8 @@ const VUpdateEvent = () => {
           />
 
           <DisabledInput
-            label={"Wprowadź "}
-            value={numberOfPlayers.value.toString()}
+            label={"Wprowadź liczbę graczy"}
+            value={editEvent.getEvent.data?.maxParticipants.toString() ?? ""}
           />
         </div>
         <div>
@@ -71,13 +71,17 @@ const VUpdateEvent = () => {
             // YYYY MM DD format
             value={dateSelector.date.toISOString().split("T")[0]}
           />
-          <DisabledInput
+          <TimeslotPicker
             label={"Wybierz godzinę"}
-            value={timeslotSelector.hour.toString()}
-          />
-          <DisabledInput
-            label={"Wprowadź czas w minutach"}
-            value={timeslotSelector.durationMinutes.toString()}
+            hours={timeslotSelector.hour}
+            minutes={timeslotSelector.minutes}
+            duration={timeslotSelector.durationMinutes}
+            error={timeslotSelector.error}
+            hourChange={timeslotSelector.handleHourChange}
+            minutesChange={timeslotSelector.handleMinutesChange}
+            durationChange={timeslotSelector.handleDurationMinutesChange}
+            possibleHours={timeslotSelector.possibleHours || []}
+            disabled={true}
           />
           <DisabledInput
             label={"Czas trwania w minutach"}

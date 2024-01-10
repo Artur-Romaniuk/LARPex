@@ -8,6 +8,7 @@ const VUserEventsList = () => {
 
   const mapEvents = controller.events.getUserEvents.data?.map((event, idx) => (
     <UserEventTile
+      key={idx}
       id={event.eventId}
       event={event}
       navigateToEventDetails={controller.navigateToEventDetails}

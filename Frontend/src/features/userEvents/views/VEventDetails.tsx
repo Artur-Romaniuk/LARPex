@@ -46,7 +46,7 @@ const VEventDetails = () => {
               <div className="icon d-flex flex-row align-items-center">
                 {/*// TODO change pepopleCount to event.peopleCount*/}
                 <BsPeople />
-                {20}
+                {event?.participantsCount + "/" + event?.maxParticipants}
               </div>
             </div>
           </div>

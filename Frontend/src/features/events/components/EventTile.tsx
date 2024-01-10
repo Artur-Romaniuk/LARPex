@@ -33,7 +33,7 @@ const EventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
               <div className="event-peopleCount d-flex flex-row align-items-center">
                 {/*// TODO change pepopleCount to event.peopleCount*/}
                 <BsPeople className="icon" />
-                {20}
+                {event.participantsCount + "/" + event.maxParticipants}
               </div>
             </div>
           </div>
@@ -64,7 +64,7 @@ const EventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
                 <div className="event-peopleCount d-flex flex-row align-items-center">
                   {/*// TODO change pepopleCount to event.peopleCount*/}
                   <BsPeople className="icon" />
-                  {20}
+                  {event.participantsCount + "/" + event.maxParticipants}
                 </div>
               </div>
             </div>

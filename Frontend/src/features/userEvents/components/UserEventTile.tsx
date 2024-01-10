@@ -34,9 +34,8 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
                 {event.timeslot.timeslotDatetime.split("T")[1].slice(0, 5)}
               </div>
               <div className="event-peopleCount d-flex flex-row align-items-center">
-                {/*// TODO change pepopleCount to event.peopleCount*/}
                 <BsPeople className="icon" />
-                {20}
+                {event.participantsCount + "/" + event.maxParticipants}
               </div>
             </div>
           </div>
@@ -84,7 +83,7 @@ const UserEventTile: React.FC<EventTileProps> = (props: EventTileProps) => {
                 <div className="event-peopleCount d-flex flex-row align-items-center">
                   {/*// TODO change pepopleCount to event.peopleCount*/}
                   <BsPeople className="icon" />
-                  {20}
+                  {event.participantsCount + "/" + event.maxParticipants}
                 </div>
               </div>
             </div>

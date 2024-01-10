@@ -41,8 +41,7 @@ const CEditHandler = (props: CEventHandlerProps) => {
   });
 
   const numberOfPlayers = useNumberInput({
-    // TODO change to event number of players
-    initialValue: 20,
+    initialValue: editEvent.event.maxParticipants,
     min: 20,
     max: 100,
   });
