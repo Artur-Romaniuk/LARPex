@@ -6,6 +6,7 @@ using Larpex.Shared.ModelDto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Stripe;
+using Stripe.Climate;
 using Stripe.Terminal;
 using System.ComponentModel;
 using System.Drawing;
@@ -236,19 +237,19 @@ public class EventsRepo : IEventsRepo
     }
 
 
-    public async Task<string> AssignUser(AssignUserToEventDto assignUser)
+    public async Task<AssignUserResponse> AssignUser(AssignUserToEventDto assignUser)
     {
         var dbUser = await _context.TblUsers.FirstOrDefaultAsync(e => e.UserId == assignUser.UserId);
         if (dbUser == null)
-            return String.Empty;
+            return new AssignUserResponse { EventId = 0, OrderId = "user not found" };
 
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == assignUser.EventId);
         if (dbEvent == null)
-            return String.Empty;
+            return new AssignUserResponse { EventId = 0, OrderId = "event not found" };
 
         var dbParti = await _context.TblParticipants.FirstOrDefaultAsync(e => e.EventId == assignUser.EventId && e.UserId == assignUser.UserId);
         if(dbParti != null)
-            return String.Empty;
+            return new AssignUserResponse { EventId = 0, OrderId = "already participates in this event" };
 
         ParticipantDto dto = new ParticipantDto
         {
@@ -260,7 +261,7 @@ public class EventsRepo : IEventsRepo
 
         if (ret < 0)
         {
-            return String.Empty;
+            return new AssignUserResponse { EventId = 0, OrderId = String.Empty };
         }
         else
         {
@@ -287,7 +288,7 @@ public class EventsRepo : IEventsRepo
             };
             await _context.TblOrders.AddAsync(order);
             await _context.SaveChangesAsync();
-            return order.OrderId;
+            return new AssignUserResponse { EventId = (int)assignUser.EventId, OrderId =  orderId };
         }
     }
 

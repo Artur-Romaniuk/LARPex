@@ -75,6 +75,8 @@ namespace Larpex.Mono.Controllers
             {
                 var session = await _paymentService.Checkout(orderDto, thisApiUrl, s_wasmClientURL);
 
+                Console.WriteLine(session.Id);
+
                 var stripeRequestDto = new StripeRequestDto()
                 {
                     StripeSessionUrl = session.Url,

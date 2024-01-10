@@ -9,7 +9,7 @@ namespace Larpex.Shared.ModelDto
     public class OrderDto
     {
         public string OrderId {  get; set; }
-        public string PaymentId { get; set; }
+        public int EventId { get; set; }
         public decimal OrderAmount { get; set; }
 
 
