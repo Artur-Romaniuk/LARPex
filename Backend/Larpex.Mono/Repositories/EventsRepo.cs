@@ -170,10 +170,16 @@ public class EventsRepo : IEventsRepo
         {
             var game = await _gameRepo.GetGame(dbEvent.GameId ?? default(int));
             if (game != null)
+            {
+                existingEventDto.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
                 existingEventDto.GameName = game.GameName;
+            }
         }
         else
+        {
+            existingEventDto.MaxParticipants = 0;
             existingEventDto.GameName = "";
+        }
 
         var icon = await _context.TblImages.FirstOrDefaultAsync(i => i.FilePath.Equals(dbEvent.EventIconUrl));
         var pathuwa = Directory.GetCurrentDirectory();
@@ -218,10 +224,16 @@ public class EventsRepo : IEventsRepo
             {
                 var game = await _gameRepo.GetGame(e.GameId ?? default(int));
                 if (game != null)
+                {
+                    evencik.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
                     evencik.GameName = game.GameName;
+                }
             }
             else
+            {
+                evencik.MaxParticipants = 0;
                 evencik.GameName = "";
+            }
 
             eventList.Add(evencik);
         }

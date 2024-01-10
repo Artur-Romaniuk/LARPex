@@ -19,6 +19,8 @@ public class EventTimeslotResponseDto
     
     public int ParticipantsCount { get; set; }
 
+    public int MaxParticipants { get; set; }
+
     public string? EventDescription { get; set; }
 
     public string? OrderId { get; set; }
