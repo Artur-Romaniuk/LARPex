@@ -9,6 +9,9 @@ import VPayment from "./features/events/views/VPayment.tsx";
 import VUserEventsList from "./features/userEvents/views/VUserEventsList.tsx";
 import VEventDetails from "./features/userEvents/views/VEventDetails.tsx";
 import VJoinEvent from "./features/userEvents/views/VJoinEvent.tsx";
+import { UserContextProvider } from "./logic/contexts/userContext.tsx";
+import VPaymentAccepted from "./features/events/views/VPaymentAccepted.tsx";
+import VPaymentDeclined from "./features/events/views/VPaymentDeclined.tsx";
 
 const router = createBrowserRouter([
   {
@@ -47,7 +50,14 @@ const router = createBrowserRouter([
         path: "/platnosc/:eventId/:orderId",
         element: <VPayment />,
       },
-
+      {
+        path: "/payment/event/:eventId/order/:orderId/accepted",
+        element: <VPaymentAccepted />,
+      },
+      {
+        path: "/payment/event/:eventId/order/:orderId/declined",
+        element: <VPaymentDeclined />,
+      },
       {
         path: "/user/events",
         element: <VUserEventsList />,
@@ -69,7 +79,9 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <RouterProvider router={router} />
+      <UserContextProvider>
+        <RouterProvider router={router} />
+      </UserContextProvider>
     </QueryClientProvider>
   );
 };

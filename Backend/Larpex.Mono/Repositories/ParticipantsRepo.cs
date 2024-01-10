@@ -42,6 +42,17 @@ public class ParticipantsRepo : IParticipantsRepo
         return true;
     }
 
+    public async Task<bool> DeleteParticipant(UnassignUserDto unassignUser)
+    {
+        var entity = await _context.TblParticipants.FirstOrDefaultAsync(p => p.UserId == unassignUser.UserId && p.EventId == unassignUser.EventId);
+        if (entity != null)
+        {
+            _context.TblParticipants.Remove(entity);
+            await _context.SaveChangesAsync();
+        }
+        return true;
+    }
+
     public async Task<ParticipantDto> GetParticipant(int id)
     {
         var g = await _context.TblParticipants.FirstOrDefaultAsync(g => g.ParticipantId == id);

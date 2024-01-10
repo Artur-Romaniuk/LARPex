@@ -1,3 +1,4 @@
+using Larpex.Mono.Models;
 using Larpex.Mono.Repositories.Interfaces;
 using Larpex.Shared.ModelDto;
 using Microsoft.AspNetCore.Mvc;
@@ -64,7 +65,7 @@ public class EventsController : ControllerBase
     [HttpPut]
     [ProducesResponseType(typeof(EventDto), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
-    public async Task<ActionResult<EventDto>> UpdateEvent(int id, EventDto existingEvent)
+    public async Task<ActionResult<EventDto>> UpdateEvent([FromQuery]int id, [FromForm] EventUpdate existingEvent)
     {
         if(id != existingEvent.EventId)
         {
@@ -72,5 +73,36 @@ public class EventsController : ControllerBase
         }
         var updatedEvent = await _eventsRepo.UpdateEvent(id, existingEvent);
         return Ok(updatedEvent);
+    }
+
+    [HttpPost("assignUser")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<bool>> AssignUser([FromBody] AssignUserToEventDto eventWith)
+    {
+        var orderId = await _eventsRepo.AssignUser(eventWith);
+        if (orderId.Equals(String.Empty))
+        {
+            return BadRequest("probably something bad happened, check if user is enrolled for this event : )");
+        }
+        return Ok(orderId);
+    }
+
+    [HttpPost("unassignUser")]
+    [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
+    public async Task<ActionResult<EventDto>> UnassignUser([FromBody] UnassignUserDto eventWith)
+    {
+        var unassignUser = await _eventsRepo.UnassignUser(eventWith);
+        return Ok(unassignUser);
+    }
+
+    [HttpGet("userEvents")]
+    public async Task<ActionResult<IEnumerable<UserEvent>>> GetUserEvents(int userId)
+    {
+        if(userId == null)
+        {
+            return BadRequest();
+        }
+        var existingEvents = await _eventsRepo.GetUserEvents(userId);
+        return Ok(existingEvents);
     }
 }

@@ -10,6 +10,9 @@ public class AutoMapperProfile : Profile
         CreateMap<TblEvent, EventDto>();
         CreateMap<EventDto, TblEvent>();
 
+        CreateMap<EventUpdate, EventDto>();
+        CreateMap<EventDto, EventUpdate>();
+
         CreateMap<EventWithTimeslotDto, EventDto>();
         CreateMap<EventDto, EventWithTimeslotDto>();
 
@@ -27,6 +30,9 @@ public class AutoMapperProfile : Profile
 
         CreateMap<TblCharacter, CharacterDto>();
         CreateMap<CharacterDto, TblCharacter>();
+
+        CreateMap<TblCharacter, GameCharacterDto>();
+        CreateMap<GameCharacterDto, TblCharacter>();
 
         CreateMap<TblParticipant, ParticipantDto>();
         CreateMap<ParticipantDto, TblParticipant>();

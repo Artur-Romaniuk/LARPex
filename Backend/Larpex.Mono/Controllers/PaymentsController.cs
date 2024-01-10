@@ -45,7 +45,7 @@ namespace Larpex.Mono.Controllers
         public async Task<ActionResult<PaymentDto>> GetPaymentStatus(string id)
         {
             var payment = await _paymentService.GetPaymentStatus(id);
-            if (payment != null)
+            if (payment == null)
             {
                 return BadRequest($"No such payment with id {id}");
             }
@@ -56,6 +56,11 @@ namespace Larpex.Mono.Controllers
         [HttpPost]
         public async Task<ActionResult<StripeRequestDto>> Checkout([FromBody] OrderDto orderDto, [FromServices] IServiceProvider sp)
         {
+            if (orderDto.OrderAmount < 5)
+            {
+                return null;
+            }
+
             var referer = Request.Headers.Referer;
             s_wasmClientURL = referer[0];
 
@@ -74,6 +79,8 @@ namespace Larpex.Mono.Controllers
             if (thisApiUrl is not null)
             {
                 var session = await _paymentService.Checkout(orderDto, thisApiUrl, s_wasmClientURL);
+
+                Console.WriteLine(session.Id);
 
                 var stripeRequestDto = new StripeRequestDto()
                 {

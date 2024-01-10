@@ -3,8 +3,12 @@ import { useQuery } from "react-query";
 
 const useGetLocation = (id: number) => {
   const locationRepository = repositoryContext.injectLocationRepository();
-  const locations = useQuery(["location", id], () =>
-    locationRepository.getLocations(),
+  const locations = useQuery(
+    ["location", id],
+    () => locationRepository.getLocations(),
+    {
+      enabled: id !== 0,
+    },
   );
 
   const location = locations.data?.find(

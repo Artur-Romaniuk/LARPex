@@ -7,9 +7,6 @@ const useCreatePayment = () => {
   const navigate = useNavigate();
   const createPayment = useMutation({
     mutationFn: paymentRepository.createPayment,
-    onSuccess: (data) => {
-      navigate("/" + data.stripeSessionUrl);
-    },
   });
 
   return createPayment;

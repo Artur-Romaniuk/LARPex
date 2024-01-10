@@ -15,6 +15,12 @@ public class EventTimeslotResponseDto
 
     public string EventStatus { get; set; } = null!;
 
+    public string GameName { get; set; } = string.Empty;
+    
+    public int ParticipantsCount { get; set; }
+
+    public int MaxParticipants { get; set; }
+
     public string? EventDescription { get; set; }
 
     public string? OrderId { get; set; }

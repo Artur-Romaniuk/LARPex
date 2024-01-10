@@ -17,6 +17,43 @@
 
 }
 
+.radio {
+    padding: 5px;
+  
+    .title {
+      label {
+        text-indent: 15px;
+        font-weight: bold;
+      }
+  
+      label::after {
+        content: ":";
+      }
+    }
+  
+    .box {
+      .radio-button {
+        margin-bottom: 10px;
+        border: 1px solid black;
+        border-radius: 5px;
+        padding-left: 30px;
+  
+        input {
+          margin-top: 6px;
+          background-color: var(--grey-light-4);
+        }
+  
+        input:checked {
+          background-color: var(--violet-light);
+        }
+  
+        label {
+          font-size: large;
+        }
+      }
+    }
+  }
+
 .date {
     .react-datepicker-wrapper {
         width: 100%;
