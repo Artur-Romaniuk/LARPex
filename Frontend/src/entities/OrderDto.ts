@@ -1,6 +1,6 @@
 interface OrderDto {
   orderId: string;
-  paymentId: string;
+  eventId: number;
   orderAmount: number;
 }
 

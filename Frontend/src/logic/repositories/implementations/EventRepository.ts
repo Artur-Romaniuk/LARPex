@@ -2,9 +2,10 @@ import IEventRepository from "../interfaces/IEventRepository.ts";
 import EventDto, { EventDtoWithTime } from "../../../entities/EventDto.ts";
 import axios from "axios";
 import { API_HOST } from "../../../config/config.ts";
+import EventTimeslotResponseDto from "../../../entities/EventTimeslotResponseDto.ts";
 
 class EventRepository implements IEventRepository {
-  getEvents(): Promise<EventDto[]> {
+  getEvents(): Promise<EventTimeslotResponseDto[]> {
     return axios.get(`${API_HOST}/Events/getEvents`).then((res) => res.data);
   }
 
@@ -18,9 +19,9 @@ class EventRepository implements IEventRepository {
     return axios.post(`${API_HOST}/Events`, event).then((res) => res.data);
   }
 
-  updateEvent(event: EventDto): Promise<EventDto> {
+  updateEvent(event: FormData): Promise<EventDto> {
     return axios
-      .put(`${API_HOST}/Events?id=${event.eventId}`, event)
+      .put(`${API_HOST}/Events?id=${event.get("eventId")}`, event)
       .then((res) => res.data);
   }
 

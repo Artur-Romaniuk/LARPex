@@ -14,6 +14,9 @@ export interface EventDtoWithTime {
   eventId: number;
   eventName: string;
   eventStatus: string;
+  gameName: string;
+  participantsCount: number;
+  maxParticipants: number;
   eventDescription: string;
   orderId: string;
   locationId: number;

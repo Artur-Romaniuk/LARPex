@@ -11,8 +11,6 @@ const useGetGames = (initialId?: number) => {
     (game) => game.gameId === currentGameId,
   );
   const selectedGameName = selectedGame?.gameName;
-  console.log(selectedGame);
-  console.log(selectedGameName);
 
   useEffect(() => {
     if (initialId) {

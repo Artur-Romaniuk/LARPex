@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import useGetEvent from "./useGetEvent.ts";
 import repositoryContext from "../../repositories/repositoryContext.ts";
+import { useUser } from "../../contexts/userContext.tsx";
 
 const initialState: EventDtoWithTime = {
   eventId: 0,
@@ -21,6 +22,7 @@ const initialState: EventDtoWithTime = {
 };
 
 const useEditEvent = (id: number) => {
+  const user = useUser();
   const navigate = useNavigate();
   const eventRepository = repositoryContext.injectEventRepository();
   const queryClient = useQueryClient();
@@ -32,7 +34,7 @@ const useEditEvent = (id: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries("events");
       setEvent(initialState);
-      navigate("/events");
+      navigate("/panel-wydarzen");
     },
     onError: (error) => {
       console.log(error);
@@ -47,11 +49,7 @@ const useEditEvent = (id: number) => {
     }
   }, [getEvent.data]);
 
-  const updateEvent = () => {
-    // updateEventMutation.mutate(event);
-  };
-
-  return { event, setEvent, getEvent, updateEvent };
+  return { event, setEvent, getEvent, updateEventMutation };
 };
 
 export default useEditEvent;

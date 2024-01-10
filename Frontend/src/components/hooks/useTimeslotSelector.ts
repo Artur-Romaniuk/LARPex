@@ -28,7 +28,6 @@ const useTimeslotSelector = (props: UseTimeslotSelectorProps) => {
   );
 
   useEffect(() => {
-    console.log(props);
     if (props.hours && props.minutes) {
       setHour(props.hours);
       setMinutes(props.minutes);

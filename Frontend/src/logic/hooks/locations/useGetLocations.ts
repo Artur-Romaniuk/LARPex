@@ -37,7 +37,6 @@ const useGetLocations = (initialId?: number) => {
         e.target.value,
     )?.locationId;
     setCurrentLocationId(locationId!);
-    console.log(locationId);
   };
 
   return {

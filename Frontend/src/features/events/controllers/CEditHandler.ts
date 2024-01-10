@@ -41,8 +41,7 @@ const CEditHandler = (props: CEventHandlerProps) => {
   });
 
   const numberOfPlayers = useNumberInput({
-    // TODO change to event number of players
-    initialValue: 20,
+    initialValue: editEvent.event.maxParticipants,
     min: 20,
     max: 100,
   });
@@ -51,11 +50,8 @@ const CEditHandler = (props: CEventHandlerProps) => {
     initialValue: editEvent.event.eventDescription,
     maxLength: 300,
     minLength: 10,
-    // pattern for text numbers with polish character
-    pattern: /^([a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ0-9]+|\s)*$/,
   });
 
-  console.log(editEvent.event.timeslot.timeslotDatetime);
   const timeslotSelector = useTimeslotSelector({
     day: dateSelector.date.toUTCString(),
     hours: Number.parseInt(
@@ -74,14 +70,37 @@ const CEditHandler = (props: CEventHandlerProps) => {
   });
 
   const icon = useFileInput({
-    // TODO: change to event icon
     url: "",
   });
 
   const updateEventExec = () => {
-    // TODO: make update event with form data
-    setGlobalError("Not implemented yet");
-    editEvent.updateEvent();
+    if (eventName.error) {
+      setGlobalError(eventName.error);
+      return;
+    }
+
+    const formData = new FormData();
+    formData.append("eventId", editEvent.event.eventId.toString());
+    formData.append("eventName", eventName.value);
+    formData.append("eventDescription", description.value);
+    formData.append("eventIconUrl", "");
+    formData.append("locationId", editEvent.event.locationId.toString());
+    formData.append("gameId", editEvent.event.gameId.toString());
+    formData.append("timeslotId", "0");
+    formData.append("changeTimeslot", false.toString());
+    formData.append("startDate", dateSelector.date.toUTCString());
+    formData.append("durationHour", "0");
+    formData.append("durationMinute", "0");
+    formData.append("numberOfPlayers", numberOfPlayers.value.toString());
+    formData.append("userId", "0");
+    if (icon.file) {
+      formData.append("icon", (icon.file as File) ?? "");
+    }
+    editEvent.updateEventMutation.mutate(formData, {
+      onSuccess: () => {
+        icon.clearInput();
+      },
+    });
   };
 
   const goBack = () => {

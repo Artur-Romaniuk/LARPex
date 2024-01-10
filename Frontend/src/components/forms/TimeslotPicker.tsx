@@ -16,6 +16,8 @@ interface TimeslotPickerProps {
   hourChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   minutesChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   durationChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+
+  disabled?: boolean;
 }
 
 const TimeslotPicker = (props: TimeslotPickerProps) => {
@@ -40,6 +42,7 @@ const TimeslotPicker = (props: TimeslotPickerProps) => {
           type={"number"}
           value={hoursWithOutLeadingZero}
           onChange={props.hourChange}
+          disabled={props.disabled}
         />
         <Form.Control
           className={"time"}
@@ -48,6 +51,7 @@ const TimeslotPicker = (props: TimeslotPickerProps) => {
           min={0}
           value={minutesWithOutLeadingZero}
           onChange={props.minutesChange}
+          disabled={props.disabled}
         />
         {show && (
           <div className={"possibleHours"}>

@@ -108,6 +108,7 @@ const CCreateEvent = () => {
     formData.append("Icon", icon.file as File);
     formData.append("UserId", "4");
 
+    localStorage.setItem("paymentFrom", "/panel-wydarzen");
     createEvent.createEvent(formData);
   };
 

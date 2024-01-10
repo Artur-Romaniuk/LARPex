@@ -8,6 +8,7 @@ import useGetLocation from "./locations/useGetLocation.ts";
 import useGetLocations from "./locations/useGetLocations.ts";
 import useGetOrder from "./order/useGetOrder.ts";
 import useCreatePayment from "./paymetns/useCreatePayment.ts";
+import useGetUsers from "./user/useGetUsers.ts";
 
 const EventLogic = {
   useCreateEvent,
@@ -24,6 +25,8 @@ const EventLogic = {
   useGetOrder,
 
   useCreatePayment,
+
+  useGetUsers,
 };
 
 export default EventLogic;
