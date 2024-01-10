@@ -28,7 +28,7 @@ namespace Larpex.Mono.Repositories
                 return new OrderDto
                 {
                     OrderId = response.OrderId,
-                    PaymentId = response.PaymentId,
+                    EventId = 0,
                     OrderAmount = response.OrderAmount,
                 };
                 }
