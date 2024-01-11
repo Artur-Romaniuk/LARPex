@@ -6,7 +6,7 @@ import React from "react";
 import DisabledInput from "../../../components/forms/DisabledInput.tsx";
 import DisabledTextArea from "../../../components/forms/DisabledTextArea.tsx";
 import ButtonComp from "../../../components/ui/ButtonComp.tsx";
-import { API_HOST, IMAGE_HOST } from "../../../config/config.ts";
+import { IMAGE_HOST } from "../../../config/config.ts";
 
 const VPayment = () => {
   const { eventId, orderId } = useParams();
@@ -14,6 +14,10 @@ const VPayment = () => {
     eventId: eventId ?? "",
     orderId: orderId ?? "",
   });
+  let amount = controller.order.data?.orderAmount ?? 0;
+  if (amount <= 2) {
+    amount = 6;
+  }
 
   return (
     <>
@@ -56,10 +60,7 @@ const VPayment = () => {
               16,
             )}
           />
-          <DisabledInput
-            label={"Cena"}
-            value={controller.order.data?.orderAmount + " zł"}
-          />
+          <DisabledInput label={"Cena"} value={amount + " zł"} />
           <DisabledTextArea
             label={"Opis"}
             value={controller.event.event.eventDescription}

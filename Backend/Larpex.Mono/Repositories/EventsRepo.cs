@@ -6,6 +6,7 @@ using Larpex.Shared.ModelDto;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Stripe;
+using Stripe.Climate;
 using Stripe.Terminal;
 using System.ComponentModel;
 using System.Drawing;
@@ -99,6 +100,36 @@ public class EventsRepo : IEventsRepo
         return _mapper.Map<EventDto>(addedEvent);
     }
 
+    public async Task<EventDto> UpdateEvent(int id, EventUpdate existingEvent)
+    {
+        if (id != existingEvent.EventId)
+        {
+            throw new ArgumentException("Event id and provided id does not match!!!!!!!!");
+        }
+
+        var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
+
+        if (dbEvent == null)
+        {
+            throw new ArgumentNullException("Event with this id does not exist.");
+        }
+
+        dbEvent.EventDescription = existingEvent.EventDescription;
+        if(existingEvent.Icon != null)
+        {
+            var image = await _imageRepo.UploadImage(existingEvent.Icon);
+            dbEvent.EventIconUrl = image.FilePath;
+        }
+
+        if (existingEvent.EventName != null || !existingEvent.EventName!.Equals(String.Empty))
+        {
+            dbEvent.EventName = existingEvent.EventName;
+        }
+
+        await _context.SaveChangesAsync();
+
+        return _mapper.Map<EventDto>(dbEvent);
+    }
     public async Task<bool> DeleteEvent(int id)
     {
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
@@ -139,10 +170,16 @@ public class EventsRepo : IEventsRepo
         {
             var game = await _gameRepo.GetGame(dbEvent.GameId ?? default(int));
             if (game != null)
+            {
+                existingEventDto.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
                 existingEventDto.GameName = game.GameName;
+            }
         }
         else
+        {
+            existingEventDto.MaxParticipants = 0;
             existingEventDto.GameName = "";
+        }
 
         var icon = await _context.TblImages.FirstOrDefaultAsync(i => i.FilePath.Equals(dbEvent.EventIconUrl));
         var pathuwa = Directory.GetCurrentDirectory();
@@ -187,10 +224,16 @@ public class EventsRepo : IEventsRepo
             {
                 var game = await _gameRepo.GetGame(e.GameId ?? default(int));
                 if (game != null)
+                {
+                    evencik.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
                     evencik.GameName = game.GameName;
+                }
             }
             else
+            {
+                evencik.MaxParticipants = 0;
                 evencik.GameName = "";
+            }
 
             eventList.Add(evencik);
         }
@@ -198,33 +241,6 @@ public class EventsRepo : IEventsRepo
         return eventList;
     }
 
-    public async Task<EventDto> UpdateEvent(int id, EventDto existingEvent)
-    {
-        if(id != existingEvent.EventId)
-        {
-            throw new ArgumentException("Event id and provided id does not match!!!!!!!!");
-        }
-
-        var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == id);
-
-        if (dbEvent == null)
-        {
-            throw new ArgumentNullException("Event with this id does not exist.");
-        }
-
-        dbEvent.EventDescription = existingEvent.EventDescription;
-        dbEvent.EventName = existingEvent.EventName;
-        dbEvent.EventStatus = existingEvent.EventStatus;
-        dbEvent.EventDescription = existingEvent?.EventDescription;
-        dbEvent.OrderId = existingEvent?.OrderId;
-        dbEvent.LocationId = existingEvent?.LocationId;
-        dbEvent.GameId = existingEvent?.GameId;
-        dbEvent.TimeslotId = existingEvent?.TimeslotId;
-
-        await _context.SaveChangesAsync();
-
-        return _mapper.Map<EventDto>(dbEvent);
-    }
     private async Task<decimal> CalculateOrderAmount(int attendeeCount, int locationId)
     {
         var dbLocation = await _context.TblLocations.FirstOrDefaultAsync(l => l.LocationId == locationId);
@@ -233,19 +249,19 @@ public class EventsRepo : IEventsRepo
     }
 
 
-    public async Task<bool> AssignUser(AssignUserToEventDto assignUser)
+    public async Task<AssignUserResponse> AssignUser(AssignUserToEventDto assignUser)
     {
         var dbUser = await _context.TblUsers.FirstOrDefaultAsync(e => e.UserId == assignUser.UserId);
         if (dbUser == null)
-            return false;
+            return new AssignUserResponse { EventId = 0, OrderId = "user not found" };
 
         var dbEvent = await _context.TblEvents.FirstOrDefaultAsync(e => e.EventId == assignUser.EventId);
         if (dbEvent == null)
-            return false;
+            return new AssignUserResponse { EventId = 0, OrderId = "event not found" };
 
         var dbParti = await _context.TblParticipants.FirstOrDefaultAsync(e => e.EventId == assignUser.EventId && e.UserId == assignUser.UserId);
         if(dbParti != null)
-            return false;
+            return new AssignUserResponse { EventId = 0, OrderId = "already participates in this event" };
 
         ParticipantDto dto = new ParticipantDto
         {
@@ -255,12 +271,103 @@ public class EventsRepo : IEventsRepo
         };
         var ret = await _participantService.AddParticipant(dto);
 
-        if (ret < 0) return false;
-        else         return true;
+        if (ret < 0)
+        {
+            return new AssignUserResponse { EventId = 0, OrderId = String.Empty };
+        }
+        else
+        {
+            var orderId = Guid.NewGuid().ToString();
+            var evento = await _context.TblEvents.FirstOrDefaultAsync(x => x.EventId.Equals(assignUser.EventId));
+            var location = await _context.TblLocations.FirstOrDefaultAsync(x => x.LocationId == evento!.LocationId);
+
+            var newPayment = new TblPayment
+            {
+                PaymentId = Guid.NewGuid().ToString(),
+                UserId = assignUser.UserId,
+                PaymentType = "Fast",
+                PaymentAmount = location.UserHourPrice,
+                PaymentAccepted = true,
+            };
+            await _context.TblPayments.AddAsync(newPayment);
+            await _context.SaveChangesAsync();
+
+            TblOrder order = new TblOrder
+            {
+                OrderId = orderId,
+                OrderAmount = 1,
+                PaymentId = newPayment.PaymentId
+            };
+            await _context.TblOrders.AddAsync(order);
+            await _context.SaveChangesAsync();
+            return new AssignUserResponse { EventId = (int)assignUser.EventId, OrderId =  orderId };
+        }
     }
 
     public async Task<bool> UnassignUser(UnassignUserDto unassignUser)
     {
         return await _participantService.DeleteParticipant(unassignUser);
+    }
+
+    public async Task<IEnumerable<UserEvent>> GetUserEvents(int userId)
+    {
+        var dbUser = await _context.TblUsers.FirstOrDefaultAsync(x => x.UserId == userId);
+        if (dbUser == null)
+        {
+            throw new ArgumentNullException("No user in db xd");
+        }
+        var dbEvents = await _context.TblEvents.Include("TblParticipants").ToListAsync();
+
+        if (dbEvents.Count == 0)
+        {
+            throw new ArgumentNullException("No available events!!!!!!!!!!");
+        }
+
+        var eventList = new List<UserEvent>();
+
+        foreach (var e in dbEvents)
+        {
+            var evencik = new UserEvent();
+            evencik.EventId = e.EventId;
+            evencik.EventName = e.EventName;
+            evencik.EventStatus = e.EventStatus;
+            evencik.EventDescription = e.EventDescription;
+            evencik.OrderId = e.OrderId;
+            evencik.LocationId = e.LocationId;
+            evencik.GameId = e.GameId;
+            evencik.Icon = e.EventIconUrl;
+            evencik.ParticipantsCount = e.TblParticipants.Count;
+            evencik.Timeslot = _mapper.Map<TimeslotDto>(await _context.TblTimeslots.FirstOrDefaultAsync(t => t.TimeslotId.Equals(e.TimeslotId)));
+
+            if (e.GameId != null)
+            {
+                var game = await _gameRepo.GetGame(e.GameId ?? default(int));
+                if (game != null)
+                {
+                    evencik.MaxParticipants = game.GameMaxNumberOfParticipants ?? 0;
+                }
+            }
+            else
+            {
+                evencik.MaxParticipants = 0;
+            }
+
+            eventList.Add(evencik);
+        }
+
+        var participantList = await _context.TblParticipants.ToListAsync();
+        
+        var userEventIds = participantList.Where(p => p.UserId == userId).Select(p => p.EventId);
+
+        foreach(var userEventId in userEventIds)
+        {
+            var userEventToUpdate = eventList.FirstOrDefault(e => e.EventId == userEventId);
+            if (userEventToUpdate != null)
+            {
+                userEventToUpdate.IsEnrolled = true;
+            }
+        }
+
+        return eventList;
     }
 }

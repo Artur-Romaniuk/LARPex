@@ -1,3 +1,5 @@
+import CharacterDto from "./CharacterDto.ts";
+
 interface GameGetDto {
   gameId: number;
   gameName: string;
@@ -6,6 +8,7 @@ interface GameGetDto {
   gameScript: string;
   gameDifficulty: number;
   gameMaxNumberOfParticipants: number;
+  characters: CharacterDto[];
 }
 
 export default GameGetDto;

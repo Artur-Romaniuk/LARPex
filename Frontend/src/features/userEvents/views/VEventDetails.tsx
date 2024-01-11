@@ -46,7 +46,7 @@ const VEventDetails = () => {
               <div className="icon d-flex flex-row align-items-center">
                 {/*// TODO change pepopleCount to event.peopleCount*/}
                 <BsPeople />
-                {20}
+                {event?.participantsCount + "/" + event?.maxParticipants}
               </div>
             </div>
           </div>
@@ -85,7 +85,11 @@ const VEventDetails = () => {
                 label={"Dostępne postacie"}
                 setValue={controller.handleCharacterChange}
                 name={"characterSelector"}
-                values={controller.characters.map(character => character.characterName)}
+                values={
+                  controller.game.data?.characters.map(
+                    (character) => character.characterName,
+                  ) || []
+                }
                 defaultValue={undefined}
               />
             </div>
@@ -93,10 +97,20 @@ const VEventDetails = () => {
             {controller.selectedCharacter && (
               <div className="w-100">
                 <h2>{controller.selectedCharacter.characterName}</h2>
-                <p><b>Klasa: </b>{controller.selectedCharacter.characterClass}</p>
-                <p><b>Rasa: </b>{controller.selectedCharacter.characterRace}</p>
-                <p><b>Opis: </b>{controller.selectedCharacter.characterLore}</p>
-              </div>)}
+                <p>
+                  <b>Klasa: </b>
+                  {controller.selectedCharacter.characterClass}
+                </p>
+                <p>
+                  <b>Rasa: </b>
+                  {controller.selectedCharacter.characterRace}
+                </p>
+                <p>
+                  <b>Opis: </b>
+                  {controller.selectedCharacter.characterLore}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </Container>

@@ -44,18 +44,25 @@ public class PaymentService : IPaymentService
 
     public async Task<Session> Checkout(OrderDto orderDto, string thisApiUrl, string clientUrl)
     {
-        EventDto eventToPayFor = await _IPaymentRepo.GetEventToPayFor(orderDto.OrderId.ToString());
+        EventDto eventToPayFor = await _IPaymentRepo.GetEventToPayFor(orderDto.EventId);
+
+        Console.WriteLine(eventToPayFor.ToString());
 
         if(eventToPayFor == null)
         {
             return null;
         }
 
+        if(orderDto.OrderAmount < 5)
+        {
+            return null;
+        }
+
         var options = new SessionCreateOptions
-        {           
-            SuccessUrl = $"{thisApiUrl}/checkout/success", // Customer paid.
+        {
+            SuccessUrl = $"{clientUrl}payment/event/{eventToPayFor.EventId}/order/{orderDto.OrderId}/accepted", // Customer paid.
             //CancelUrl = "https://localhost:7226/" + "failed",
-            CancelUrl = clientUrl + "failed",  // Checkout cancelled.
+            CancelUrl = $"{clientUrl}payment/event/{eventToPayFor.EventId}/order/{orderDto.OrderId}/declined",  // Checkout cancelled.
             PaymentMethodTypes = new List<string>
             {
                 "card"

@@ -55,7 +55,7 @@ namespace Larpex.Mono.Repositories
         public async Task<PaymentDto> GetPaymentStatus(string id)
         {
             var payment = await _context.TblPayments.FirstOrDefaultAsync(p => p.PaymentId.Equals(id));
-
+            var payments = await _context.TblPayments.ToListAsync();
             if (payment == null)
             {
                 return null;
@@ -64,10 +64,10 @@ namespace Larpex.Mono.Repositories
             return new PaymentDto { Id = payment.PaymentId, Status = payment.PaymentAccepted };
         }
 
-        public async Task<EventDto> GetEventToPayFor(string id)
+        public async Task<EventDto> GetEventToPayFor(int id)
         {
-            var order = await _context.TblOrders.FirstOrDefaultAsync(e => e.OrderId.Equals(id));
-            var eventToPayFor = await _context.TblEvents.FirstOrDefaultAsync(ev => ev.OrderId.Equals(id));
+            var eventToPayFor = await _context.TblEvents.FirstOrDefaultAsync(ev => ev.EventId.Equals(id));
+            Console.WriteLine("===> ", id);
             
             if(eventToPayFor != null)
             {

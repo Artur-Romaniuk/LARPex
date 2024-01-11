@@ -4,6 +4,7 @@ import { useParams } from "react-router-dom";
 import { BsCalendar, BsClock, BsPeople } from "react-icons/bs";
 import CUserEvent from "../controllers/CUserEvent.ts";
 import { IMAGE_HOST } from "../../../config/config.ts";
+import Form from "react-bootstrap/Form";
 import RadioInput from "../../../components/forms/RadioInput.tsx";
 
 const VJoinEvent = () => {
@@ -44,7 +45,7 @@ const VJoinEvent = () => {
               <div className="icon d-flex flex-row align-items-center">
                 {/*// TODO change pepopleCount to event.peopleCount*/}
                 <BsPeople />
-                {20}
+                {event?.participantsCount + "/" + event?.maxParticipants}
               </div>
             </div>
           </div>
@@ -76,7 +77,11 @@ const VJoinEvent = () => {
               label={"Wybierz postać"}
               setValue={handleCharacterChange}
               name={"characterSelector"}
-              values={controller.characters.map(character => character.characterName)}
+              values={
+                controller.characters?.map(
+                  (character) => character.characterName,
+                ) || []
+              }
               defaultValue={undefined}
             />
           </div>
@@ -84,10 +89,20 @@ const VJoinEvent = () => {
           {controller.selectedCharacter && (
             <div className="w-100">
               <h2>{controller.selectedCharacter.characterName}</h2>
-              <p><b>Klasa: </b>{controller.selectedCharacter.characterClass}</p>
-              <p><b>Rasa: </b>{controller.selectedCharacter.characterRace}</p>
-              <p><b>Opis: </b>{controller.selectedCharacter.characterLore}</p>
-            </div>)}
+              <p>
+                <b>Klasa: </b>
+                {controller.selectedCharacter.characterClass}
+              </p>
+              <p>
+                <b>Rasa: </b>
+                {controller.selectedCharacter.characterRace}
+              </p>
+              <p>
+                <b>Opis: </b>
+                {controller.selectedCharacter.characterLore}
+              </p>
+            </div>
+          )}
         </div>
         <p className={"globalError"}>{controller.error}</p>
       </Container>
@@ -100,7 +115,8 @@ const VJoinEvent = () => {
         </button>
         <button
           className="btn btn-success px-4 py-2"
-          onClick={controller.joinGameExec}>
+          onClick={controller.handleJoinEvent}
+        >
           Dołącz
         </button>
       </Container>

@@ -10,6 +10,9 @@ const initialState: EventDtoWithTime = {
   eventName: "",
   eventStatus: "",
   eventDescription: "",
+  gameName: "",
+  participantsCount: 0,
+  maxParticipants: 0,
   orderId: "",
   locationId: 0,
   gameId: 0,
@@ -32,7 +35,7 @@ const useEditEvent = (id: number) => {
     onSuccess: () => {
       queryClient.invalidateQueries("events");
       setEvent(initialState);
-      navigate("/events");
+      navigate("/panel-wydarzen");
     },
     onError: (error) => {
       console.log(error);
@@ -47,11 +50,7 @@ const useEditEvent = (id: number) => {
     }
   }, [getEvent.data]);
 
-  const updateEvent = () => {
-    // updateEventMutation.mutate(event);
-  };
-
-  return { event, setEvent, getEvent, updateEvent };
+  return { event, setEvent, getEvent, updateEventMutation };
 };
 
 export default useEditEvent;
